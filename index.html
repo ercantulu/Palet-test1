@@ -174,11 +174,11 @@ main{flex:1;overflow:hidden;position:relative}
 <body>
 <div id="app">
   <header class="top">
-    <button id="palletBtn" class="pallet" aria-label="Palet değiştir">
-      <span class="lbl">PALET · DEĞİŞTİR</span><span id="palletNo" class="pno none">Palet seç</span>
+    <button id="palletBtn" class="pallet" data-it="palletLbl">
+      <span class="lbl" data-i="palletLbl"></span><span id="palletNo" class="pno none"></span>
     </button>
-    <div class="ptot"><b id="pItems">0</b>kalem</div>
-    <div class="ptot"><b id="pQty">0</b>adet</div>
+    <div class="ptot"><b id="pItems">0</b><span data-i="items"></span></div>
+    <div class="ptot"><b id="pQty">0</b><span data-i="pcs"></span></div>
   </header>
   <main>
     <section id="v-scan" class="view active">
@@ -190,36 +190,36 @@ main{flex:1;overflow:hidden;position:relative}
         <div class="camtools">
           <button id="zoomBtn" class="hidden">2×</button>
           <button id="torchBtn" class="hidden">🔦</button>
-          <button id="stopBtn" title="Kamerayı kapat">✕</button>
+          <button id="stopBtn" data-it="camClose">✕</button>
         </div>
         <div id="camStart" class="camstart">
-          <button id="startBtn" class="big">📷 Taramayı başlat</button>
-          <p id="camMsg">Barkodu kutunun içine yatay tutun, telefonu 15–25 cm uzakta tutun.</p>
+          <button id="startBtn" class="big" data-i="startScan"></button>
+          <p id="camMsg" data-i="camHint"></p>
         </div>
       </div>
       <div class="scanbody">
         <div class="seg2" id="modeSeg">
-          <button data-mode="ask">Adet sor</button>
-          <button data-mode="plusc">Okut = +1 koli</button>
-          <button data-mode="plusu">Okut = +1 adet</button>
+          <button data-mode="ask" data-i="modeAsk"></button>
+          <button data-mode="plusc" data-i="modePlusC"></button>
+          <button data-mode="plusu" data-i="modePlusU"></button>
         </div>
         <div class="row2">
-          <button id="manualBtn" class="btn ghost">⌨︎ Ürün ara / elle gir</button>
-          <button id="finishBtn" class="btn ghost">✓ Palet bitti</button>
+          <button id="manualBtn" class="btn ghost" data-i="manualBtn"></button>
+          <button id="finishBtn" class="btn ghost" data-i="finishBtn"></button>
         </div>
-        <div class="sect">Bu palette son okutulanlar</div>
+        <div class="sect" data-i="recentHdr"></div>
         <div id="recent" class="recent"></div>
       </div>
     </section>
 
     <section id="v-list" class="view">
       <div class="lhead">
-        <input id="lq" type="search" placeholder="Ara: ürün, referans, barkod, palet" autocomplete="off">
+        <input id="lq" type="search" data-ip="listSearch" autocomplete="off">
         <div class="seg2" id="listSeg">
-          <button data-lm="rows">Tüm okutmalar</button>
-          <button data-lm="sum">Ürün toplamı</button>
+          <button data-lm="rows" data-i="listRows"></button>
+          <button data-lm="sum" data-i="listSum"></button>
         </div>
-        <div class="tgl"><span>Sadece aktif palet</span><button class="sw" id="onlyActive"></button></div>
+        <div class="tgl"><span data-i="onlyActive"></span><button class="sw" id="onlyActive"></button></div>
       </div>
       <div id="listBody"></div>
     </section>
@@ -227,60 +227,63 @@ main{flex:1;overflow:hidden;position:relative}
     <section id="v-export" class="view">
       <div class="stats" id="expStats"></div>
       <div id="expWarn"></div>
-      <div class="sect">Kapsam</div>
+      <div class="sect" data-i="scope"></div>
       <div class="seg2" id="scopeSeg">
-        <button data-scope="all">Tüm paletler</button>
-        <button data-scope="active">Sadece aktif palet</button>
+        <button data-scope="all" data-i="scopeAll"></button>
+        <button data-scope="active" data-i="onlyActive"></button>
       </div>
-      <div class="sect">Format</div>
+      <div class="sect" data-i="format"></div>
       <div class="seg2" id="fmtSeg">
-        <button data-fmt="sum">Özet (palet + ürün toplamı)</button>
-        <button data-fmt="rows">Detaylı (her okutma)</button>
+        <button data-fmt="sum" data-i="fmtSum"></button>
+        <button data-fmt="rows" data-i="fmtRows"></button>
       </div>
       <div class="row2" style="flex-direction:column">
-        <button id="shareBtn" class="btn primary wide">⇪ CSV paylaş (Mail, AirDrop, Dosyalar)</button>
-        <button id="dlBtn" class="btn ghost wide">⬇︎ CSV indir</button>
+        <button id="shareBtn" class="btn primary wide" data-i="shareCsv"></button>
+        <button id="dlBtn" class="btn ghost wide" data-i="dlCsv"></button>
       </div>
-      <div class="sect">Önizleme</div>
+      <div class="sect" data-i="preview"></div>
       <div class="prev" id="prev"></div>
-      <div class="sect">Tehlikeli bölge</div>
-      <button id="wipeBtn" class="btn danger wide">Tüm kayıtları sil…</button>
+      <div class="sect" data-i="danger"></div>
+      <button id="wipeBtn" class="btn danger wide" data-i="wipe"></button>
     </section>
 
     <section id="v-set" class="view">
       <div class="card">
-        <label class="fld">Cihaz / sayan kişi (CSV'de görünür)<input id="setDevice" placeholder="Örn. Ercan iPhone" autocomplete="off"></label>
-        <div class="tgl"><span>Lot numarasını otomatik doldur<small>Aynı palette aynı ürün için son girilen lot önerilir</small></span><button class="sw" id="setLot"></button></div>
-        <div class="tgl"><span>Okuma sesi<small>iPhone sessiz moddaysa ses çıkmaz, yeşil flaş yine görünür</small></span><button class="sw" id="setSound"></button></div>
-        <div class="tgl"><span>Excel'de barkodu metin olarak koru<small>13 haneli barkod 8,05E+12 gibi bozulmasın diye ="…" yazılır</small></span><button class="sw" id="setExcel"></button></div>
-        <label class="fld">CSV ayracı
-          <select id="setSep"><option value=";">Noktalı virgül ; (Türkçe/Almanca Excel)</option><option value=",">Virgül , (İngilizce Excel, Google Sheets)</option></select>
+        <label class="fld"><span data-i="setLang"></span>
+          <select id="setLang"></select>
         </label>
-        <label class="fld">"+1 koli / +1 adet" modunda aynı barkod bekleme süresi
-          <select id="setCool"><option value="800">0,8 sn</option><option value="1200">1,2 sn</option><option value="2000">2 sn</option></select>
+        <label class="fld"><span data-i="setDevice"></span><input id="setDevice" data-ip="setDevicePh" autocomplete="off"></label>
+        <div class="tgl"><span><span data-i="setLot"></span><small data-i="setLotSub"></small></span><button class="sw" id="setLot"></button></div>
+        <div class="tgl"><span><span data-i="setSound"></span><small data-i="setSoundSub"></small></span><button class="sw" id="setSound"></button></div>
+        <div class="tgl"><span><span data-i="setExcel"></span><small data-i="setExcelSub"></small></span><button class="sw" id="setExcel"></button></div>
+        <label class="fld"><span data-i="setSep"></span>
+          <select id="setSep"><option value=";" data-i="sepSemi"></option><option value="," data-i="sepComma"></option></select>
+        </label>
+        <label class="fld"><span data-i="setCool"></span>
+          <select id="setCool"><option value="800"></option><option value="1200"></option><option value="2000"></option></select>
         </label>
       </div>
-      <div class="sect">Ürün listesi ve koli içi adetleri</div>
+      <div class="sect" data-i="prodHdr"></div>
       <div class="card">
         <div id="prodInfo" class="mut"></div>
         <div class="row2">
-          <button id="tplBtn" class="btn ghost wide">⬇︎ Şablon indir (CSV)</button>
-          <label class="btn ghost wide" style="cursor:pointer">⬆︎ Liste yükle (CSV)<input id="prodFile" type="file" accept=".csv,text/csv,text/plain" class="hidden"></label>
+          <button id="tplBtn" class="btn ghost wide" data-i="tplBtn"></button>
+          <label class="btn ghost wide" style="cursor:pointer"><span data-i="uploadBtn"></span><input id="prodFile" type="file" accept=".csv,text/csv,text/plain" class="hidden"></label>
         </div>
-        <p class="mut">Şablonu indir, Excel'de <b>koli_ici</b> sütununu doldur, buradan geri yükle. Sütunlar: barkod; referans; urun_adi; hacim_ml; koli_ici. Barkodu olmayan ürünler referansla eşleşir. Yeni ürün satırları da eklenebilir.</p>
-        <div class="row2"><button id="pcEditBtn" class="btn ghost wide">✎ Koli içi adetlerini tek tek düzenle</button></div>
+        <p class="mut" data-ih="prodHelp"></p>
+        <div class="row2"><button id="pcEditBtn" class="btn ghost wide" data-i="pcEditBtn"></button></div>
         <div id="pcList" class="pcl hidden"></div>
-        <div class="row2"><button id="prodClear" class="btn ghost wide">Yüklenen ek ürünleri sil</button></div>
+        <div class="row2"><button id="prodClear" class="btn ghost wide" data-i="prodClear"></button></div>
       </div>
-      <div class="sect">Veri</div>
+      <div class="sect" data-i="dataHdr"></div>
       <div class="card mut" id="dataInfo"></div>
     </section>
   </main>
   <nav class="tabs" id="tabs">
-    <button data-v="scan" class="on">📷<span>Tara</span></button>
-    <button data-v="list">☰<span>Liste</span></button>
-    <button data-v="export">⇪<span>Export</span><i id="expBadge" class="badge hidden"></i></button>
-    <button data-v="set">⚙︎<span>Ayarlar</span></button>
+    <button data-v="scan" class="on">📷<span data-i="tabScan"></span></button>
+    <button data-v="list">☰<span data-i="tabList"></span></button>
+    <button data-v="export">⇪<span data-i="tabExport"></span><i id="expBadge" class="badge hidden"></i></button>
+    <button data-v="set">⚙︎<span data-i="tabSet"></span></button>
   </nav>
 </div>
 <div id="sheetBg" class="sheetbg hidden"></div>
@@ -289,19 +292,241 @@ main{flex:1;overflow:hidden;position:relative}
 
 <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js" crossorigin="anonymous"></script>
 <script>
+const LANGS={tr:'Türkçe',de:'Deutsch',it:'Italiano',ru:'Русский',en:'English'};
+const I18N={
+tr:{
+palletLbl:'PALET · DEĞİŞTİR',palletPick:'Palet seç',items:'kalem',pcs:'adet',camClose:'Kamerayı kapat',startScan:'📷 Taramayı başlat',
+camHint:'Barkodu kutunun içine yatay tutun, telefonu 15–25 cm uzakta tutun.',modeAsk:'Adet sor',modePlusC:'Okut = +1 koli',modePlusU:'Okut = +1 adet',
+manualBtn:'⌨︎ Ürün ara / elle gir',finishBtn:'✓ Palet bitti',recentHdr:'Bu palette son okutulanlar',listSearch:'Ara: ürün, referans, barkod, palet, lot',
+listRows:'Tüm okutmalar',listSum:'Ürün toplamı',onlyActive:'Sadece aktif palet',scope:'Kapsam',scopeAll:'Tüm paletler',format:'Format',
+fmtSum:'Özet (palet + ürün toplamı)',fmtRows:'Detaylı (her okutma)',shareCsv:'⇪ CSV paylaş (Mail, AirDrop, Dosyalar…)',dlCsv:'⬇︎ CSV indir',
+preview:'Önizleme',danger:'Tehlikeli bölge',wipe:'Tüm kayıtları sil…',setLang:'Dil / Language',langAuto:'Otomatik (telefon dili)',
+setDevice:"Cihaz / sayan kişi (CSV'de görünür)",setDevicePh:'Örn. Depo iPhone 1',setLot:'Lot numarasını otomatik doldur',
+setLotSub:'Aynı palette aynı ürün için son girilen lot önerilir',setSound:'Okuma sesi',setSoundSub:'iPhone sessiz moddaysa ses çıkmaz, yeşil flaş yine görünür',
+setExcel:"Excel'de barkodu metin olarak koru",setExcelSub:'13 haneli barkod 8,05E+12 gibi bozulmasın diye ="…" yazılır',setSep:'CSV ayracı',
+sepSemi:'Noktalı virgül ; (Türkçe/Almanca Excel)',sepComma:'Virgül , (İngilizce Excel, Google Sheets)',setCool:'"+1 koli / +1 adet" modunda aynı barkod bekleme süresi',sec:'sn',
+prodHdr:'Ürün listesi ve koli içi adetleri',tplBtn:'⬇︎ Şablon indir (CSV)',uploadBtn:'⬆︎ Liste yükle (CSV)',
+prodHelp:"Şablonu indir, Excel'de <b>koli_ici</b> sütununu doldur, buradan geri yükle. Sütunlar: barkod; referans; urun_adi; hacim_ml; koli_ici. Barkodu olmayan ürünler referansla eşleşir. Yeni ürün satırları da eklenebilir.",
+pcEditBtn:'✎ Koli içi adetlerini tek tek düzenle',prodClear:'Yüklenen ek ürünleri sil',dataHdr:'Veri',tabScan:'Tara',tabList:'Liste',tabExport:'Export',tabSet:'Ayarlar',
+saveFail:'⚠️ Kayıt yazılamadı – hemen export alın',notInList:'Listede yok',noName:'Adsız ürün',nCases:'{n} koli',undo:'Geri al',undone:'Geri alındı',lot:'Lot',product:'ürün',
+palletWasClosed:'Bu palet daha önce kapatılmıştı – üzerine ekleniyor',
+libFail:'Barkod okuyucu yüklenemedi. Uygulamayı bir kez internete bağlıyken açın. Bu arada "Ürün ara / elle gir" kullanılabilir.',
+needHttps:'Kamera için sayfa https:// adresinden açılmalı.',noCamApi:'Bu tarayıcı kameraya erişemiyor. Safari veya Chrome ile açın.',
+camDenied:'Kamera izni verilmedi. Telefon ayarlarından tarayıcıya kamera izni verip tekrar deneyin.',camFail:'Kamera açılamadı: {e}',palletToast:'Palet: {p}',
+badRead:'Hatalı okuma, tekrar okutun',enterPalletFirst:'Önce palet numarasını girin',noPcWarn:'Bu ürünün koli içi adedi tanımlı değil – adet girin',
+notInListTitle:'⚠️ Ürün listesinde yok',noBarcode:'barkodsuz',palletWord:'Palet',
+existsNew:'Bu palette bu üründen zaten <b>{n}</b> adet var – yeni giriş ayrı satır olarak eklenir.',existsEdit:'Bu palette bu üründen başka <b>{n}</b> adet var.',
+unknownCanSave:'Ürün listede yok ama yine de kaydedilebilir.',editPallet:'Palet (yanlış palete girildiyse değiştirin)',lotPh:'Lot no (isteğe bağlı)',
+caseBox:'KOLİ',unitBox:'TEKİL',pcInputPh:'Koli içi adet',ok:'Tamam',del:'Sil',cancel:'İptal',save:'KAYDET',update:'Güncelle',
+pcLabel:'Koli içi: {n} adet ✎',pcMissing:'⚠️ Koli içi adedi tanımla',pcUnknownBox:'Koli içi?',totalOnly:'Toplam <b>{n}</b> adet',confirmBig:'{n} adet – emin misin? Onayla',
+updated:'Güncellendi',pcSaved:'Koli içi kaydedildi: {n}',sureDel:'Emin misin? Sil',deleted:'Silindi',palletNo:'Palet numarası',palletPh:'Örn. P-0012',next:'Sonraki',
+scanLabel:'📷 Palet etiketini tara (isteğe bağlı)',start:'Başla',scanLabelBanner:'Palet etiketini okutun',finishQ:'Palet {p} tamamlansın mı?',cases:'koli',back:'Vazgeç',
+finishOk:'✓ Tamamla → sonraki palet',searchTitle:'Ürün ara veya elle gir',searchPh:'Ürün adı, referans veya barkod',
+searchHint:'Barkod zorunlu değil – listeden seçin ya da serbest ürün adı yazın.',casePerShort:'koli içi {n}',saveWithCode:'Barkod "{c}" ile kaydet',
+checksumBad:'⚠️ kontrol hanesi tutmuyor',saveFree:'"{n}" adıyla barkodsuz kaydet',notInListShort:'Listede olmayan ürün',close:'Kapat',
+emptyPallet:'Bu palette henüz kayıt yok. Barkod okutun veya ürün arayın.',emptyStart:'Başlamak için üstten palet seçin.',scansN:'{n} okutma',singleWord:'tekil',
+noMatch:'Eşleşen kayıt yok.',noEntries:'Henüz kayıt yok.',active:'aktif',makeActive:'Aktif yap',pallets:'palet',scans:'okutma',totalPcs:'toplam adet',
+unexported:"Son export'tan sonra <b>{n}</b> yeni okutma var.",lastExport:' Son export: {d}',neverExport:' Henüz export alınmadı.',allExported:'Her şey export edildi ({d}).',
+moreLines:'… (+{n} satır)',noRecords:'(kayıt yok)',prodInfo:'<b>{n}</b> ürün ({b} barkodlu, {nb} barkodsuz) – {src}{x}.<br>Koli içi tanımlı: <b>{pc}</b> / {n}',
+extraRows:' + {n} yüklenen satır',dataInfo:'Veriler sadece bu telefonda saklanır ({kb} KB). Düzenli CSV export alın.<br>Ana ekrana eklediyseniz her zaman ana ekrandaki simgeden açın – tarayıcı sekmesindeki veriler ayrıdır.<br>Sürüm {v} · okuyucu: {r}',
+readerNative:'yerleşik',readerNone:'yüklenmedi',pcDefault:'Varsayılana döndü',pcSet:'Koli içi: {n}',modeToastAsk:'Her okutmada koli / tekil adet sorulur',
+modeToastC:'Her okutma 1 koli olarak kaydedilir',modeToastU:'Her okutma 1 adet olarak kaydedilir',activePalletToast:'Aktif palet: {p}',nothingExport:'Export edilecek kayıt yok',
+csvReady:'CSV hazır',csvDl:'CSV indirildi',wipeQ:'Tüm kayıtlar silinsin mi?',wipeBody:'{n} okutma, {p} palet kalıcı olarak silinecek. Ürün listesi ve koli içi adetleri kalır.',
+wipeWarn:'<b>{n}</b> okutma henüz export edilmedi!',wipeOk:'Evet, hepsini sil',wiped:'Tüm kayıtlar silindi',imported:'{n} satır yüklendi, {pc} koli içi',
+extraCleared:'Yüklenen ek ürünler silindi (koli içi adetleri duruyor)',noteSGA:'1 adet = 6×10 ml kutu (tek ampul sayılmaz)',src:'SONO fiyat listesi · koli içi: 17.11.2026',clearLot:'Lotu temizle'
+},
+de:{
+palletLbl:'PALETTE · ÄNDERN',palletPick:'Palette wählen',items:'Artikel',pcs:'Stk',camClose:'Kamera schließen',startScan:'📷 Scannen starten',
+camHint:'Barcode waagerecht in den Rahmen halten, Abstand 15–25 cm.',modeAsk:'Menge abfragen',modePlusC:'Scan = +1 Karton',modePlusU:'Scan = +1 Stück',
+manualBtn:'⌨︎ Artikel suchen / manuell',finishBtn:'✓ Palette fertig',recentHdr:'Zuletzt auf dieser Palette',listSearch:'Suche: Artikel, Referenz, Barcode, Palette, Charge',
+listRows:'Alle Scans',listSum:'Summe je Artikel',onlyActive:'Nur aktive Palette',scope:'Umfang',scopeAll:'Alle Paletten',format:'Format',
+fmtSum:'Übersicht (Palette + Artikelsumme)',fmtRows:'Detail (jeder Scan)',shareCsv:'⇪ CSV teilen (Mail, AirDrop, Dateien…)',dlCsv:'⬇︎ CSV herunterladen',
+preview:'Vorschau',danger:'Gefahrenbereich',wipe:'Alle Einträge löschen…',setLang:'Sprache / Language',langAuto:'Automatisch (Telefonsprache)',
+setDevice:'Gerät / zählende Person (steht in der CSV)',setDevicePh:'z. B. Lager iPhone 1',setLot:'Charge automatisch ausfüllen',
+setLotSub:'Für denselben Artikel auf derselben Palette wird die letzte Charge vorgeschlagen',setSound:'Scan-Ton',setSoundSub:'Im Stumm-Modus des iPhones kein Ton – der grüne Blitz erscheint trotzdem',
+setExcel:'Barcode in Excel als Text erhalten',setExcelSub:'Damit 13-stellige Barcodes nicht zu 8,05E+12 werden, wird ="…" geschrieben',setSep:'CSV-Trennzeichen',
+sepSemi:'Semikolon ; (deutsches/türkisches Excel)',sepComma:'Komma , (englisches Excel, Google Sheets)',setCool:'Sperrzeit für gleichen Barcode im Modus „+1 Karton / +1 Stück“',sec:'s',
+prodHdr:'Artikelliste und Kartoninhalt',tplBtn:'⬇︎ Vorlage laden (CSV)',uploadBtn:'⬆︎ Liste importieren (CSV)',
+prodHelp:'Vorlage laden, in Excel die Spalte <b>koli_ici</b> (Stück pro Karton) ausfüllen und hier wieder importieren. Spalten: barkod; referans; urun_adi; hacim_ml; koli_ici. Artikel ohne Barcode werden über die Referenz zugeordnet. Neue Artikelzeilen sind möglich.',
+pcEditBtn:'✎ Kartoninhalt einzeln bearbeiten',prodClear:'Importierte Zusatzartikel löschen',dataHdr:'Daten',tabScan:'Scannen',tabList:'Liste',tabExport:'Export',tabSet:'Einstellungen',
+saveFail:'⚠️ Speichern fehlgeschlagen – sofort exportieren',notInList:'Nicht in Liste',noName:'Artikel ohne Namen',nCases:'{n} Krt.',undo:'Rückgängig',undone:'Rückgängig gemacht',lot:'Charge',product:'Artikel',
+palletWasClosed:'Diese Palette war bereits abgeschlossen – es wird ergänzt',
+libFail:'Barcode-Leser konnte nicht geladen werden. App einmal mit Internetverbindung öffnen. Bis dahin „Artikel suchen / manuell“ nutzen.',
+needHttps:'Für die Kamera muss die Seite über https:// geöffnet werden.',noCamApi:'Dieser Browser kann nicht auf die Kamera zugreifen. Mit Safari oder Chrome öffnen.',
+camDenied:'Kamerazugriff verweigert. In den Telefoneinstellungen dem Browser die Kamera erlauben und erneut versuchen.',camFail:'Kamera konnte nicht gestartet werden: {e}',palletToast:'Palette: {p}',
+badRead:'Fehllesung – bitte erneut scannen',enterPalletFirst:'Bitte zuerst die Palettennummer eingeben',noPcWarn:'Kartoninhalt für diesen Artikel nicht definiert – Menge eingeben',
+notInListTitle:'⚠️ Nicht in der Artikelliste',noBarcode:'ohne Barcode',palletWord:'Palette',
+existsNew:'Auf dieser Palette sind bereits <b>{n}</b> Stk dieses Artikels – der neue Eintrag kommt als eigene Zeile hinzu.',existsEdit:'Auf dieser Palette sind weitere <b>{n}</b> Stk dieses Artikels.',
+unknownCanSave:'Artikel nicht in der Liste, kann aber trotzdem gespeichert werden.',editPallet:'Palette (bei falscher Palette ändern)',lotPh:'Charge (optional)',
+caseBox:'KARTON',unitBox:'EINZELN',pcInputPh:'Stück pro Karton',ok:'OK',del:'Löschen',cancel:'Abbrechen',save:'SPEICHERN',update:'Aktualisieren',
+pcLabel:'Kartoninhalt: {n} Stk ✎',pcMissing:'⚠️ Kartoninhalt festlegen',pcUnknownBox:'Inhalt?',totalOnly:'Gesamt <b>{n}</b> Stk',confirmBig:'{n} Stk – sicher? Bestätigen',
+updated:'Aktualisiert',pcSaved:'Kartoninhalt gespeichert: {n}',sureDel:'Sicher? Löschen',deleted:'Gelöscht',palletNo:'Palettennummer',palletPh:'z. B. P-0012',next:'Nächste',
+scanLabel:'📷 Palettenetikett scannen (optional)',start:'Start',scanLabelBanner:'Palettenetikett scannen',finishQ:'Palette {p} abschließen?',cases:'Kartons',back:'Zurück',
+finishOk:'✓ Abschließen → nächste Palette',searchTitle:'Artikel suchen oder manuell eingeben',searchPh:'Name, Referenz oder Barcode',
+searchHint:'Barcode nicht nötig – aus der Liste wählen oder freien Namen eingeben.',casePerShort:'{n}/Krt.',saveWithCode:'Mit Barcode „{c}“ speichern',
+checksumBad:'⚠️ Prüfziffer stimmt nicht',saveFree:'„{n}“ ohne Barcode speichern',notInListShort:'Artikel nicht in Liste',close:'Schließen',
+emptyPallet:'Noch keine Einträge auf dieser Palette. Barcode scannen oder Artikel suchen.',emptyStart:'Zum Start oben eine Palette wählen.',scansN:'{n} Scans',singleWord:'einzeln',
+noMatch:'Keine Treffer.',noEntries:'Noch keine Einträge.',active:'aktiv',makeActive:'Aktivieren',pallets:'Paletten',scans:'Scans',totalPcs:'Stück gesamt',
+unexported:'Seit dem letzten Export <b>{n}</b> neue Scans.',lastExport:' Letzter Export: {d}',neverExport:' Noch kein Export.',allExported:'Alles exportiert ({d}).',
+moreLines:'… (+{n} Zeilen)',noRecords:'(keine Einträge)',prodInfo:'<b>{n}</b> Artikel ({b} mit Barcode, {nb} ohne) – {src}{x}.<br>Kartoninhalt definiert: <b>{pc}</b> / {n}',
+extraRows:' + {n} importierte Zeilen',dataInfo:'Daten werden nur auf diesem Telefon gespeichert ({kb} KB). Regelmäßig als CSV exportieren.<br>Wenn zum Home-Bildschirm hinzugefügt, immer über das Symbol öffnen – Daten im Browser-Tab sind getrennt.<br>Version {v} · Leser: {r}',
+readerNative:'integriert',readerNone:'nicht geladen',pcDefault:'Auf Standard zurückgesetzt',pcSet:'Kartoninhalt: {n}',modeToastAsk:'Bei jedem Scan wird Karton / Einzelmenge abgefragt',
+modeToastC:'Jeder Scan zählt als 1 Karton',modeToastU:'Jeder Scan zählt als 1 Stück',activePalletToast:'Aktive Palette: {p}',nothingExport:'Keine Einträge zum Exportieren',
+csvReady:'CSV bereit',csvDl:'CSV heruntergeladen',wipeQ:'Alle Einträge löschen?',wipeBody:'{n} Scans und {p} Paletten werden endgültig gelöscht. Artikelliste und Kartoninhalte bleiben.',
+wipeWarn:'<b>{n}</b> Scans sind noch nicht exportiert!',wipeOk:'Ja, alles löschen',wiped:'Alle Einträge gelöscht',imported:'{n} Zeilen importiert, {pc} Kartoninhalte',
+extraCleared:'Importierte Artikel gelöscht (Kartoninhalte bleiben)',noteSGA:'1 Stk = Box 6×10 ml (keine Einzelampullen zählen)',src:'SONO-Preisliste · Kartoninhalt: 17.11.2026',clearLot:'Charge löschen'
+},
+it:{
+palletLbl:'PALLET · CAMBIA',palletPick:'Scegli pallet',items:'articoli',pcs:'pz',camClose:'Chiudi fotocamera',startScan:'📷 Avvia scansione',
+camHint:'Tieni il barcode orizzontale nel riquadro, a 15–25 cm.',modeAsk:'Chiedi quantità',modePlusC:'Scan = +1 cartone',modePlusU:'Scan = +1 pezzo',
+manualBtn:'⌨︎ Cerca / inserisci a mano',finishBtn:'✓ Pallet completato',recentHdr:'Ultimi su questo pallet',listSearch:'Cerca: prodotto, codice, barcode, pallet, lotto',
+listRows:'Tutte le scansioni',listSum:'Totale per prodotto',onlyActive:'Solo pallet attivo',scope:'Ambito',scopeAll:'Tutti i pallet',format:'Formato',
+fmtSum:'Riepilogo (pallet + totale prodotto)',fmtRows:'Dettaglio (ogni scansione)',shareCsv:'⇪ Condividi CSV (Mail, AirDrop, File…)',dlCsv:'⬇︎ Scarica CSV',
+preview:'Anteprima',danger:'Zona pericolosa',wipe:'Elimina tutti i dati…',setLang:'Lingua / Language',langAuto:'Automatica (lingua del telefono)',
+setDevice:'Dispositivo / operatore (compare nel CSV)',setDevicePh:'es. Magazzino iPhone 1',setLot:'Compila lotto automaticamente',
+setLotSub:"Per lo stesso prodotto sullo stesso pallet viene proposto l'ultimo lotto",setSound:'Suono di lettura',setSoundSub:"Con l'iPhone in silenzioso non c'è suono, il lampo verde appare comunque",
+setExcel:'Mantieni il barcode come testo in Excel',setExcelSub:'Per evitare che i codici a 13 cifre diventino 8,05E+12 viene scritto ="…"',setSep:'Separatore CSV',
+sepSemi:'Punto e virgola ; (Excel italiano/tedesco)',sepComma:'Virgola , (Excel inglese, Google Sheets)',setCool:'Attesa per lo stesso barcode in modalità "+1 cartone / +1 pezzo"',sec:'s',
+prodHdr:'Elenco prodotti e pezzi per cartone',tplBtn:'⬇︎ Scarica modello (CSV)',uploadBtn:'⬆︎ Carica elenco (CSV)',
+prodHelp:'Scarica il modello, compila in Excel la colonna <b>koli_ici</b> (pezzi per cartone) e ricaricalo qui. Colonne: barkod; referans; urun_adi; hacim_ml; koli_ici. I prodotti senza barcode vengono abbinati tramite il codice. Si possono aggiungere nuovi prodotti.',
+pcEditBtn:'✎ Modifica pezzi per cartone',prodClear:'Elimina prodotti importati',dataHdr:'Dati',tabScan:'Scansiona',tabList:'Elenco',tabExport:'Esporta',tabSet:'Impostazioni',
+saveFail:'⚠️ Salvataggio non riuscito – esporta subito',notInList:'Non in elenco',noName:'Prodotto senza nome',nCases:'{n} cart.',undo:'Annulla',undone:'Annullato',lot:'Lotto',product:'prodotto',
+palletWasClosed:'Questo pallet era già chiuso – si aggiunge',
+libFail:'Lettore barcode non caricato. Apri l\'app una volta con connessione internet. Nel frattempo usa "Cerca / inserisci a mano".',
+needHttps:'Per la fotocamera la pagina deve essere aperta via https://.',noCamApi:'Questo browser non può usare la fotocamera. Apri con Safari o Chrome.',
+camDenied:'Accesso alla fotocamera negato. Consenti la fotocamera al browser nelle impostazioni del telefono e riprova.',camFail:'Impossibile avviare la fotocamera: {e}',palletToast:'Pallet: {p}',
+badRead:'Lettura errata, riprova',enterPalletFirst:'Inserisci prima il numero pallet',noPcWarn:'Pezzi per cartone non definiti – inserisci la quantità',
+notInListTitle:"⚠️ Non presente nell'elenco",noBarcode:'senza barcode',palletWord:'Pallet',
+existsNew:'Su questo pallet ci sono già <b>{n}</b> pz di questo prodotto – la nuova voce viene aggiunta come riga separata.',existsEdit:'Su questo pallet ci sono altri <b>{n}</b> pz di questo prodotto.',
+unknownCanSave:'Prodotto non in elenco, ma può essere salvato comunque.',editPallet:'Pallet (cambia se inserito nel pallet sbagliato)',lotPh:'Lotto (facoltativo)',
+caseBox:'CARTONI',unitBox:'SFUSI',pcInputPh:'Pezzi per cartone',ok:'OK',del:'Elimina',cancel:'Annulla',save:'SALVA',update:'Aggiorna',
+pcLabel:'Pezzi per cartone: {n} ✎',pcMissing:'⚠️ Imposta pezzi per cartone',pcUnknownBox:'Pz/cart.?',totalOnly:'Totale <b>{n}</b> pz',confirmBig:'{n} pz – sicuro? Conferma',
+updated:'Aggiornato',pcSaved:'Pezzi per cartone salvati: {n}',sureDel:'Sicuro? Elimina',deleted:'Eliminato',palletNo:'Numero pallet',palletPh:'es. P-0012',next:'Successivo',
+scanLabel:'📷 Scansiona etichetta pallet (facoltativo)',start:'Inizia',scanLabelBanner:"Scansiona l'etichetta del pallet",finishQ:'Completare il pallet {p}?',cases:'cartoni',back:'Indietro',
+finishOk:'✓ Completa → pallet successivo',searchTitle:'Cerca o inserisci prodotto',searchPh:'Nome, codice o barcode',
+searchHint:"Barcode non obbligatorio – scegli dall'elenco o scrivi un nome libero.",casePerShort:'{n}/cart.',saveWithCode:'Salva con barcode "{c}"',
+checksumBad:'⚠️ cifra di controllo errata',saveFree:'Salva "{n}" senza barcode',notInListShort:'Prodotto non in elenco',close:'Chiudi',
+emptyPallet:'Nessuna voce su questo pallet. Scansiona un barcode o cerca un prodotto.',emptyStart:'Per iniziare scegli un pallet in alto.',scansN:'{n} scansioni',singleWord:'sfusi',
+noMatch:'Nessun risultato.',noEntries:'Ancora nessuna voce.',active:'attivo',makeActive:'Attiva',pallets:'pallet',scans:'scansioni',totalPcs:'pezzi totali',
+unexported:"<b>{n}</b> nuove scansioni dall'ultima esportazione.",lastExport:' Ultima esportazione: {d}',neverExport:' Nessuna esportazione finora.',allExported:'Tutto esportato ({d}).',
+moreLines:'… (+{n} righe)',noRecords:'(nessun dato)',prodInfo:'<b>{n}</b> prodotti ({b} con barcode, {nb} senza) – {src}{x}.<br>Pezzi per cartone definiti: <b>{pc}</b> / {n}',
+extraRows:' + {n} righe importate',dataInfo:"I dati sono salvati solo su questo telefono ({kb} KB). Esporta regolarmente in CSV.<br>Se aggiunta alla schermata Home, aprila sempre dall'icona – i dati nella scheda del browser sono separati.<br>Versione {v} · lettore: {r}",
+readerNative:'integrato',readerNone:'non caricato',pcDefault:'Ripristinato predefinito',pcSet:'Pezzi per cartone: {n}',modeToastAsk:'A ogni scansione vengono chiesti cartoni / pezzi',
+modeToastC:'Ogni scansione conta come 1 cartone',modeToastU:'Ogni scansione conta come 1 pezzo',activePalletToast:'Pallet attivo: {p}',nothingExport:'Niente da esportare',
+csvReady:'CSV pronto',csvDl:'CSV scaricato',wipeQ:'Eliminare tutti i dati?',wipeBody:'{n} scansioni e {p} pallet verranno eliminati definitivamente. Elenco prodotti e pezzi per cartone restano.',
+wipeWarn:'<b>{n}</b> scansioni non ancora esportate!',wipeOk:'Sì, elimina tutto',wiped:'Tutti i dati eliminati',imported:'{n} righe caricate, {pc} pezzi per cartone',
+extraCleared:'Prodotti importati eliminati (pezzi per cartone restano)',noteSGA:'1 pz = scatola 6×10 ml (non contare le singole fiale)',src:'Listino SONO · pezzi per cartone: 17.11.2026',clearLot:'Cancella lotto'
+},
+ru:{
+palletLbl:'ПАЛЛЕТА · ИЗМЕНИТЬ',palletPick:'Выбрать паллету',items:'поз.',pcs:'шт',camClose:'Закрыть камеру',startScan:'📷 Начать сканирование',
+camHint:'Держите штрихкод горизонтально в рамке, на расстоянии 15–25 см.',modeAsk:'Спрашивать кол-во',modePlusC:'Скан = +1 короб',modePlusU:'Скан = +1 шт',
+manualBtn:'⌨︎ Поиск / ввод вручную',finishBtn:'✓ Паллета готова',recentHdr:'Последние на этой паллете',listSearch:'Поиск: товар, артикул, штрихкод, паллета, партия',
+listRows:'Все сканы',listSum:'Итого по товару',onlyActive:'Только активная паллета',scope:'Объём',scopeAll:'Все паллеты',format:'Формат',
+fmtSum:'Сводка (паллета + итог по товару)',fmtRows:'Подробно (каждый скан)',shareCsv:'⇪ Поделиться CSV (почта, AirDrop, файлы…)',dlCsv:'⬇︎ Скачать CSV',
+preview:'Предпросмотр',danger:'Опасная зона',wipe:'Удалить все записи…',setLang:'Язык / Language',langAuto:'Автоматически (язык телефона)',
+setDevice:'Устройство / сотрудник (указывается в CSV)',setDevicePh:'напр. Склад iPhone 1',setLot:'Автозаполнение партии',
+setLotSub:'Для того же товара на той же паллете подставляется последняя партия',setSound:'Звук сканирования',setSoundSub:'В беззвучном режиме iPhone звука нет, зелёная вспышка всё равно видна',
+setExcel:'Сохранять штрихкод в Excel как текст',setExcelSub:'Чтобы 13-значный код не превращался в 8,05E+12, пишется ="…"',setSep:'Разделитель CSV',
+sepSemi:'Точка с запятой ; (русский/немецкий Excel)',sepComma:'Запятая , (английский Excel, Google Sheets)',setCool:'Пауза для того же штрихкода в режиме «+1 короб / +1 шт»',sec:'с',
+prodHdr:'Список товаров и вложение в короб',tplBtn:'⬇︎ Скачать шаблон (CSV)',uploadBtn:'⬆︎ Загрузить список (CSV)',
+prodHelp:'Скачайте шаблон, заполните в Excel столбец <b>koli_ici</b> (шт в коробе) и загрузите обратно. Столбцы: barkod; referans; urun_adi; hacim_ml; koli_ici. Товары без штрихкода сопоставляются по артикулу. Можно добавлять новые строки.',
+pcEditBtn:'✎ Изменить вложение по товарам',prodClear:'Удалить загруженные товары',dataHdr:'Данные',tabScan:'Скан',tabList:'Список',tabExport:'Экспорт',tabSet:'Настройки',
+saveFail:'⚠️ Не удалось сохранить – сразу сделайте экспорт',notInList:'Нет в списке',noName:'Товар без названия',nCases:'{n} кор.',undo:'Отменить',undone:'Отменено',lot:'Партия',product:'товар',
+palletWasClosed:'Эта паллета уже была закрыта – добавляем к ней',
+libFail:'Не удалось загрузить сканер. Откройте приложение один раз с интернетом. Пока можно использовать «Поиск / ввод вручную».',
+needHttps:'Для камеры страница должна быть открыта по https://.',noCamApi:'Этот браузер не имеет доступа к камере. Откройте в Safari или Chrome.',
+camDenied:'Доступ к камере запрещён. Разрешите браузеру камеру в настройках телефона и попробуйте снова.',camFail:'Не удалось открыть камеру: {e}',palletToast:'Паллета: {p}',
+badRead:'Ошибка чтения, отсканируйте ещё раз',enterPalletFirst:'Сначала введите номер паллеты',noPcWarn:'Вложение в короб не задано – введите количество',
+notInListTitle:'⚠️ Нет в списке товаров',noBarcode:'без штрихкода',palletWord:'Паллета',
+existsNew:'На этой паллете уже <b>{n}</b> шт этого товара – новая запись добавится отдельной строкой.',existsEdit:'На этой паллете есть ещё <b>{n}</b> шт этого товара.',
+unknownCanSave:'Товара нет в списке, но его можно сохранить.',editPallet:'Паллета (измените, если указана неверно)',lotPh:'Партия (необязательно)',
+caseBox:'КОРОБА',unitBox:'ШТУЧНО',pcInputPh:'Шт в коробе',ok:'ОК',del:'Удалить',cancel:'Отмена',save:'СОХРАНИТЬ',update:'Обновить',
+pcLabel:'В коробе: {n} шт ✎',pcMissing:'⚠️ Задать вложение в короб',pcUnknownBox:'Вложение?',totalOnly:'Итого <b>{n}</b> шт',confirmBig:'{n} шт – уверены? Подтвердить',
+updated:'Обновлено',pcSaved:'Вложение сохранено: {n}',sureDel:'Точно? Удалить',deleted:'Удалено',palletNo:'Номер паллеты',palletPh:'напр. P-0012',next:'Следующая',
+scanLabel:'📷 Сканировать этикетку паллеты (необязательно)',start:'Начать',scanLabelBanner:'Отсканируйте этикетку паллеты',finishQ:'Завершить паллету {p}?',cases:'коробов',back:'Назад',
+finishOk:'✓ Завершить → следующая',searchTitle:'Поиск или ручной ввод товара',searchPh:'Название, артикул или штрихкод',
+searchHint:'Штрихкод не обязателен – выберите из списка или введите название.',casePerShort:'{n}/кор.',saveWithCode:'Сохранить со штрихкодом «{c}»',
+checksumBad:'⚠️ неверная контрольная цифра',saveFree:'Сохранить «{n}» без штрихкода',notInListShort:'Товара нет в списке',close:'Закрыть',
+emptyPallet:'На этой паллете пока нет записей. Отсканируйте штрихкод или найдите товар.',emptyStart:'Чтобы начать, выберите паллету вверху.',scansN:'{n} скан.',singleWord:'шт',
+noMatch:'Ничего не найдено.',noEntries:'Записей пока нет.',active:'активна',makeActive:'Сделать активной',pallets:'паллет',scans:'сканов',totalPcs:'всего шт',
+unexported:'С последнего экспорта <b>{n}</b> новых сканов.',lastExport:' Последний экспорт: {d}',neverExport:' Экспорта ещё не было.',allExported:'Всё экспортировано ({d}).',
+moreLines:'… (+{n} строк)',noRecords:'(нет записей)',prodInfo:'<b>{n}</b> товаров ({b} со штрихкодом, {nb} без) – {src}{x}.<br>Вложение задано: <b>{pc}</b> / {n}',
+extraRows:' + {n} загруженных строк',dataInfo:'Данные хранятся только на этом телефоне ({kb} КБ). Регулярно делайте экспорт CSV.<br>Если приложение добавлено на главный экран, всегда открывайте его через значок – данные во вкладке браузера хранятся отдельно.<br>Версия {v} · сканер: {r}',
+readerNative:'встроенный',readerNone:'не загружен',pcDefault:'Сброшено по умолчанию',pcSet:'Вложение: {n}',modeToastAsk:'При каждом скане запрашиваются короба / штуки',
+modeToastC:'Каждый скан = 1 короб',modeToastU:'Каждый скан = 1 шт',activePalletToast:'Активная паллета: {p}',nothingExport:'Нет записей для экспорта',
+csvReady:'CSV готов',csvDl:'CSV скачан',wipeQ:'Удалить все записи?',wipeBody:'{n} сканов и {p} паллет будут удалены навсегда. Список товаров и вложения сохранятся.',
+wipeWarn:'<b>{n}</b> сканов ещё не экспортированы!',wipeOk:'Да, удалить всё',wiped:'Все записи удалены',imported:'Загружено строк: {n}, вложений: {pc}',
+extraCleared:'Загруженные товары удалены (вложения сохранены)',noteSGA:'1 шт = коробка 6×10 мл (ампулы поштучно не считаются)',src:'Прайс SONO · вложения: 17.11.2026',clearLot:'Очистить партию'
+},
+en:{
+palletLbl:'PALLET · CHANGE',palletPick:'Select pallet',items:'items',pcs:'pcs',camClose:'Close camera',startScan:'📷 Start scanning',
+camHint:'Hold the barcode horizontally inside the frame, 15–25 cm away.',modeAsk:'Ask quantity',modePlusC:'Scan = +1 case',modePlusU:'Scan = +1 pc',
+manualBtn:'⌨︎ Search / enter manually',finishBtn:'✓ Pallet done',recentHdr:'Latest on this pallet',listSearch:'Search: product, ref, barcode, pallet, lot',
+listRows:'All scans',listSum:'Total per product',onlyActive:'Active pallet only',scope:'Scope',scopeAll:'All pallets',format:'Format',
+fmtSum:'Summary (pallet + product total)',fmtRows:'Detailed (every scan)',shareCsv:'⇪ Share CSV (Mail, AirDrop, Files…)',dlCsv:'⬇︎ Download CSV',
+preview:'Preview',danger:'Danger zone',wipe:'Delete all records…',setLang:'Language',langAuto:'Automatic (phone language)',
+setDevice:'Device / counter name (shown in CSV)',setDevicePh:'e.g. Warehouse iPhone 1',setLot:'Auto-fill lot number',
+setLotSub:'Suggests the last lot for the same product on the same pallet',setSound:'Scan sound',setSoundSub:'No sound when the iPhone is on silent – the green flash still shows',
+setExcel:'Keep barcode as text in Excel',setExcelSub:'Writes ="…" so 13-digit barcodes don\'t turn into 8.05E+12',setSep:'CSV separator',
+sepSemi:'Semicolon ; (German/Turkish Excel)',sepComma:'Comma , (English Excel, Google Sheets)',setCool:'Same-barcode wait time in "+1 case / +1 pc" mode',sec:'s',
+prodHdr:'Product list and case quantities',tplBtn:'⬇︎ Download template (CSV)',uploadBtn:'⬆︎ Upload list (CSV)',
+prodHelp:'Download the template, fill in the <b>koli_ici</b> (pcs per case) column in Excel and upload it here. Columns: barkod; referans; urun_adi; hacim_ml; koli_ici. Products without barcode are matched by reference. New product rows can be added.',
+pcEditBtn:'✎ Edit case quantities one by one',prodClear:'Delete uploaded extra products',dataHdr:'Data',tabScan:'Scan',tabList:'List',tabExport:'Export',tabSet:'Settings',
+saveFail:'⚠️ Could not save – export now',notInList:'Not in list',noName:'Unnamed product',nCases:'{n} cs',undo:'Undo',undone:'Undone',lot:'Lot',product:'product',
+palletWasClosed:'This pallet was already closed – adding to it',
+libFail:'Barcode reader failed to load. Open the app once while online. Meanwhile use "Search / enter manually".',
+needHttps:'The page must be opened via https:// for the camera.',noCamApi:"This browser can't access the camera. Open in Safari or Chrome.",
+camDenied:'Camera permission denied. Allow camera access for the browser in phone settings and try again.',camFail:'Could not start camera: {e}',palletToast:'Pallet: {p}',
+badRead:'Misread – scan again',enterPalletFirst:'Enter the pallet number first',noPcWarn:'Case quantity not set for this product – enter quantity',
+notInListTitle:'⚠️ Not in product list',noBarcode:'no barcode',palletWord:'Pallet',
+existsNew:'This pallet already has <b>{n}</b> pcs of this product – the new entry is added as a separate line.',existsEdit:'This pallet has another <b>{n}</b> pcs of this product.',
+unknownCanSave:'Product not in list but can still be saved.',editPallet:'Pallet (change if entered on the wrong one)',lotPh:'Lot no. (optional)',
+caseBox:'CASES',unitBox:'SINGLE',pcInputPh:'Pcs per case',ok:'OK',del:'Delete',cancel:'Cancel',save:'SAVE',update:'Update',
+pcLabel:'Per case: {n} pcs ✎',pcMissing:'⚠️ Set case quantity',pcUnknownBox:'Per case?',totalOnly:'Total <b>{n}</b> pcs',confirmBig:'{n} pcs – sure? Confirm',
+updated:'Updated',pcSaved:'Case quantity saved: {n}',sureDel:'Sure? Delete',deleted:'Deleted',palletNo:'Pallet number',palletPh:'e.g. P-0012',next:'Next',
+scanLabel:'📷 Scan pallet label (optional)',start:'Start',scanLabelBanner:'Scan the pallet label',finishQ:'Complete pallet {p}?',cases:'cases',back:'Back',
+finishOk:'✓ Complete → next pallet',searchTitle:'Search or enter product',searchPh:'Name, reference or barcode',
+searchHint:'Barcode not required – pick from the list or type a free name.',casePerShort:'{n}/case',saveWithCode:'Save with barcode "{c}"',
+checksumBad:'⚠️ check digit mismatch',saveFree:'Save "{n}" without barcode',notInListShort:'Product not in list',close:'Close',
+emptyPallet:'No entries on this pallet yet. Scan a barcode or search a product.',emptyStart:'Select a pallet at the top to start.',scansN:'{n} scans',singleWord:'single',
+noMatch:'No matches.',noEntries:'No entries yet.',active:'active',makeActive:'Make active',pallets:'pallets',scans:'scans',totalPcs:'total pcs',
+unexported:'<b>{n}</b> new scans since last export.',lastExport:' Last export: {d}',neverExport:' No export yet.',allExported:'Everything exported ({d}).',
+moreLines:'… (+{n} lines)',noRecords:'(no records)',prodInfo:'<b>{n}</b> products ({b} with barcode, {nb} without) – {src}{x}.<br>Case quantity set: <b>{pc}</b> / {n}',
+extraRows:' + {n} uploaded rows',dataInfo:'Data is stored only on this phone ({kb} KB). Export CSV regularly.<br>If added to the home screen, always open it from the icon – browser-tab data is separate.<br>Version {v} · reader: {r}',
+readerNative:'built-in',readerNone:'not loaded',pcDefault:'Reset to default',pcSet:'Per case: {n}',modeToastAsk:'Each scan asks for cases / single pcs',
+modeToastC:'Each scan counts as 1 case',modeToastU:'Each scan counts as 1 pc',activePalletToast:'Active pallet: {p}',nothingExport:'Nothing to export',
+csvReady:'CSV ready',csvDl:'CSV downloaded',wipeQ:'Delete all records?',wipeBody:'{n} scans and {p} pallets will be permanently deleted. Product list and case quantities stay.',
+wipeWarn:'<b>{n}</b> scans not exported yet!',wipeOk:'Yes, delete all',wiped:'All records deleted',imported:'{n} rows imported, {pc} case quantities',
+extraCleared:'Uploaded products deleted (case quantities kept)',noteSGA:'1 pc = box of 6×10 ml (single ampoules not counted)',src:'SONO price list · case qty: 17.11.2026',clearLot:'Clear lot'
+}};
+
 'use strict';
-const PRODUCTS=[["8053839950161","SAO001","SONO ARGAN OIL",30,200,""],["8053839950178","SAO002","SONO ARGAN OIL",100,36,""],["8053839950109","SASH002","SONO ARGAN SHAMPOO 250",250,48,""],["8053839950093","SACN002","SONO ARGAN CONDITIONER",250,48,""],["8053839950130","SADM001","SONO ARGAN DEEP MASK box",250,32,""],["8053839950123","SALM002","SONO ARGAN LEAVE IN MASK box",150,64,""],["8053839950154","SALMM002","SONO ARGAN LEAVE IN MASK",50,100,""],["8053839950024","SAA001","SONO COLOR SHAMPOO",250,48,""],["8053839950000","SAA002","SONO COLOR MASK box",250,32,""],["8053839950246","SSO002","SONO BLONDER OIL",100,36,""],["8053839950062","SSH001","SONO SILVER SHAMPOO",250,48,""],["8053839950048","SSMA02","SONO SILVER MASK box",250,32,""],["8053839950192","SSSI01","SONO SILVER SILK box",150,64,""],["8053839950321","SSSIM011","SONO SILVER SILK",50,100,""],["8053839950239","SSS003","SONO STYLE SALT WAVE",150,64,""],["8053839950338","SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250,48,""],["8053839950352","SGM001","SONO GOLD RESTRUCTURING MASK",150,64,""],["8053839950376","SSG001","SONO SILKY GOLD",150,64,""],["8053839950277","SKSH001","SONO KERATIN SHAMPOO",250,48,""],["8053839950284","SKCN001","SONO KERATIN CONDITIONER",250,48,""],["8053839950314","SAAP001","Sono Color Potion 150 ml",150,64,""],["8053839950857","SSG002","Silky Gold 50 ml",50,100,""],["8053839950956","SCP050","Sono Color Potion 50 ml",50,100,""],["8053839950116","SASH003","SONO ARGAN SHAMPOO 1000",1000,12,""],["8053839950086","SACN003","SONO ARGAN CONDITIONER",1000,12,""],["8053839950536","SKSH002","SONO KERATIN SHAMPOO",1000,12,""],["8053839951151","SSVS150","VOLUME SPRAY",150,64,""],["8053839951182","SSTP150","THERMO-PROTECTIVE SPRAY",150,80,""],["8053839950031","SAA003","SONO COLOR SHAMPOO 1000 ml",1000,12,""],["8053839950345","SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000,12,""],["8053839951168","SSVM150","Sono Volume Mousse",150,48,""],["8053839951199","SSBW150","BEACH WAVES SPRAY",150,64,""],["8053839950680","SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250,48,""],["8053839950697","SVMA001","THE VOLUMIZING MASK 250 ml",250,32,""],["8053839950079","SSH003","SONO SILVER SHAMPOO 1000 ml",1000,12,""],["8053839951755","SAPGS25","SONO Argan Perfume Gift Set 2025","","",""],["8053839951472","SGCN1000","SONO GOLD Conditioner 1000 ml",1000,12,""],["8053839951489","SGCN0250","SONO GOLD Conditioner 250 ml",250,48,""],["8053839951496","SSCN1000","SONO Silver Conditioner 1000 ml",1000,12,""],["8053839951502","SSCN0250","SONO Silver Conditioner 250 ml",250,48,""],["8053839951618","SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250,48,""],["8053839951519","SCCN1000","SONO Color Conditioner 1000 ml",1000,12,""],["8053839951649","SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250,48,""],["8053839951700","SKHP001","SONO KERATIN PERFUME",30,256,""],["8053839951526","SCCN0250","SONO Color Conditioner 250 ml",250,48,""],["8053839951281","SSDRS200","SPRAY DRY SHAMPOO","",12,""],["8053839951311","SSFSPR300","FIX SPRAY","",12,""],["8053839951564","SCSH250","SONO THE CURL SHAMPOO",250,48,""],["8053839951588","SCMA250","SONO CURL MASK",250,32,""],["8053839951601","SCLG150","SONO CURL LIQUID GEL",150,64,""],["8053839951632","SDLT150","SONO ANTI-DANDRUFF LOTION",150,64,""],["8053839951656","SGFM050","SONO GOLD  LIQUID FILLER MASK",50,100,""],["8053839951663","SBLM050","SONO BLONDER LIQUID MASK",50,100,""],["8053839951670","SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250,48,""],["8053839951687","SHLCN250","SONO HAIR-LOSS CONDITIONER",250,48,""],["8053839951694","SHLT150","SONO HAIR-LOSS LOTION",150,64,""],["8053839951717","SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100,36,""],["8053839950475","SAOM02","ARGAN OIL 10 ML",10,"",""],["8053839950437","SASHS02","ARGAN SHAMPOO 10 ML",10,"",""],["8053839950444","SACNS02","ARGAN CONDITIONER 10 ML",10,"",""],["8053839950451","SADMS01","ARGAN DEEP MASK 10 ML",10,"",""],["8053839950468","SALMS02","ARGAN LEAVE IN MASK 10 ML",10,"",""],["8053839950482","SAAS001","COLOR SHAMPOO 10 ML",10,"",""],["8053839950499","SAAS002","ANTI-AGE MASK 10 ML",10,"",""],["8053839950390","SAHS01","SILVER SHAMPOO 10 ML",10,"",""],["","","SONO Silver Conditioner 10 ml",10,"",""],["8053839950406","SSMS01","SILVER MASK 10 ML",10,"",""],["8053839950413","SSSS01","SONO SILVER SILK SPRAY 10ML",10,"",""],["8053839950567","SKSHS01","SONO KERATIN SHAMPOO",10,"",""],["8053839950574","SKCNS01","SONO KERATIN CONDITIONER",10,"",""],["8053839950376_","SSGS01","SONO SILKY GOLD",10,"",""],["8053839950529","SACNS02","SONO Kraft Bag 18X24X8 cm","","",""],["8053839951120","SWB001","SMAL SONO WHITE BAG","",200,""],["","SADM002","SONO ARGAN DEEP MASK",500,"",""],["","SAA004","SONO COLOR MASK",500,"",""],["","SSO001","SONO BLONDER OIL",30,200,""],["","SSMA01","SONO SILVER MASK",500,"",""],["","SGM002","SONO GOLD RESTRUCTURING MASK",500,"",""],["","SGF002","SONO GOLD FILLER",250,"",""],["","SGA001","SONO GOLD AMPOULE","6 x 10 ml",32,"1 adet = 6×10 ml kutu (tek ampul sayılmaz)"],["","SKCN002","SONO KERATIN CONDITIONER",1000,12,""],["","SSS004","SONO STYLE SALT WAVE",50,100,""],["","SSGG150","LIQUID GEL",150,64,""],["","SSDC050","STYLING PASTE",50,112,""],["","SSDCSH250","SONO STYLE DEEP CLEANSING SHAMPOO 250 ml",250,48,""],["","SSDCSH1000","SONO STYLE DEEP CLEANSING SHAMPOO 1000 ml",1000,12,""],["","SAPD001","SONO DETOX LOTION 150 ML",150,64,""],["","SAPSH001","SONO DETOX SHAMPOO 250 ML",250,48,""],["","SAPM001","SONO DETOX MASK 150 ML",150,64,""],["","SAPS001","SONO DETOX SPRAY 150 ML",150,64,""],["","SVSP001","SONO VOLUME VOLUMIZING  SPRAY 150 ml",150,64,""],["","SCSH1000","SONO CURL SHAMPOO 1000 ML",1000,12,""],["","SCMA500","SONO CURL MASK 500 ML",500,"",""],["","SDSH1000","SONO ANTI-DANDRUFF SHAMPOO 1000 ML",1000,12,""],["","SCP010","SONO COLOR POTION",10,"",""],["","SSOS01","SONO SILVER OIL",10,"",""],["","SGSS01","SONO GOLD RESTRUCTURING SHAMPOO",10,"",""],["","SGMS01","SONO GOLD RESTRUCTURING MASK",10,"",""],["","KWB001","SMALL SONO WHITE BAG","",200,""],["","SGP00","SONO GOLD PERFUME",30,256,""],["","SAP00","SONO ARGAN PERFUME",30,256,""],["","SBP00","SONO BLONDER PERFUME",30,256,""]];
-const PRODUCT_SOURCE='SONO fiyat listesi · koli içi: SONO listesi 17.11.2026';
-const VERSION='1.2';
+const PRODUCTS=[["8053839950161","SAO001","SONO ARGAN OIL",30,200,""],["8053839950178","SAO002","SONO ARGAN OIL",100,36,""],["8053839950109","SASH002","SONO ARGAN SHAMPOO 250",250,48,""],["8053839950093","SACN002","SONO ARGAN CONDITIONER",250,48,""],["8053839950130","SADM001","SONO ARGAN DEEP MASK box",250,32,""],["8053839950123","SALM002","SONO ARGAN LEAVE IN MASK box",150,64,""],["8053839950154","SALMM002","SONO ARGAN LEAVE IN MASK",50,100,""],["8053839950024","SAA001","SONO COLOR SHAMPOO",250,48,""],["8053839950000","SAA002","SONO COLOR MASK box",250,32,""],["8053839950246","SSO002","SONO BLONDER OIL",100,36,""],["8053839950062","SSH001","SONO SILVER SHAMPOO",250,48,""],["8053839950048","SSMA02","SONO SILVER MASK box",250,32,""],["8053839950192","SSSI01","SONO SILVER SILK box",150,64,""],["8053839950321","SSSIM011","SONO SILVER SILK",50,100,""],["8053839950239","SSS003","SONO STYLE SALT WAVE",150,64,""],["8053839950338","SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250,48,""],["8053839950352","SGM001","SONO GOLD RESTRUCTURING MASK",150,64,""],["8053839950376","SSG001","SONO SILKY GOLD",150,64,""],["8053839950277","SKSH001","SONO KERATIN SHAMPOO",250,48,""],["8053839950284","SKCN001","SONO KERATIN CONDITIONER",250,48,""],["8053839950314","SAAP001","Sono Color Potion 150 ml",150,64,""],["8053839950857","SSG002","Silky Gold 50 ml",50,100,""],["8053839950956","SCP050","Sono Color Potion 50 ml",50,100,""],["8053839950116","SASH003","SONO ARGAN SHAMPOO 1000",1000,12,""],["8053839950086","SACN003","SONO ARGAN CONDITIONER",1000,12,""],["8053839950536","SKSH002","SONO KERATIN SHAMPOO",1000,12,""],["8053839951151","SSVS150","VOLUME SPRAY",150,64,""],["8053839951182","SSTP150","THERMO-PROTECTIVE SPRAY",150,80,""],["8053839950031","SAA003","SONO COLOR SHAMPOO 1000 ml",1000,12,""],["8053839950345","SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000,12,""],["8053839951168","SSVM150","Sono Volume Mousse",150,48,""],["8053839951199","SSBW150","BEACH WAVES SPRAY",150,64,""],["8053839950680","SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250,48,""],["8053839950697","SVMA001","THE VOLUMIZING MASK 250 ml",250,32,""],["8053839950079","SSH003","SONO SILVER SHAMPOO 1000 ml",1000,12,""],["8053839951755","SAPGS25","SONO Argan Perfume Gift Set 2025","","",""],["8053839951472","SGCN1000","SONO GOLD Conditioner 1000 ml",1000,12,""],["8053839951489","SGCN0250","SONO GOLD Conditioner 250 ml",250,48,""],["8053839951496","SSCN1000","SONO Silver Conditioner 1000 ml",1000,12,""],["8053839951502","SSCN0250","SONO Silver Conditioner 250 ml",250,48,""],["8053839951618","SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250,48,""],["8053839951519","SCCN1000","SONO Color Conditioner 1000 ml",1000,12,""],["8053839951649","SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250,48,""],["8053839951700","SKHP001","SONO KERATIN PERFUME",30,256,""],["8053839951526","SCCN0250","SONO Color Conditioner 250 ml",250,48,""],["8053839951281","SSDRS200","SPRAY DRY SHAMPOO","",12,""],["8053839951311","SSFSPR300","FIX SPRAY","",12,""],["8053839951564","SCSH250","SONO THE CURL SHAMPOO",250,48,""],["8053839951588","SCMA250","SONO CURL MASK",250,32,""],["8053839951601","SCLG150","SONO CURL LIQUID GEL",150,64,""],["8053839951632","SDLT150","SONO ANTI-DANDRUFF LOTION",150,64,""],["8053839951656","SGFM050","SONO GOLD  LIQUID FILLER MASK",50,100,""],["8053839951663","SBLM050","SONO BLONDER LIQUID MASK",50,100,""],["8053839951670","SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250,48,""],["8053839951687","SHLCN250","SONO HAIR-LOSS CONDITIONER",250,48,""],["8053839951694","SHLT150","SONO HAIR-LOSS LOTION",150,64,""],["8053839951717","SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100,36,""],["8053839950475","SAOM02","ARGAN OIL 10 ML",10,"",""],["8053839950437","SASHS02","ARGAN SHAMPOO 10 ML",10,"",""],["8053839950444","SACNS02","ARGAN CONDITIONER 10 ML",10,"",""],["8053839950451","SADMS01","ARGAN DEEP MASK 10 ML",10,"",""],["8053839950468","SALMS02","ARGAN LEAVE IN MASK 10 ML",10,"",""],["8053839950482","SAAS001","COLOR SHAMPOO 10 ML",10,"",""],["8053839950499","SAAS002","ANTI-AGE MASK 10 ML",10,"",""],["8053839950390","SAHS01","SILVER SHAMPOO 10 ML",10,"",""],["","","SONO Silver Conditioner 10 ml",10,"",""],["8053839950406","SSMS01","SILVER MASK 10 ML",10,"",""],["8053839950413","SSSS01","SONO SILVER SILK SPRAY 10ML",10,"",""],["8053839950567","SKSHS01","SONO KERATIN SHAMPOO",10,"",""],["8053839950574","SKCNS01","SONO KERATIN CONDITIONER",10,"",""],["8053839950376_","SSGS01","SONO SILKY GOLD",10,"",""],["8053839950529","SACNS02","SONO Kraft Bag 18X24X8 cm","","",""],["8053839951120","SWB001","SMAL SONO WHITE BAG","",200,""],["","SADM002","SONO ARGAN DEEP MASK",500,"",""],["","SAA004","SONO COLOR MASK",500,"",""],["","SSO001","SONO BLONDER OIL",30,200,""],["","SSMA01","SONO SILVER MASK",500,"",""],["","SGM002","SONO GOLD RESTRUCTURING MASK",500,"",""],["","SGF002","SONO GOLD FILLER",250,"",""],["","SGA001","SONO GOLD AMPOULE","6 x 10 ml",32,"noteSGA"],["","SKCN002","SONO KERATIN CONDITIONER",1000,12,""],["","SSS004","SONO STYLE SALT WAVE",50,100,""],["","SSGG150","LIQUID GEL",150,64,""],["","SSDC050","STYLING PASTE",50,112,""],["","SSDCSH250","SONO STYLE DEEP CLEANSING SHAMPOO 250 ml",250,48,""],["","SSDCSH1000","SONO STYLE DEEP CLEANSING SHAMPOO 1000 ml",1000,12,""],["","SAPD001","SONO DETOX LOTION 150 ML",150,64,""],["","SAPSH001","SONO DETOX SHAMPOO 250 ML",250,48,""],["","SAPM001","SONO DETOX MASK 150 ML",150,64,""],["","SAPS001","SONO DETOX SPRAY 150 ML",150,64,""],["","SVSP001","SONO VOLUME VOLUMIZING  SPRAY 150 ml",150,64,""],["","SCSH1000","SONO CURL SHAMPOO 1000 ML",1000,12,""],["","SCMA500","SONO CURL MASK 500 ML",500,"",""],["","SDSH1000","SONO ANTI-DANDRUFF SHAMPOO 1000 ML",1000,12,""],["","SCP010","SONO COLOR POTION",10,"",""],["","SSOS01","SONO SILVER OIL",10,"",""],["","SGSS01","SONO GOLD RESTRUCTURING SHAMPOO",10,"",""],["","SGMS01","SONO GOLD RESTRUCTURING MASK",10,"",""],["","KWB001","SMALL SONO WHITE BAG","",200,""],["","SGP00","SONO GOLD PERFUME",30,256,""],["","SAP00","SONO ARGAN PERFUME",30,256,""],["","SBP00","SONO BLONDER PERFUME",30,256,""]];
+const VERSION='1.3';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const LS='palet_sayim_v1';
-const DEF={entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false};
+const DEF={lang:'auto',entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false};
 let S=Object.assign({},DEF,(()=>{try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}}})());
 if(S.mode==='plus')S.mode='plusu';
 if(Array.isArray(S.extra)||typeof S.extra!=='object')S.extra={};
 for(const k of Object.keys(S.extra)){const v=S.extra[k];if(Array.isArray(v)&&v.length===3)S.extra[k]=[k,v[0],v[1],v[2]]} // v1.0 format → [barcode,ref,name,vol]
 for(const e of S.entries){if(e.units==null){e.units=e.qty;e.cases=0;e.perCase=''}if(e.lot==null)e.lot=''}
-function save(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){toast('⚠️ Kayıt yazılamadı – hemen export alın','err')}}
+function save(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){toast(t('saveFail'),'err')}}
+function detectLang(){for(const l of (navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'en'])){const c=String(l).slice(0,2).toLowerCase();if(LANGS[c])return c}return 'en'}
+let L='tr';
+function t(k,v){let s=(I18N[L]&&I18N[L][k]!=null)?I18N[L][k]:(I18N.tr[k]!=null?I18N.tr[k]:k);if(v)s=s.replace(/\{(\w+)\}/g,(m,n)=>v[n]!=null?v[n]:'');return s}
+function applyLang(){
+  L=S.lang&&S.lang!=='auto'&&LANGS[S.lang]?S.lang:detectLang();
+  document.documentElement.lang=L;
+  $$('[data-i]').forEach(el=>{el.textContent=t(el.dataset.i)});
+  $$('[data-ih]').forEach(el=>{el.innerHTML=t(el.dataset.ih)});
+  $$('[data-ip]').forEach(el=>{el.placeholder=t(el.dataset.ip)});
+  $$('[data-it]').forEach(el=>{el.title=t(el.dataset.it);el.setAttribute('aria-label',t(el.dataset.it))});
+  $('#setLang').innerHTML=`<option value="auto">${esc(t('langAuto'))} – ${esc(LANGS[detectLang()])}</option>`+Object.entries(LANGS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  $('#setLang').value=S.lang||'auto';
+  $$('#setCool option').forEach(o=>{o.textContent=(+o.value/1000).toLocaleString(L)+' '+t('sec')});
+  if(!scanning)$('#camMsg').textContent=t('camHint');
+}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const pad2=n=>String(n).padStart(2,'0');
@@ -351,9 +576,9 @@ function nextPallet(p){
   const m=/^(.*?)(\d+)(\D*)$/.exec(p||'');if(!m)return '';
   return m[1]+String(+m[2]+1).padStart(m[2].length,'0')+m[3];
 }
-function displayName(e){return e.name?(e.name+(hasVol(e.vol)?' · '+volTxt(e.vol):'')):(e.barcode?'Listede yok':'Adsız ürün')}
+function displayName(e){return e.name?(e.name+(hasVol(e.vol)?' · '+volTxt(e.vol):'')):(e.barcode?t('notInList'):t('noName'))}
 function qtyText(e){
-  if(e.cases>0&&e.perCase>0)return e.cases+' koli'+(e.units?' + '+e.units:'')+' = '+e.qty;
+  if(e.cases>0&&e.perCase>0)return t('nCases',{n:e.cases})+(e.units?' + '+e.units:'')+' = '+e.qty;
   return String(e.qty);
 }
 function lastLotFor(p,pallet){
@@ -417,7 +642,7 @@ function addEntry(p,{cases=0,units=0,perCase=0,lot='',source='scan'}){
   const e={id:uid(),pallet:S.pallet,barcode:p.barcode||'',ref:p.ref||'',name:p.name||'',vol:p.vol??'',lot:lot||'',cases,perCase:cases?perCase:'',units,qty,ts:Date.now(),device:S.device||'',source};
   S.entries.push(e);save();renderAll();
   beepSaved();
-  toast('✓ '+(cases?cases+' koli'+(units?' + '+units:'')+' = ':'')+qty+' × '+(p.name||p.barcode||'ürün')+(lot?' · Lot '+lot:''),'ok',{label:'Geri al',fn:()=>{removeEntry(e.id);toast('Geri alındı')}});
+  toast('✓ '+(cases?t('nCases',{n:cases})+(units?' + '+units:'')+' = ':'')+qty+' × '+(p.name||p.barcode||t('product'))+(lot?' · '+t('lot')+' '+lot:''),'ok',{label:t('undo'),fn:()=>{removeEntry(e.id);toast(t('undone'))}});
   return e;
 }
 function removeEntry(id){S.entries=S.entries.filter(e=>e.id!==id);save();renderAll()}
@@ -425,7 +650,7 @@ const pushRecent=(arr,q)=>[q,...(arr||[]).filter(x=>x!==q)].slice(0,4);
 function setPallet(p){
   p=String(p||'').trim();if(!p)return false;
   S.pallet=p;S.recentPallets=[p,...S.recentPallets.filter(x=>x!==p)].slice(0,8);save();renderAll();
-  if(S.closed[p])toast('Bu palet daha önce kapatılmıştı – üzerine ekleniyor','warn');
+  if(S.closed[p])toast(t('palletWasClosed'),'warn');
   return true;
 }
 
@@ -447,15 +672,15 @@ function initDecoder(){
 function camMsg(t){$('#camMsg').textContent=t}
 async function startCamera(){
   unlockAudio();wantCam=true;
-  if(!initDecoder()){camMsg('Barkod okuyucu yüklenemedi. Uygulamayı bir kez internete bağlıyken açın. Bu arada "Ürün ara / elle gir" kullanılabilir.');return}
-  if(!window.isSecureContext){camMsg('Kamera için sayfa https:// adresinden açılmalı.');return}
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){camMsg('Bu tarayıcı kameraya erişemiyor. Safari ile açın.');return}
+  if(!initDecoder()){camMsg(t('libFail'));return}
+  if(!window.isSecureContext){camMsg(t('needHttps'));return}
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){camMsg(t('noCamApi'));return}
   if(stream)return;
   try{
     stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}});
   }catch(e){
     stream=null;
-    camMsg(e&&e.name==='NotAllowedError'?'Kamera izni verilmedi. iPhone Ayarlar › Safari › Kamera › "İzin Ver" yapıp tekrar deneyin.':'Kamera açılamadı: '+(e&&e.message||e));
+    camMsg(e&&e.name==='NotAllowedError'?t('camDenied'):t('camFail',{e:(e&&e.message||e)}));
     return;
   }
   if(!wantCam){stopCamera(false);return}
@@ -512,13 +737,13 @@ function onScan(code,format){
   if(!code)return;
   if(awaitPallet){
     awaitPallet=false;$('#banner').classList.add('hidden');
-    flash('ok');beepOk();vib(40);setPallet(code);toast('Palet: '+code,'ok');
+    flash('ok');beepOk();vib(40);setPallet(code);toast(t('palletToast',{p:code}),'ok');
     cool={code,until:Date.now()+2000};return;
   }
   if(cool.code===code&&Date.now()<cool.until)return;
   const f=String(format||'').toUpperCase().replace('-','_');
   if(['EAN_13','EAN_8','UPC_A'].includes(f)&&!gtinValid(code)){
-    flash('err');beepErr();vib([60,40,60]);toast('Hatalı okuma, tekrar okutun','err');cool={code,until:Date.now()+800};return;
+    flash('err');beepErr();vib([60,40,60]);toast(t('badRead'),'err');cool={code,until:Date.now()+800};return;
   }
   flash('ok');beepOk();vib(40);
   const p=lookup(code)||{barcode:code,ref:'',name:'',vol:'',unknown:true};
@@ -528,7 +753,7 @@ function processProduct(p,{scanned=false,code=null}={}){
   const ck=code||p.barcode||pid(p);
   if(!S.pallet){
     cool={code:ck,until:Infinity};
-    openPalletSheet(()=>processProduct(p,{scanned,code}),'Önce palet numarasını girin');
+    openPalletSheet(()=>processProduct(p,{scanned,code}),t('enterPalletFirst'));
     return;
   }
   if(scanned&&!p.unknown&&(S.mode==='plusc'||S.mode==='plusu')){
@@ -536,7 +761,7 @@ function processProduct(p,{scanned=false,code=null}={}){
     if(S.mode==='plusc'){
       const pc=perCaseOf(p);
       if(pc){addEntry(p,{cases:1,perCase:pc,lot});cool={code:ck,until:Date.now()+(+S.cool||1200)};return}
-      toast('Bu ürünün koli içi adedi tanımlı değil – adet girin','warn');
+      toast(t('noPcWarn'),'warn');
     }else{addEntry(p,{units:1,lot});cool={code:ck,until:Date.now()+(+S.cool||1200)};return}
   }
   cool={code:ck,until:Infinity};
@@ -558,46 +783,46 @@ function openQtySheet(p,entry,source){
   const known=!!(p.name||p.ref);
   const sh=openSheet(`
     <div class="pinfo ${known?'':'unk'}">
-      <div class="pname">${known?esc(p.name||p.ref)+(hasVol(p.vol)?' <span class="vol">'+esc(p.vol)+' ml</span>':''):'⚠️ Ürün listesinde yok'}</div>
-      <div class="pmeta">${p.ref?esc(p.ref)+' · ':''}${p.barcode?esc(p.barcode):'<span class="tag">barkodsuz</span>'} · Palet <b>${esc(pal)}</b></div>
-      ${baseOf(p).note?`<div class="note w" style="margin-top:6px">${esc(baseOf(p).note)}</div>`:''}
+      <div class="pname">${known?esc(p.name||p.ref)+(hasVol(p.vol)?' <span class="vol">'+esc(volTxt(p.vol))+'</span>':''):t('notInListTitle')}</div>
+      <div class="pmeta">${p.ref?esc(p.ref)+' · ':''}${p.barcode?esc(p.barcode):'<span class="tag">'+t('noBarcode')+'</span>'} · ${t('palletWord')} <b>${esc(pal)}</b></div>
+      ${baseOf(p).note?`<div class="note w" style="margin-top:6px">${esc(t(baseOf(p).note))}</div>`:''}
       ${known?`<button class="pcbtn" data-a="pc" id="pcBtn"></button>`:''}
-      <div class="pcrow hidden" id="pcRow"><input id="pcIn" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="Koli içi adet"><button class="btn primary" data-a="pcok" style="min-height:46px">Tamam</button></div>
+      <div class="pcrow hidden" id="pcRow"><input id="pcIn" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="${esc(t('pcInputPh'))}"><button class="btn primary" data-a="pcok" style="min-height:46px">${t('ok')}</button></div>
     </div>
-    ${existing?`<div class="note">Bu palette bu üründen ${editing?'başka':'zaten'} <b>${existing}</b> adet var${editing?'':' – yeni giriş ayrı satır olarak eklenir'}.</div>`:''}
-    ${!known&&!editing?'<div class="note w">Ürün listede yok ama yine de kaydedilebilir.</div>':''}
-    ${editing?`<label class="fld">Palet (yanlış palete girildiyse değiştirin)<input id="edPal" value="${esc(entry.pallet)}" autocomplete="off"></label>`:''}
-    <div class="lotrow"><input id="lotIn" value="${esc(lot0)}" placeholder="Lot no (isteğe bağlı)" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="done"><button data-a="lotclr" aria-label="Lotu temizle">✕</button></div>
+    ${existing?`<div class="note">${t(editing?'existsEdit':'existsNew',{n:existing})}</div>`:''}
+    ${!known&&!editing?`<div class="note w">${t('unknownCanSave')}</div>`:''}
+    ${editing?`<label class="fld">${t('editPallet')}<input id="edPal" value="${esc(entry.pallet)}" autocomplete="off"></label>`:''}
+    <div class="lotrow"><input id="lotIn" value="${esc(lot0)}" placeholder="${esc(t('lotPh'))}" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="done"><button data-a="lotclr" aria-label="${esc(t('clearLot'))}">✕</button></div>
     ${lots.length?`<div class="chips left" style="margin:8px 0 0">${lots.map(l=>`<button data-lot="${esc(l)}">${esc(l)}</button>`).join('')}</div>`:''}
     <div class="cu">
-      <button class="fbox" data-f="c" id="fbC"><small>KOLİ</small><span id="fC"></span><em id="fCe"></em></button>
+      <button class="fbox" data-f="c" id="fbC"><small>${t('caseBox')}</small><span id="fC"></span><em id="fCe"></em></button>
       <div class="plus">+</div>
-      <button class="fbox" data-f="u" id="fbU"><small>TEKİL</small><span id="fU"></span><em>adet</em></button>
+      <button class="fbox" data-f="u" id="fbU"><small>${t('unitBox')}</small><span id="fU"></span><em>${t('pcs')}</em></button>
     </div>
     <div class="tot" id="tot"></div>
     <div class="chips" id="qchips"></div>
     <div class="pad">${['1','2','3','4','5','6','7','8','9','C','0','⌫'].map(k=>`<button data-k="${k}">${k}</button>`).join('')}</div>
     <div class="acts">
-      ${editing?'<button class="btn danger" data-a="del">Sil</button>':'<button class="btn ghost" data-a="cancel">İptal</button>'}
+      ${editing?`<button class="btn danger" data-a="del">${t('del')}</button>`:`<button class="btn ghost" data-a="cancel">${t('cancel')}</button>`}
       <button class="btn primary" data-a="save" id="saveBtn"></button>
     </div>`);
   const defC=()=>!val.c&&!val.u&&pc&&act==='c'; // nothing typed, koli field active → 1 koli
   const eff=()=>{let c=pc?(+val.c||0):0,u=+val.u||0;if(!c&&!u){if(defC())c=1;else u=1}return {c,u}};
   const total=()=>{const {c,u}=eff();return c*pc+u};
   const upd=()=>{
-    if($('#pcBtn')){$('#pcBtn').textContent=pc?'Koli içi: '+pc+' adet ✎':'⚠️ Koli içi adedi tanımla';$('#pcBtn').className='pcbtn'+(pc?'':' miss')}
+    if($('#pcBtn')){$('#pcBtn').textContent=pc?t('pcLabel',{n:pc}):t('pcMissing');$('#pcBtn').className='pcbtn'+(pc?'':' miss')}
     const fC=$('#fC'),fU=$('#fU');
     if(!pc&&act==='c')act='u';
     const {c,u}=eff();
     if(pc){fC.textContent=val.c||String(c);fC.className=val.c?'':'ph';$('#fCe').textContent='× '+pc;$('#fbC').classList.remove('dis')}
-    else{fC.textContent='Koli içi?';fC.className='';$('#fCe').textContent='';$('#fbC').classList.add('dis')}
+    else{fC.textContent=t('pcUnknownBox');fC.className='';$('#fCe').textContent='';$('#fbC').classList.add('dis')}
     fU.textContent=val.u||String(u);fU.className=val.u?'':'ph';
     $('#fbC').classList.toggle('on',act==='c');$('#fbU').classList.toggle('on',act==='u');
-    $('#tot').innerHTML=c?`${c} koli × ${pc}${u?' + '+u:''} = <b>${total()}</b> adet`:`Toplam <b>${u}</b> adet`;
+    $('#tot').innerHTML=c?`${t('nCases',{n:c})} × ${pc}${u?' + '+u:''} = <b>${total()}</b> ${t('pcs')}`:t('totalOnly',{n:u});
     const rec=act==='c'?[...new Set([...(S.recentC||[]),1,2,5])].slice(0,5):[...new Set([...(S.recentU||[]),1])].slice(0,5);
-    $('#qchips').innerHTML=rec.map(v=>`<button data-chip="${v}">${v}${act==='c'?' koli':''}</button>`).join('');
+    $('#qchips').innerHTML=rec.map(v=>`<button data-chip="${v}">${act==='c'?t('nCases',{n:v}):v}</button>`).join('');
     bigOk=false;const b=$('#saveBtn');b.className='btn primary';
-    b.textContent=(editing?'Güncelle':'KAYDET')+' · '+total();
+    b.textContent=t(editing?'update':'save')+' · '+total();
   };
   const key=k=>{
     if(act==='c'&&!pc)return;
@@ -607,14 +832,14 @@ function openQtySheet(p,entry,source){
     else{if(fresh[act]){s=k==='0'?'':k;fresh[act]=false}else if(s.length<5)s=(s+k).replace(/^0+/,'')}
     val[act]=s;upd();
   };
-  const setPc=n=>{n=parseInt(n,10);if(!(n>0))return false;pc=n;S.perCase[pid(p)]=n;save();$('#pcRow').classList.add('hidden');if(!val.c&&!val.u)act='c';upd();toast('Koli içi kaydedildi: '+n,'ok');return true};
+  const setPc=n=>{n=parseInt(n,10);if(!(n>0))return false;pc=n;S.perCase[pid(p)]=n;save();$('#pcRow').classList.add('hidden');if(!val.c&&!val.u)act='c';upd();toast(t('pcSaved',{n}),'ok');return true};
   const doSave=()=>{
     const {c,u}=eff();const q=c*pc+u;
-    if(c>200||u>999||q>20000){if(!bigOk){bigOk=true;const b=$('#saveBtn');b.textContent=q+' adet – emin misin? Onayla';b.className='btn warn';beepErr();return}}
+    if(c>200||u>999||q>20000){if(!bigOk){bigOk=true;const b=$('#saveBtn');b.textContent=t('confirmBig',{n:q});b.className='btn warn';beepErr();return}}
     const lot=($('#lotIn').value||'').trim();
     if(editing){
       const np=($('#edPal').value||'').trim()||entry.pallet;
-      Object.assign(entry,{cases:c,perCase:c?pc:'',units:u,qty:q,lot,pallet:np});save();closeSheet();renderAll();toast('Güncellendi','ok');
+      Object.assign(entry,{cases:c,perCase:c?pc:'',units:u,qty:q,lot,pallet:np});save();closeSheet();renderAll();toast(t('updated'),'ok');
     }else{
       if(+val.c)S.recentC=pushRecent(S.recentC,c);if(+val.u)S.recentU=pushRecent(S.recentU,u);
       closeSheet();addEntry(p,{cases:c,perCase:pc,units:u,lot,source});
@@ -633,7 +858,7 @@ function openQtySheet(p,entry,source){
     if(a==='lotclr'){$('#lotIn').value=''}
     if(a==='cancel')closeSheet();
     if(a==='save')doSave();
-    if(a==='del'){if(!delOk){delOk=true;b.textContent='Emin misin? Sil';b.className='btn dangerfill';return}removeEntry(entry.id);closeSheet();toast('Silindi')}
+    if(a==='del'){if(!delOk){delOk=true;b.textContent=t('sureDel');b.className='btn dangerfill';return}removeEntry(entry.id);closeSheet();toast(t('deleted'))}
   };
   $('#lotIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.target.blur()}});
   $('#pcIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();setPc(e.target.value);e.target.blur()}});
@@ -649,15 +874,15 @@ function openPalletSheet(after,msg){
   const sug=nextPallet(S.pallet);
   const recent=S.recentPallets.filter(x=>x!==S.pallet&&x!==sug).slice(0,5);
   const sh=openSheet(`
-    <h3>Palet numarası</h3>
+    <h3>${t('palletNo')}</h3>
     ${msg?`<div class="note w" style="margin-bottom:10px">${esc(msg)}</div>`:''}
-    <input id="pIn" class="bigin" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" placeholder="Örn. P-0012" enterkeyhint="done">
+    <input id="pIn" class="bigin" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" placeholder="${esc(t('palletPh'))}" enterkeyhint="done">
     <div class="chips left" style="margin-top:10px">
-      ${sug?`<button data-p="${esc(sug)}">Sonraki: <b>${esc(sug)}</b></button>`:''}
+      ${sug?`<button data-p="${esc(sug)}">${t('next')}: <b>${esc(sug)}</b></button>`:''}
       ${recent.map(r=>`<button data-p="${esc(r)}">${esc(r)}</button>`).join('')}
     </div>
-    <button class="btn ghost wide" data-a="scanp">📷 Palet etiketini tara (isteğe bağlı)</button>
-    <div class="acts"><button class="btn ghost" data-a="cancel">İptal</button><button class="btn primary" data-a="ok">Başla</button></div>`);
+    <button class="btn ghost wide" data-a="scanp">${t('scanLabel')}</button>
+    <div class="acts"><button class="btn ghost" data-a="cancel">${t('cancel')}</button><button class="btn primary" data-a="ok">${t('start')}</button></div>`);
   const inp=$('#pIn');
   const go=v=>{if(!setPallet(v)){inp.classList.add('shake');setTimeout(()=>inp.classList.remove('shake'),300);return}
     sheetOnClose=null;closeSheet();cool.until=Date.now()+800;after&&after()};
@@ -667,7 +892,7 @@ function openPalletSheet(after,msg){
     const a=b.dataset.a;
     if(a==='ok')go(inp.value);
     if(a==='cancel'){cool.until=Date.now()+1500;closeSheet()}
-    if(a==='scanp'){closeSheet();awaitPallet=true;const bn=$('#banner');bn.textContent='Palet etiketini okutun';bn.classList.remove('hidden');showView('scan');if(!scanning)startCamera()}
+    if(a==='scanp'){closeSheet();awaitPallet=true;const bn=$('#banner');bn.textContent=t('scanLabelBanner');bn.classList.remove('hidden');showView('scan');if(!scanning)startCamera()}
   };
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go(inp.value)}});
   sheetOnClose=()=>{if(cool.until===Infinity)cool.until=Date.now()+1500};
@@ -677,9 +902,9 @@ function finishPallet(){
   if(!S.pallet)return openPalletSheet();
   const st=palletStats(S.pallet);
   const sh=openSheet(`
-    <h3>Palet ${esc(S.pallet)} tamamlansın mı?</h3>
-    <div class="sum"><div><b>${st.items}</b><span>kalem</span></div><div><b>${st.cases}</b><span>koli</span></div><div><b>${st.qty}</b><span>adet</span></div></div>
-    <div class="acts"><button class="btn ghost" data-a="cancel">Vazgeç</button><button class="btn primary" data-a="ok">✓ Tamamla → sonraki palet</button></div>`);
+    <h3>${t('finishQ',{p:esc(S.pallet)})}</h3>
+    <div class="sum"><div><b>${st.items}</b><span>${t('items')}</span></div><div><b>${st.cases}</b><span>${t('cases')}</span></div><div><b>${st.qty}</b><span>${t('pcs')}</span></div></div>
+    <div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button><button class="btn primary" data-a="ok">${t('finishOk')}</button></div>`);
   sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;
     if(b.dataset.a==='cancel')closeSheet();
     if(b.dataset.a==='ok'){S.closed[S.pallet]=Date.now();save();closeSheet();renderAll();openPalletSheet()}};
@@ -688,21 +913,21 @@ function finishPallet(){
 /* ---------- product search / manual entry (barcode not required) ---------- */
 function openManualSheet(){
   const sh=openSheet(`
-    <h3>Ürün ara veya elle gir</h3>
-    <input id="mIn" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Ürün adı, referans veya barkod" enterkeyhint="go">
-    <div class="mut" style="margin-top:6px">Barkod zorunlu değil – listeden seçin ya da serbest ürün adı yazın.</div>
+    <h3>${t('searchTitle')}</h3>
+    <input id="mIn" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="${esc(t('searchPh'))}" enterkeyhint="go">
+    <div class="mut" style="margin-top:6px">${t('searchHint')}</div>
     <div id="mRes" class="mres"></div>
-    <div class="acts"><button class="btn ghost" data-a="cancel">Kapat</button></div>`);
+    <div class="acts"><button class="btn ghost" data-a="cancel">${t('close')}</button></div>`);
   const inp=$('#mIn'),res=$('#mRes');let hits=[];
   const render=()=>{
     const q=inp.value.trim().toLowerCase();
     const words=q.split(/\s+/).filter(Boolean);
     hits=!q?[]:IDX.all.filter(p=>{const s=(p.barcode+' '+p.ref+' '+p.name+' '+p.vol+' '+(hasVol(p.vol)?p.vol+'ml':'')).toLowerCase();return words.every(w=>s.includes(w))}).slice(0,12);
-    let html=hits.map((p,i)=>`<button class="ritem" data-i="${i}"><div class="nm"><div>${esc(p.name||p.ref)}${hasVol(p.vol)?' · '+esc(volTxt(p.vol)):''}</div><div>${esc(p.ref)}${p.ref?' · ':''}${p.barcode?esc(p.barcode):'<span class="tag">barkodsuz</span>'}${perCaseOf(p)?' · koli içi '+perCaseOf(p):''}</div></div></button>`).join('');
+    let html=hits.map((p,i)=>`<button class="ritem" data-i="${i}"><div class="nm"><div>${esc(p.name||p.ref)}${hasVol(p.vol)?' · '+esc(volTxt(p.vol)):''}</div><div>${esc(p.ref)}${p.ref?' · ':''}${p.barcode?esc(p.barcode):'<span class="tag">'+t('noBarcode')+'</span>'}${perCaseOf(p)?' · '+t('casePerShort',{n:perCaseOf(p)}):''}</div></div></button>`).join('');
     const raw=inp.value.trim();
     if(raw){
-      if(/^\d{4,14}$/.test(raw)&&!lookup(raw))html+=`<button class="ritem unk" data-a="code"><div class="nm"><div>Barkod "${esc(raw)}" ile kaydet</div><div>Listede yok${[8,12,13,14].includes(raw.length)&&!gtinValid(raw)?' · ⚠️ kontrol hanesi tutmuyor':''}</div></div></button>`;
-      else if(!/^\d+$/.test(raw))html+=`<button class="ritem unk" data-a="free"><div class="nm"><div>"${esc(raw)}" adıyla barkodsuz kaydet</div><div>Listede olmayan ürün</div></div></button>`;
+      if(/^\d{4,14}$/.test(raw)&&!lookup(raw))html+=`<button class="ritem unk" data-a="code"><div class="nm"><div>${esc(t('saveWithCode',{c:raw}))}</div><div>${t('notInList')}${[8,12,13,14].includes(raw.length)&&!gtinValid(raw)?' · '+t('checksumBad'):''}</div></div></button>`;
+      else if(!/^\d+$/.test(raw))html+=`<button class="ritem unk" data-a="free"><div class="nm"><div>${esc(t('saveFree',{n:raw}))}</div><div>${t('notInListShort')}</div></div></button>`;
     }
     res.innerHTML=html;
   };
@@ -721,16 +946,16 @@ function openManualSheet(){
 
 /* ---------- render ---------- */
 function renderTop(){
-  const n=$('#palletNo');n.textContent=S.pallet||'Palet seç';n.className='pno'+(S.pallet?'':' none');
+  const n=$('#palletNo');n.textContent=S.pallet||t('palletPick');n.className='pno'+(S.pallet?'':' none');
   const st=palletStats(S.pallet);$('#pItems').textContent=st.items;$('#pQty').textContent=st.qty;
   const un=S.entries.filter(e=>e.ts>S.lastExport).length;const b=$('#expBadge');b.textContent=un;b.classList.toggle('hidden',!un);
 }
 function rowHtml(e,cls='ritem'){
-  return `<button class="${cls} ${e.name||e.ref?'':'unk'}" data-id="${e.id}"><div class="nm"><div>${esc(displayName(e))}</div><div>${fHM(e.ts)} · ${e.ref?esc(e.ref)+' · ':''}${e.barcode?esc(e.barcode):'barkodsuz'}${e.lot?' · <span class="lot">Lot '+esc(e.lot)+'</span>':''}${e.cases?' · '+e.cases+' koli'+(e.units?' + '+e.units:''):''}</div></div><div class="q">${e.qty}</div></button>`;
+  return `<button class="${cls} ${e.name||e.ref?'':'unk'}" data-id="${e.id}"><div class="nm"><div>${esc(displayName(e))}</div><div>${fHM(e.ts)} · ${e.ref?esc(e.ref)+' · ':''}${e.barcode?esc(e.barcode):t('noBarcode')}${e.lot?' · <span class="lot">'+t('lot')+' '+esc(e.lot)+'</span>':''}${e.cases?' · '+t('nCases',{n:e.cases})+(e.units?' + '+e.units:''):''}</div></div><div class="q">${e.qty}</div></button>`;
 }
 function renderRecent(){
   const rs=S.entries.filter(e=>e.pallet===S.pallet).slice(-4).reverse();
-  $('#recent').innerHTML=rs.length?rs.map(e=>rowHtml(e)).join(''):`<div class="empty">${S.pallet?'Bu palette henüz kayıt yok. Barkod okutun veya ürün arayın.':'Başlamak için üstten palet seçin.'}</div>`;
+  $('#recent').innerHTML=rs.length?rs.map(e=>rowHtml(e)).join(''):`<div class="empty">${S.pallet?t('emptyPallet'):t('emptyStart')}</div>`;
 }
 function aggregate(rows,byPallet){
   const m=new Map();
@@ -746,14 +971,14 @@ function renderList(){
   const groups=new Map();
   for(const e of es){if(!groups.has(e.pallet))groups.set(e.pallet,{last:0,rows:[]});const g=groups.get(e.pallet);g.rows.push(e);g.last=Math.max(g.last,e.ts)}
   const gs=[...groups.entries()].sort((a,b)=>(b[0]===S.pallet)-(a[0]===S.pallet)||b[1].last-a[1].last);
-  if(!gs.length){$('#listBody').innerHTML=`<div class="empty">${S.entries.length?'Eşleşen kayıt yok.':'Henüz kayıt yok.'}</div>`;return}
+  if(!gs.length){$('#listBody').innerHTML=`<div class="empty">${S.entries.length?t('noMatch'):t('noEntries')}</div>`;return}
   $('#listBody').innerHTML=gs.map(([p,g])=>{
     const qty=g.rows.reduce((a,r)=>a+r.qty,0),cases=g.rows.reduce((a,r)=>a+(r.cases||0),0),items=new Set(g.rows.map(pid)).size;
     let body;
     if(S.listMode==='sum'){
-      body=aggregate(g.rows,false).sort((a,b)=>(a.name||'~').localeCompare(b.name||'~')).map(x=>`<div class="lrow ${x.name||x.ref?'':'unk'}"><div class="nm"><div>${esc(displayName(x))}</div><div>${x.ref?esc(x.ref)+' · ':''}${x.barcode?esc(x.barcode):'barkodsuz'}${x.lot?' · <span class="lot">Lot '+esc(x.lot)+'</span>':''} · ${x.cases?x.cases+' koli'+(x.units?' + '+x.units+' tekil':'')+' · ':''}${x.n} okutma</div></div><div class="q">${x.qty}</div></div>`).join('');
+      body=aggregate(g.rows,false).sort((a,b)=>(a.name||'~').localeCompare(b.name||'~')).map(x=>`<div class="lrow ${x.name||x.ref?'':'unk'}"><div class="nm"><div>${esc(displayName(x))}</div><div>${x.ref?esc(x.ref)+' · ':''}${x.barcode?esc(x.barcode):t('noBarcode')}${x.lot?' · <span class="lot">'+t('lot')+' '+esc(x.lot)+'</span>':''} · ${x.cases?t('nCases',{n:x.cases})+(x.units?' + '+x.units+' '+t('singleWord'):'')+' · ':''}${t('scansN',{n:x.n})}</div></div><div class="q">${x.qty}</div></div>`).join('');
     }else body=g.rows.slice().reverse().map(e=>rowHtml(e,'lrow')).join('');
-    return `<div class="grp ${p===S.pallet?'act':''}"><div class="gh"><div class="t"><b>${esc(p)}</b>${S.closed[p]?' ✓':''}<div>${items} kalem · ${cases?cases+' koli · ':''}${qty} adet · ${g.rows.length} okutma</div></div>${p===S.pallet?'<span class="mut">aktif</span>':`<button data-act="${esc(p)}">Aktif yap</button>`}</div>${body}</div>`;
+    return `<div class="grp ${p===S.pallet?'act':''}"><div class="gh"><div class="t"><b>${esc(p)}</b>${S.closed[p]?' ✓':''}<div>${items} ${t('items')} · ${cases?t('nCases',{n:cases})+' · ':''}${qty} ${t('pcs')} · ${t('scansN',{n:g.rows.length})}</div></div>${p===S.pallet?`<span class="mut">${t('active')}</span>`:`<button data-act="${esc(p)}">${t('makeActive')}</button>`}</div>${body}</div>`;
   }).join('');
 }
 function csvField(v){v=String(v??'');return /[";,\n\r\t]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
@@ -779,25 +1004,25 @@ function csvName(){
 }
 function renderExport(){
   const pals=new Set(S.entries.map(e=>e.pallet)).size,qty=S.entries.reduce((a,e)=>a+e.qty,0);
-  $('#expStats').innerHTML=`<div><b>${pals}</b><span>palet</span></div><div><b>${S.entries.length}</b><span>okutma</span></div><div><b>${qty}</b><span>toplam adet</span></div>`;
+  $('#expStats').innerHTML=`<div><b>${pals}</b><span>${t('pallets')}</span></div><div><b>${S.entries.length}</b><span>${t('scans')}</span></div><div><b>${qty}</b><span>${t('totalPcs')}</span></div>`;
   const un=S.entries.filter(e=>e.ts>S.lastExport).length;
-  $('#expWarn').innerHTML=un?`<div class="note w" style="margin-top:10px">Son export'tan sonra <b>${un}</b> yeni okutma var.${S.lastExport?' Son export: '+fDate(S.lastExport)+' '+fHM(S.lastExport):' Henüz export alınmadı.'}</div>`:(S.lastExport?`<div class="note" style="margin-top:10px">Her şey export edildi (${fDate(S.lastExport)} ${fHM(S.lastExport)}).</div>`:'');
+  $('#expWarn').innerHTML=un?`<div class="note w" style="margin-top:10px">${t('unexported',{n:un})}${S.lastExport?t('lastExport',{d:fDate(S.lastExport)+' '+fHM(S.lastExport)}):t('neverExport')}</div>`:(S.lastExport?`<div class="note" style="margin-top:10px">${t('allExported',{d:fDate(S.lastExport)+' '+fHM(S.lastExport)})}</div>`:'');
   setSeg('#scopeSeg','scope',S.scope);setSeg('#fmtSeg','fmt',S.fmt);
   const c=buildCsv();const ls=c.text.split('\r\n');
-  $('#prev').textContent=ls.slice(0,7).join('\n')+(ls.length>7?'\n… (+'+(ls.length-7)+' satır)':'')+(c.lines?'':'\n(kayıt yok)');
+  $('#prev').textContent=ls.slice(0,7).join('\n')+(ls.length>7?'\n'+t('moreLines',{n:ls.length-7}):'')+(c.lines?'':'\n'+t('noRecords'));
 }
 function renderSettings(){
   $('#setDevice').value=S.device||'';$('#setSep').value=S.sep;$('#setCool').value=String(S.cool||1200);
   $('#setSound').classList.toggle('on',!!S.sound);$('#setExcel').classList.toggle('on',!!S.excelText);$('#setLot').classList.toggle('on',!!S.autoLot);
   const ne=Object.keys(S.extra).length,nb=IDX.all.filter(p=>p.barcode).length,npc=IDX.all.filter(p=>perCaseOf(p)).length;
-  $('#prodInfo').innerHTML=`<b style="color:var(--tx)">${IDX.all.length}</b> ürün (${nb} barkodlu, ${IDX.all.length-nb} barkodsuz) – ${PRODUCT_SOURCE}${ne?` + ${ne} yüklenen satır`:''}.<br>Koli içi tanımlı: <b style="color:${npc?'var(--tx)':'var(--warn)'}">${npc}</b> / ${IDX.all.length}`;
+  $('#prodInfo').innerHTML=t('prodInfo',{n:IDX.all.length,b:nb,nb:IDX.all.length-nb,src:t('src'),x:ne?t('extraRows',{n:ne}):'',pc:npc});
   let kb=0;try{kb=Math.round((localStorage.getItem(LS)||'').length/1024)}catch(e){}
-  $('#dataInfo').innerHTML=`Veriler sadece bu telefonda saklanır (${kb} KB). Düzenli CSV export alın.<br>Ana ekrana eklediyseniz her zaman ana ekrandaki simgeden açın – Safari sekmesindeki veriler ayrıdır.<br>Sürüm ${VERSION} · okuyucu: ${nativeDet?'yerleşik':(window.ZXing?'ZXing':'yüklenmedi')}`;
+  $('#dataInfo').innerHTML=t('dataInfo',{kb,v:VERSION,r:nativeDet?t('readerNative'):(window.ZXing?'ZXing':t('readerNone'))});
   if(!$('#pcList').classList.contains('hidden'))renderPcList();
 }
 function renderPcList(){
   const ps=IDX.all.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'')||(+a.vol||0)-(+b.vol||0));
-  $('#pcList').innerHTML=ps.map(p=>`<div><span>${esc(p.name||p.ref)}${hasVol(p.vol)?' · '+esc(volTxt(p.vol)):''}<small>${esc(p.ref)}${p.barcode?' · '+esc(p.barcode):' · barkodsuz'}</small></span><input type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="–" data-pid="${esc(pid(p))}" value="${perCaseOf(p)||''}"></div>`).join('');
+  $('#pcList').innerHTML=ps.map(p=>`<div><span>${esc(p.name||p.ref)}${hasVol(p.vol)?' · '+esc(volTxt(p.vol)):''}<small>${esc(p.ref)}${p.barcode?' · '+esc(p.barcode):' · '+t('noBarcode')}</small></span><input type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="–" data-pid="${esc(pid(p))}" value="${perCaseOf(p)||''}"></div>`).join('');
 }
 function setSeg(sel,attr,val){$$(sel+' button').forEach(b=>b.classList.toggle('on',b.dataset[attr]===val))}
 function renderAll(){
@@ -832,11 +1057,11 @@ $('#palletBtn').onclick=()=>{unlockAudio();openPalletSheet()};
 $('#finishBtn').onclick=()=>finishPallet();
 $('#manualBtn').onclick=()=>{unlockAudio();openManualSheet()};
 $('#modeSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.mode=b.dataset.mode;save();setSeg('#modeSeg','mode',S.mode);
-  toast(S.mode==='plusc'?'Her okutma 1 koli olarak kaydedilir':S.mode==='plusu'?'Her okutma 1 adet olarak kaydedilir':'Her okutmada koli / tekil adet sorulur')};
+  toast(t(S.mode==='plusc'?'modeToastC':S.mode==='plusu'?'modeToastU':'modeToastAsk'))};
 function editEntry(id){const en=S.entries.find(x=>x.id===id);if(en)openQtySheet({barcode:en.barcode,ref:en.ref,name:en.name,vol:en.vol},en)}
 $('#recent').onclick=e=>{const b=e.target.closest('[data-id]');if(b)editEntry(b.dataset.id)};
 $('#listBody').onclick=e=>{
-  const a=e.target.closest('[data-act]');if(a){setPallet(a.dataset.act);toast('Aktif palet: '+a.dataset.act,'ok');return}
+  const a=e.target.closest('[data-act]');if(a){setPallet(a.dataset.act);toast(t('activePalletToast',{p:a.dataset.act}),'ok');return}
   const b=e.target.closest('[data-id]');if(b)editEntry(b.dataset.id);
 };
 $('#lq').oninput=()=>renderList();
@@ -854,16 +1079,16 @@ async function shareOrDownload(text,name){
   download(blob,name);return true;
 }
 function markExported(){S.lastExport=Date.now();save();renderAll()}
-$('#shareBtn').onclick=async()=>{const c=buildCsv();if(!c.lines)return toast('Export edilecek kayıt yok','warn');if(await shareOrDownload(c.text,csvName())){markExported();toast('CSV hazır','ok')}};
-$('#dlBtn').onclick=()=>{const c=buildCsv();if(!c.lines)return toast('Export edilecek kayıt yok','warn');download(new Blob(['﻿'+c.text],{type:'text/csv;charset=utf-8'}),csvName());markExported();toast('CSV indirildi','ok')};
+$('#shareBtn').onclick=async()=>{const c=buildCsv();if(!c.lines)return toast(t('nothingExport'),'warn');if(await shareOrDownload(c.text,csvName())){markExported();toast(t('csvReady'),'ok')}};
+$('#dlBtn').onclick=()=>{const c=buildCsv();if(!c.lines)return toast(t('nothingExport'),'warn');download(new Blob(['﻿'+c.text],{type:'text/csv;charset=utf-8'}),csvName());markExported();toast(t('csvDl'),'ok')};
 $('#wipeBtn').onclick=()=>{
   const un=S.entries.filter(e=>e.ts>S.lastExport).length;
-  const sh=openSheet(`<h3>Tüm kayıtlar silinsin mi?</h3>
-    <p>${S.entries.length} okutma, ${new Set(S.entries.map(e=>e.pallet)).size} palet kalıcı olarak silinecek. Ürün listesi ve koli içi adetleri kalır.</p>
-    ${un?`<div class="note w"><b>${un}</b> okutma henüz export edilmedi!</div>`:''}
-    <div class="acts"><button class="btn ghost" data-a="cancel">Vazgeç</button><button class="btn dangerfill" data-a="ok">Evet, hepsini sil</button></div>`);
+  const sh=openSheet(`<h3>${t('wipeQ')}</h3>
+    <p>${t('wipeBody',{n:S.entries.length,p:new Set(S.entries.map(e=>e.pallet)).size})}</p>
+    ${un?`<div class="note w">${t('wipeWarn',{n:un})}</div>`:''}
+    <div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button><button class="btn dangerfill" data-a="ok">${t('wipeOk')}</button></div>`);
   sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.a==='cancel')closeSheet();
-    if(b.dataset.a==='ok'){S.entries=[];S.closed={};S.lastExport=0;save();closeSheet();renderAll();toast('Tüm kayıtlar silindi')}};
+    if(b.dataset.a==='ok'){S.entries=[];S.closed={};S.lastExport=0;save();closeSheet();renderAll();toast(t('wiped'))}};
 };
 $('#setDevice').onchange=e=>{S.device=e.target.value.trim();save()};
 $('#setSep').onchange=e=>{S.sep=e.target.value;save()};
@@ -871,9 +1096,10 @@ $('#setCool').onchange=e=>{S.cool=+e.target.value;save()};
 $('#setSound').onclick=()=>{S.sound=!S.sound;save();renderSettings();unlockAudio();beepOk()};
 $('#setExcel').onclick=()=>{S.excelText=!S.excelText;save();renderSettings()};
 $('#setLot').onclick=()=>{S.autoLot=!S.autoLot;save();renderSettings()};
+$('#setLang').onchange=e=>{S.lang=e.target.value;save();applyLang();renderAll()};
 $('#pcEditBtn').onclick=()=>{const l=$('#pcList');l.classList.toggle('hidden');if(!l.classList.contains('hidden'))renderPcList()};
 $('#pcList').addEventListener('change',e=>{const i=e.target.closest('input[data-pid]');if(!i)return;const n=parseInt(i.value,10);
-  if(n>0)S.perCase[i.dataset.pid]=n;else delete S.perCase[i.dataset.pid];save();renderSettings();toast(n>0?'Koli içi: '+n:'Varsayılana döndü','ok')});
+  if(n>0)S.perCase[i.dataset.pid]=n;else delete S.perCase[i.dataset.pid];save();renderSettings();toast(n>0?t('pcSet',{n}):t('pcDefault'),'ok')});
 $('#tplBtn').onclick=async()=>{
   const sep=S.sep||';';
   const lines=[['barkod','referans','urun_adi','hacim_ml','koli_ici'].join(sep)];
@@ -904,9 +1130,9 @@ $('#prodFile').onchange=async e=>{
     const p=(bc&&IDX.bc.get(bc))||IDX.ref.get(ref.toUpperCase());
     if(p&&pcv>0){S.perCase[pid(p)]=pcv;npc++}
   }
-  buildIndex();save();renderSettings();toast(n+' satır yüklendi, '+npc+' koli içi',n?'ok':'warn');e.target.value='';
+  buildIndex();save();renderSettings();toast(t('imported',{n,pc:npc}),n?'ok':'warn');e.target.value='';
 };
-$('#prodClear').onclick=()=>{S.extra={};buildIndex();save();renderSettings();toast('Yüklenen ek ürünler silindi (koli içi adetleri duruyor)')};
+$('#prodClear').onclick=()=>{S.extra={};buildIndex();save();renderSettings();toast(t('extraCleared'))};
 
 /* hardware / Bluetooth keyboard-wedge scanners */
 let kb='',kbT=0;
@@ -921,6 +1147,7 @@ try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}ca
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 buildIndex();
 initDecoder();
+applyLang();
 renderAll();
 if(!S.pallet)setTimeout(()=>{if(!sheetOpen())openPalletSheet()},300);
 </script>
