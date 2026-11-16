@@ -95,7 +95,7 @@ main{flex:1;overflow:hidden;position:relative}
 .chips.left{justify-content:flex-start}
 .chips button{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:700;min-width:54px}
 .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.pad button{background:var(--card2);border:1px solid var(--line);border-radius:14px;font-size:28px;font-weight:700;height:60px}
+.pad button{background:var(--card2);border:1px solid var(--line);border-radius:14px;font-size:28px;font-weight:700;height:54px}
 .pad button:active,.chips button:active,.btn:active{filter:brightness(1.3)}
 .acts{display:flex;gap:10px;margin-top:12px}
 .acts .btn{flex:1}
@@ -142,6 +142,31 @@ main{flex:1;overflow:hidden;position:relative}
 .toast.err{background:var(--err);color:#fff}
 .toast.warn{background:var(--warn);color:#111}
 .toast button{background:rgba(0,0,0,.18);padding:8px 12px;border-radius:10px;font-weight:800}
+.pcbtn{display:inline-block;margin-top:6px;font-size:14px;color:var(--acc);font-weight:700;padding:4px 0}
+.pcbtn.miss{color:var(--warn)}
+.pcrow{display:flex;gap:8px;align-items:center;margin-top:8px}
+.pcrow input{flex:1}
+.lotrow{display:flex;gap:8px;margin-top:10px;align-items:center}
+.lotrow input{flex:1;font-weight:700;letter-spacing:.03em}
+.lotrow button{width:48px;height:48px;border-radius:12px;background:var(--card2);border:1px solid var(--line)}
+.cu{display:grid;grid-template-columns:1fr 22px 1fr;gap:6px;align-items:stretch;margin:10px 0 2px}
+.cu .plus{display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:22px;font-weight:700}
+.fbox{background:var(--card2);border:2px solid var(--line);border-radius:14px;padding:6px 8px;display:flex;flex-direction:column;align-items:center}
+.fbox.on{border-color:var(--ok);box-shadow:0 0 0 3px rgba(34,197,94,.18)}
+.fbox small{font-size:11px;letter-spacing:.1em;color:var(--mut);font-weight:800}
+.fbox span{font-size:40px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.fbox span.ph{color:#5b6372}
+.fbox em{font-style:normal;font-size:12px;color:var(--mut);min-height:15px}
+.fbox.dis span{color:var(--warn);font-size:15px;padding:12px 0 6px;text-align:center}
+.tot{text-align:center;color:var(--mut);margin:2px 0 6px;font-size:14px}
+.tot b{color:var(--tx);font-size:24px}
+.tag{font-size:11px;background:var(--card2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:4px;color:var(--mut);font-weight:600;white-space:nowrap}
+.lot{color:var(--acc);font-weight:700}
+.pcl{display:flex;flex-direction:column;gap:6px;margin-top:10px;max-height:60vh;overflow:auto}
+.pcl div{display:flex;align-items:center;gap:8px}
+.pcl div span{flex:1;min-width:0;font-size:13px}
+.pcl div span small{display:block;color:var(--mut);font-size:11px}
+.pcl input{width:84px;flex:none;text-align:center;padding:8px}
 .shake{animation:sh .3s}
 @keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 </style>
@@ -175,10 +200,11 @@ main{flex:1;overflow:hidden;position:relative}
       <div class="scanbody">
         <div class="seg2" id="modeSeg">
           <button data-mode="ask">Adet sor</button>
-          <button data-mode="plus">Her okutma +1</button>
+          <button data-mode="plusc">Okut = +1 koli</button>
+          <button data-mode="plusu">Okut = +1 adet</button>
         </div>
         <div class="row2">
-          <button id="manualBtn" class="btn ghost">⌨︎ Elle gir / ara</button>
+          <button id="manualBtn" class="btn ghost">⌨︎ Ürün ara / elle gir</button>
           <button id="finishBtn" class="btn ghost">✓ Palet bitti</button>
         </div>
         <div class="sect">Bu palette son okutulanlar</div>
@@ -224,23 +250,27 @@ main{flex:1;overflow:hidden;position:relative}
     <section id="v-set" class="view">
       <div class="card">
         <label class="fld">Cihaz / sayan kişi (CSV'de görünür)<input id="setDevice" placeholder="Örn. Ercan iPhone" autocomplete="off"></label>
+        <div class="tgl"><span>Lot numarasını otomatik doldur<small>Aynı palette aynı ürün için son girilen lot önerilir</small></span><button class="sw" id="setLot"></button></div>
         <div class="tgl"><span>Okuma sesi<small>iPhone sessiz moddaysa ses çıkmaz, yeşil flaş yine görünür</small></span><button class="sw" id="setSound"></button></div>
         <div class="tgl"><span>Excel'de barkodu metin olarak koru<small>13 haneli barkod 8,05E+12 gibi bozulmasın diye ="…" yazılır</small></span><button class="sw" id="setExcel"></button></div>
         <label class="fld">CSV ayracı
           <select id="setSep"><option value=";">Noktalı virgül ; (Türkçe/Almanca Excel)</option><option value=",">Virgül , (İngilizce Excel, Google Sheets)</option></select>
         </label>
-        <label class="fld">"Her okutma +1" modunda aynı barkod bekleme süresi
+        <label class="fld">"+1 koli / +1 adet" modunda aynı barkod bekleme süresi
           <select id="setCool"><option value="800">0,8 sn</option><option value="1200">1,2 sn</option><option value="2000">2 sn</option></select>
         </label>
       </div>
-      <div class="sect">Ürün listesi</div>
+      <div class="sect">Ürün listesi ve koli içi adetleri</div>
       <div class="card">
         <div id="prodInfo" class="mut"></div>
         <div class="row2">
-          <label class="btn ghost wide" style="cursor:pointer">Ek liste yükle (CSV)<input id="prodFile" type="file" accept=".csv,text/csv,text/plain" class="hidden"></label>
-          <button id="prodClear" class="btn ghost">Ek listeyi sil</button>
+          <button id="tplBtn" class="btn ghost wide">⬇︎ Şablon indir (CSV)</button>
+          <label class="btn ghost wide" style="cursor:pointer">⬆︎ Liste yükle (CSV)<input id="prodFile" type="file" accept=".csv,text/csv,text/plain" class="hidden"></label>
         </div>
-        <p class="mut">CSV sütunları: barkod; referans; ürün adı; hacim. İlk satır başlık olabilir. Aynı barkod varsa ek liste önceliklidir.</p>
+        <p class="mut">Şablonu indir, Excel'de <b>koli_ici</b> sütununu doldur, buradan geri yükle. Sütunlar: barkod; referans; urun_adi; hacim_ml; koli_ici. Barkodu olmayan ürünler referansla eşleşir. Yeni ürün satırları da eklenebilir.</p>
+        <div class="row2"><button id="pcEditBtn" class="btn ghost wide">✎ Koli içi adetlerini tek tek düzenle</button></div>
+        <div id="pcList" class="pcl hidden"></div>
+        <div class="row2"><button id="prodClear" class="btn ghost wide">Yüklenen ek ürünleri sil</button></div>
       </div>
       <div class="sect">Veri</div>
       <div class="card mut" id="dataInfo"></div>
@@ -260,13 +290,17 @@ main{flex:1;overflow:hidden;position:relative}
 <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js" crossorigin="anonymous"></script>
 <script>
 'use strict';
-const PRODUCTS={"8053839950161":["SAO001","SONO ARGAN OIL",30],"8053839950178":["SAO002","SONO ARGAN OIL",100],"8053839950109":["SASH002","SONO ARGAN SHAMPOO 250",250],"8053839950093":["SACN002","SONO ARGAN CONDITIONER",250],"8053839950130":["SADM001","SONO ARGAN DEEP MASK box",250],"8053839950123":["SALM002","SONO ARGAN LEAVE IN MASK box",150],"8053839950154":["SALMM002","SONO ARGAN LEAVE IN MASK",50],"8053839950024":["SAA001","SONO COLOR SHAMPOO",250],"8053839950000":["SAA002","SONO COLOR MASK box",250],"8053839950246":["SSO002","SONO BLONDER OIL",100],"8053839950062":["SSH001","SONO SILVER SHAMPOO",250],"8053839950048":["SSMA02","SONO SILVER MASK box",250],"8053839950192":["SSSI01","SONO SILVER SILK box",150],"8053839950321":["SSSIM011","SONO SILVER SILK",50],"8053839950239":["SSS003","SONO STYLE SALT WAVE",150],"8053839950338":["SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250],"8053839950352":["SGM001","SONO GOLD RESTRUCTURING MASK",150],"8053839950376":["SSG001","SONO SILKY GOLD",150],"8053839950277":["SKSH001","SONO KERATIN SHAMPOO",250],"8053839950284":["SKCN001","SONO KERATIN CONDITIONER",250],"8053839950314":["SAAP001","Sono Color Potion 150 ml",150],"8053839950857":["SSG002","Silky Gold 50 ml",50],"8053839950956":["SCP050","Sono Color Potion 50 ml",50],"8053839950116":["SASH003","SONO ARGAN SHAMPOO 1000",1000],"8053839950086":["SACN003","SONO ARGAN CONDITIONER",1000],"8053839950536":["SKSH002","SONO KERATIN SHAMPOO",1000],"8053839951151":["SSVS150","VOLUME SPRAY",150],"8053839951182":["SSTP150","THERMO-PROTECTIVE SPRAY",150],"8053839950031":["SAA003","SONO COLOR SHAMPOO 1000 ml",1000],"8053839950345":["SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000],"8053839951168":["SSVM150","Sono Volume Mousse",150],"8053839951199":["SSBW150","BEACH WAVES SPRAY",150],"8053839950680":["SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250],"8053839950697":["SVMA001","THE VOLUMIZING MASK 250 ml",250],"8053839950079":["SSH003","SONO SILVER SHAMPOO 1000 ml",1000],"8053839951755":["SAPGS25","SONO Argan Perfume Gift Set 2025",""],"8053839951472":["SGCN1000","SONO GOLD Conditioner 1000 ml",1000],"8053839951489":["SGCN0250","SONO GOLD Conditioner 250 ml",250],"8053839951496":["SSCN1000","SONO Silver Conditioner 1000 ml",1000],"8053839951502":["SSCN0250","SONO Silver Conditioner 250 ml",250],"8053839951618":["SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250],"8053839951519":["SCCN1000","SONO Color Conditioner 1000 ml",1000],"8053839951649":["SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250],"8053839951700":["SKHP001","SONO KERATIN PERFUME",30],"8053839951526":["SCCN0250","SONO Color Conditioner 250 ml",250],"8053839951281":["SSDRS200","SPRAY DRY SHAMPOO",""],"8053839951311":["SSFSPR300","FIX SPRAY",""],"8053839951564":["SCSH250","SONO THE CURL SHAMPOO",250],"8053839951588":["SCMA250","SONO CURL MASK",250],"8053839951601":["SCLG150","SONO CURL LIQUID GEL",150],"8053839951632":["SDLT150","SONO ANTI-DANDRUFF LOTION",150],"8053839951656":["SGFM050","SONO GOLD  LIQUID FILLER MASK",50],"8053839951663":["SBLM050","SONO BLONDER LIQUID MASK",50],"8053839951670":["SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250],"8053839951687":["SHLCN250","SONO HAIR-LOSS CONDITIONER",250],"8053839951694":["SHLT150","SONO HAIR-LOSS LOTION",150],"8053839951717":["SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100],"8053839950475":["SAOM02","ARGAN OIL 10 ML",10],"8053839950437":["SASHS02","ARGAN SHAMPOO 10 ML",10],"8053839950444":["SACNS02","ARGAN CONDITIONER 10 ML",10],"8053839950451":["SADMS01","ARGAN DEEP MASK 10 ML",10],"8053839950468":["SALMS02","ARGAN LEAVE IN MASK 10 ML",10],"8053839950482":["SAAS001","COLOR SHAMPOO 10 ML",10],"8053839950499":["SAAS002","ANTI-AGE MASK 10 ML",10],"8053839950390":["SAHS01","SILVER SHAMPOO 10 ML",10],"8053839950406":["SSMS01","SILVER MASK 10 ML",10],"8053839950413":["SSSS01","SONO SILVER SILK SPRAY 10ML",10],"8053839950567":["SKSHS01","SONO KERATIN SHAMPOO",10],"8053839950574":["SKCNS01","SONO KERATIN CONDITIONER",10],"8053839950376_":["SSGS01","SONO SILKY GOLD",10],"8053839950529":["SACNS02","SONO Kraft Bag 18X24X8 cm",""],"8053839951120":["SWB001","SMAL SONO WHITE BAG",""]};
+const PRODUCTS=[["8053839950161","SAO001","SONO ARGAN OIL",30],["8053839950178","SAO002","SONO ARGAN OIL",100],["8053839950109","SASH002","SONO ARGAN SHAMPOO 250",250],["8053839950093","SACN002","SONO ARGAN CONDITIONER",250],["8053839950130","SADM001","SONO ARGAN DEEP MASK box",250],["8053839950123","SALM002","SONO ARGAN LEAVE IN MASK box",150],["8053839950154","SALMM002","SONO ARGAN LEAVE IN MASK",50],["8053839950024","SAA001","SONO COLOR SHAMPOO",250],["8053839950000","SAA002","SONO COLOR MASK box",250],["8053839950246","SSO002","SONO BLONDER OIL",100],["8053839950062","SSH001","SONO SILVER SHAMPOO",250],["8053839950048","SSMA02","SONO SILVER MASK box",250],["8053839950192","SSSI01","SONO SILVER SILK box",150],["8053839950321","SSSIM011","SONO SILVER SILK",50],["8053839950239","SSS003","SONO STYLE SALT WAVE",150],["8053839950338","SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250],["8053839950352","SGM001","SONO GOLD RESTRUCTURING MASK",150],["8053839950376","SSG001","SONO SILKY GOLD",150],["8053839950277","SKSH001","SONO KERATIN SHAMPOO",250],["8053839950284","SKCN001","SONO KERATIN CONDITIONER",250],["8053839950314","SAAP001","Sono Color Potion 150 ml",150],["8053839950857","SSG002","Silky Gold 50 ml",50],["8053839950956","SCP050","Sono Color Potion 50 ml",50],["8053839950116","SASH003","SONO ARGAN SHAMPOO 1000",1000],["8053839950086","SACN003","SONO ARGAN CONDITIONER",1000],["8053839950536","SKSH002","SONO KERATIN SHAMPOO",1000],["8053839951151","SSVS150","VOLUME SPRAY",150],["8053839951182","SSTP150","THERMO-PROTECTIVE SPRAY",150],["8053839950031","SAA003","SONO COLOR SHAMPOO 1000 ml",1000],["8053839950345","SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000],["8053839951168","SSVM150","Sono Volume Mousse",150],["8053839951199","SSBW150","BEACH WAVES SPRAY",150],["8053839950680","SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250],["8053839950697","SVMA001","THE VOLUMIZING MASK 250 ml",250],["8053839950079","SSH003","SONO SILVER SHAMPOO 1000 ml",1000],["8053839951755","SAPGS25","SONO Argan Perfume Gift Set 2025",""],["8053839951472","SGCN1000","SONO GOLD Conditioner 1000 ml",1000],["8053839951489","SGCN0250","SONO GOLD Conditioner 250 ml",250],["8053839951496","SSCN1000","SONO Silver Conditioner 1000 ml",1000],["8053839951502","SSCN0250","SONO Silver Conditioner 250 ml",250],["8053839951618","SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250],["8053839951519","SCCN1000","SONO Color Conditioner 1000 ml",1000],["8053839951649","SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250],["8053839951700","SKHP001","SONO KERATIN PERFUME",30],["8053839951526","SCCN0250","SONO Color Conditioner 250 ml",250],["8053839951281","SSDRS200","SPRAY DRY SHAMPOO",""],["8053839951311","SSFSPR300","FIX SPRAY",""],["8053839951564","SCSH250","SONO THE CURL SHAMPOO",250],["8053839951588","SCMA250","SONO CURL MASK",250],["8053839951601","SCLG150","SONO CURL LIQUID GEL",150],["8053839951632","SDLT150","SONO ANTI-DANDRUFF LOTION",150],["8053839951656","SGFM050","SONO GOLD  LIQUID FILLER MASK",50],["8053839951663","SBLM050","SONO BLONDER LIQUID MASK",50],["8053839951670","SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250],["8053839951687","SHLCN250","SONO HAIR-LOSS CONDITIONER",250],["8053839951694","SHLT150","SONO HAIR-LOSS LOTION",150],["8053839951717","SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100],["8053839950475","SAOM02","ARGAN OIL 10 ML",10],["8053839950437","SASHS02","ARGAN SHAMPOO 10 ML",10],["8053839950444","SACNS02","ARGAN CONDITIONER 10 ML",10],["8053839950451","SADMS01","ARGAN DEEP MASK 10 ML",10],["8053839950468","SALMS02","ARGAN LEAVE IN MASK 10 ML",10],["8053839950482","SAAS001","COLOR SHAMPOO 10 ML",10],["8053839950499","SAAS002","ANTI-AGE MASK 10 ML",10],["8053839950390","SAHS01","SILVER SHAMPOO 10 ML",10],["","","SONO Silver Conditioner 10 ml",10],["8053839950406","SSMS01","SILVER MASK 10 ML",10],["8053839950413","SSSS01","SONO SILVER SILK SPRAY 10ML",10],["8053839950567","SKSHS01","SONO KERATIN SHAMPOO",10],["8053839950574","SKCNS01","SONO KERATIN CONDITIONER",10],["8053839950376_","SSGS01","SONO SILKY GOLD",10],["8053839950529","SACNS02","SONO Kraft Bag 18X24X8 cm",""],["8053839951120","SWB001","SMAL SONO WHITE BAG",""],["","SADM002","SONO ARGAN DEEP MASK",500],["","SAA004","SONO COLOR MASK",500],["","SSO001","SONO BLONDER OIL",30],["","SSMA01","SONO SILVER MASK",500],["","SGM002","SONO GOLD RESTRUCTURING MASK",500],["","SGF002","SONO GOLD FILLER",250],["","SGA001","SONO GOLD AMPOULE","6 x 10 ml"],["","SKCN002","SONO KERATIN CONDITIONER",1000],["","SSS004","SONO STYLE SALT WAVE",50],["","SSGG150","LIQUID GEL",150],["","SSDC050","STYLING PASTE",50],["","SSDCSH250","SONO STYLE DEEP CLEANSING SHAMPOO 250 ml",250],["","SSDCSH1000","SONO STYLE DEEP CLEANSING SHAMPOO 1000 ml",1000],["","SAPD001","SONO DETOX LOTION 150 ML",150],["","SAPSH001","SONO DETOX SHAMPOO 250 ML",250],["","SAPM001","SONO DETOX MASK 150 ML",150],["","SAPS001","SONO DETOX SPRAY 150 ML",150],["","SVSP001","SONO VOLUME VOLUMIZING  SPRAY 150 ml",150],["","SCSH1000","SONO CURL SHAMPOO 1000 ML",1000],["","SCMA500","SONO CURL MASK 500 ML",500],["","SDSH1000","SONO ANTI-DANDRUFF SHAMPOO 1000 ML",1000],["","SCP010","SONO COLOR POTION",10],["","SSOS01","SONO SILVER OIL",10],["","SGSS01","SONO GOLD RESTRUCTURING SHAMPOO",10],["","SGMS01","SONO GOLD RESTRUCTURING MASK",10],["","KWB001","SMALL SONO WHITE BAG",""],["","SGP00","SONO GOLD PERFUME",30],["","SAP00","SONO ARGAN PERFUME",30],["","SBP00","SONO BLONDER PERFUME",30]];
 const PRODUCT_SOURCE='SONO fiyat listesi';
-const VERSION='1.0';
+const VERSION='1.1';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const LS='palet_sayim_v1';
-const DEF={entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,recentQty:[1],recentPallets:[],closed:{},extra:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false};
+const DEF={entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false};
 let S=Object.assign({},DEF,(()=>{try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}}})());
+if(S.mode==='plus')S.mode='plusu';
+if(Array.isArray(S.extra)||typeof S.extra!=='object')S.extra={};
+for(const k of Object.keys(S.extra)){const v=S.extra[k];if(Array.isArray(v)&&v.length===3)S.extra[k]=[k,v[0],v[1],v[2]]} // v1.0 format → [barcode,ref,name,vol]
+for(const e of S.entries){if(e.units==null){e.units=e.qty;e.cases=0;e.perCase=''}if(e.lot==null)e.lot=''}
 function save(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){toast('⚠️ Kayıt yazılamadı – hemen export alın','err')}}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
@@ -274,15 +308,30 @@ const pad2=n=>String(n).padStart(2,'0');
 const fDate=t=>{const d=new Date(t);return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())};
 const fTime=t=>{const d=new Date(t);return pad2(d.getHours())+':'+pad2(d.getMinutes())+':'+pad2(d.getSeconds())};
 const fHM=t=>{const d=new Date(t);return pad2(d.getHours())+':'+pad2(d.getMinutes())};
+const hasVol=v=>v!==''&&v!=null;
 
-function lookup(code){
-  const L=c=>S.extra[c]||PRODUCTS[c];
-  let p=L(code);
-  if(!p&&code.length===12)p=L('0'+code);
-  if(!p&&code.length===13&&code[0]==='0')p=L(code.slice(1));
-  if(!p&&code.length===14&&code[0]==='0')p=L(code.slice(1));
-  return p?{ref:p[0]||'',name:p[1]||'',vol:p[2]??''}:null;
+/* ---------- products ---------- */
+// product id: reference first (stable, also for items without barcode), else barcode, else name
+function pid(p){return p.ref?'R:'+String(p.ref).toUpperCase():p.barcode?'B:'+p.barcode:'N:'+String(p.name||'').toLowerCase()}
+let IDX={all:[],bc:new Map(),ref:new Map()};
+function buildIndex(){
+  const all=[];
+  const add=(row,src)=>{
+    const [b,r,n,v]=row;const p={barcode:String(b||''),ref:String(r||''),name:String(n||''),vol:v??'',src};
+    const i=all.findIndex(x=>(p.barcode&&x.barcode===p.barcode)||(p.ref&&x.ref&&x.ref.toUpperCase()===p.ref.toUpperCase()));
+    if(i>=0){const x=all[i];for(const k of ['barcode','ref','name','vol'])if(p[k]!==''&&p[k]!=null)x[k]=p[k];}
+    else all.push(p);
+  };
+  PRODUCTS.forEach(r=>add(r,'base'));Object.values(S.extra).forEach(r=>add(r,'extra'));
+  const bc=new Map(),ref=new Map();
+  for(const p of all){if(p.barcode)bc.set(p.barcode,p);if(p.ref)ref.set(p.ref.toUpperCase(),p)}
+  IDX={all,bc,ref};
 }
+function lookup(code){
+  const g=c=>IDX.bc.get(c);
+  return g(code)||(code.length===12&&g('0'+code))||(code.length===13&&code[0]==='0'&&g(code.slice(1)))||(code.length===14&&code[0]==='0'&&g(code.slice(1)))||null;
+}
+function perCaseOf(p){const v=S.perCase[pid(p)];return v>0?v:0}
 function gtinValid(c){
   if(!/^\d+$/.test(c)||![8,12,13,14].includes(c.length))return false;
   const d=c.split('').map(Number),chk=d.pop();let s=0;
@@ -291,13 +340,27 @@ function gtinValid(c){
 }
 function palletStats(p){
   const rows=S.entries.filter(e=>e.pallet===p);
-  return {rows:rows.length,items:new Set(rows.map(r=>r.barcode)).size,qty:rows.reduce((a,r)=>a+r.qty,0)};
+  return {rows:rows.length,items:new Set(rows.map(pid)).size,qty:rows.reduce((a,r)=>a+r.qty,0),cases:rows.reduce((a,r)=>a+(r.cases||0),0)};
 }
 function nextPallet(p){
   const m=/^(.*?)(\d+)(\D*)$/.exec(p||'');if(!m)return '';
   return m[1]+String(+m[2]+1).padStart(m[2].length,'0')+m[3];
 }
-function displayName(e){return e.name?(e.name+(e.vol!==''&&e.vol!=null?' · '+e.vol+' ml':'')):'Listede yok'}
+function displayName(e){return e.name?(e.name+(hasVol(e.vol)?' · '+e.vol+' ml':'')):(e.barcode?'Listede yok':'Adsız ürün')}
+function qtyText(e){
+  if(e.cases>0&&e.perCase>0)return e.cases+' koli'+(e.units?' + '+e.units:'')+' = '+e.qty;
+  return String(e.qty);
+}
+function lastLotFor(p,pallet){
+  const id=pid(p);
+  for(let i=S.entries.length-1;i>=0;i--){const e=S.entries[i];if(e.pallet===pallet&&pid(e)===id&&e.lot)return e.lot}
+  return '';
+}
+function recentLotsFor(p){
+  const id=pid(p),out=[];
+  for(let i=S.entries.length-1;i>=0&&out.length<4;i--){const e=S.entries[i];if(pid(e)===id&&e.lot&&!out.includes(e.lot))out.push(e.lot)}
+  return out;
+}
 
 /* ---------- audio / feedback ---------- */
 let actx=null;
@@ -330,11 +393,12 @@ let sheetOnClose=null,sheetKey=null;
 const sheetOpen=()=>!$('#sheet').classList.contains('hidden');
 function openSheet(html,onClose){
   const sh=$('#sheet');sh.innerHTML='<div class="grip"></div>'+html;sh.onclick=null;
-  sh.classList.remove('hidden');$('#sheetBg').classList.remove('hidden');
+  sh.classList.remove('hidden');$('#sheetBg').classList.remove('hidden');sh.scrollTop=0;
   sheetOnClose=onClose||null;sheetKey=null;return sh;
 }
 function closeSheet(){
   if(!sheetOpen())return;
+  if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
   $('#sheet').classList.add('hidden');$('#sheetBg').classList.add('hidden');$('#sheet').innerHTML='';
   sheetKey=null;const f=sheetOnClose;sheetOnClose=null;
   if(cool.until===Infinity)cool.until=Date.now()+1500;
@@ -343,16 +407,16 @@ function closeSheet(){
 $('#sheetBg').onclick=()=>closeSheet();
 
 /* ---------- entries ---------- */
-function addEntry(code,qty){
-  const p=lookup(code);
-  const e={id:uid(),pallet:S.pallet,barcode:code,ref:p?p.ref:'',name:p?p.name:'',vol:p?p.vol:'',qty,ts:Date.now(),device:S.device||''};
+function addEntry(p,{cases=0,units=0,perCase=0,lot='',source='scan'}){
+  const qty=cases*perCase+units;
+  const e={id:uid(),pallet:S.pallet,barcode:p.barcode||'',ref:p.ref||'',name:p.name||'',vol:p.vol??'',lot:lot||'',cases,perCase:cases?perCase:'',units,qty,ts:Date.now(),device:S.device||'',source};
   S.entries.push(e);save();renderAll();
   beepSaved();
-  toast('✓ '+qty+' × '+(p?p.name:code),'ok',{label:'Geri al',fn:()=>{removeEntry(e.id);toast('Geri alındı')}});
+  toast('✓ '+(cases?cases+' koli'+(units?' + '+units:'')+' = ':'')+qty+' × '+(p.name||p.barcode||'ürün')+(lot?' · Lot '+lot:''),'ok',{label:'Geri al',fn:()=>{removeEntry(e.id);toast('Geri alındı')}});
   return e;
 }
 function removeEntry(id){S.entries=S.entries.filter(e=>e.id!==id);save();renderAll()}
-function pushRecentQty(q){S.recentQty=[q,...(S.recentQty||[]).filter(x=>x!==q)].slice(0,4)}
+const pushRecent=(arr,q)=>[q,...(arr||[]).filter(x=>x!==q)].slice(0,4);
 function setPallet(p){
   p=String(p||'').trim();if(!p)return false;
   S.pallet=p;S.recentPallets=[p,...S.recentPallets.filter(x=>x!==p)].slice(0,8);save();renderAll();
@@ -367,7 +431,7 @@ let cool={code:null,until:0};
 let mfr=null,nativeDet=null;
 const cv=document.createElement('canvas');const cx=cv.getContext('2d',{willReadFrequently:true});
 function initDecoder(){
-  if('BarcodeDetector' in window){try{nativeDet=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39','itf']})}catch(e){nativeDet=null}}
+  if('BarcodeDetector' in window&&!nativeDet){try{nativeDet=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39','itf']})}catch(e){nativeDet=null}}
   if(window.ZXing&&!mfr){try{
     mfr=new ZXing.MultiFormatReader();const h=new Map(),F=ZXing.BarcodeFormat;
     h.set(ZXing.DecodeHintType.POSSIBLE_FORMATS,[F.EAN_13,F.EAN_8,F.UPC_A,F.UPC_E,F.CODE_128,F.CODE_39,F.ITF]);
@@ -378,7 +442,7 @@ function initDecoder(){
 function camMsg(t){$('#camMsg').textContent=t}
 async function startCamera(){
   unlockAudio();wantCam=true;
-  if(!initDecoder()){camMsg('Barkod okuyucu yüklenemedi. Uygulamayı bir kez internete bağlıyken açın. Bu arada "Elle gir" kullanılabilir.');return}
+  if(!initDecoder()){camMsg('Barkod okuyucu yüklenemedi. Uygulamayı bir kez internete bağlıyken açın. Bu arada "Ürün ara / elle gir" kullanılabilir.');return}
   if(!window.isSecureContext){camMsg('Kamera için sayfa https:// adresinden açılmalı.');return}
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){camMsg('Bu tarayıcı kameraya erişemiyor. Safari ile açın.');return}
   if(stream)return;
@@ -452,72 +516,125 @@ function onScan(code,format){
     flash('err');beepErr();vib([60,40,60]);toast('Hatalı okuma, tekrar okutun','err');cool={code,until:Date.now()+800};return;
   }
   flash('ok');beepOk();vib(40);
-  processCode(code,false);
+  const p=lookup(code)||{barcode:code,ref:'',name:'',vol:'',unknown:true};
+  processProduct(p,{scanned:true,code});
 }
-function processCode(code,manual){
+function processProduct(p,{scanned=false,code=null}={}){
+  const ck=code||p.barcode||pid(p);
   if(!S.pallet){
-    cool={code,until:Infinity};
-    openPalletSheet(()=>{processCode(code,manual)},'Önce palet numarasını girin');
+    cool={code:ck,until:Infinity};
+    openPalletSheet(()=>processProduct(p,{scanned,code}),'Önce palet numarasını girin');
     return;
   }
-  if(S.mode==='plus'&&!manual){
-    addEntry(code,1);cool={code,until:Date.now()+(+S.cool||1200)};return;
+  if(scanned&&!p.unknown&&(S.mode==='plusc'||S.mode==='plusu')){
+    const lot=S.autoLot?lastLotFor(p,S.pallet):'';
+    if(S.mode==='plusc'){
+      const pc=perCaseOf(p);
+      if(pc){addEntry(p,{cases:1,perCase:pc,lot});cool={code:ck,until:Date.now()+(+S.cool||1200)};return}
+      toast('Bu ürünün koli içi adedi tanımlı değil – adet girin','warn');
+    }else{addEntry(p,{units:1,lot});cool={code:ck,until:Date.now()+(+S.cool||1200)};return}
   }
-  cool={code,until:Infinity};
-  openQtySheet(code,null);
+  cool={code:ck,until:Infinity};
+  openQtySheet(p,null,scanned?'scan':'manual');
 }
 
 /* ---------- qty / edit sheet ---------- */
-function openQtySheet(code,entry){
+function openQtySheet(p,entry,source){
   const editing=!!entry;
-  const p=editing?(entry.name?{ref:entry.ref,name:entry.name,vol:entry.vol}:lookup(code)):lookup(code);
   const pal=editing?entry.pallet:S.pallet;
-  let qs=editing?String(entry.qty):'',bigOk=false,delOk=false;
-  const existing=S.entries.filter(e=>e.pallet===pal&&e.barcode===code&&(!entry||e.id!==entry.id)).reduce((a,e)=>a+e.qty,0);
-  const chips=[...new Set([...(S.recentQty||[]),1])].slice(0,5);
+  let pc=editing&&entry.cases>0&&entry.perCase>0?+entry.perCase:perCaseOf(p);
+  let val={c:editing?String(entry.cases||''):'',u:editing?String(entry.units||''):''};
+  if(editing){if(val.c==='0')val.c='';if(val.u==='0')val.u=''}
+  let act=editing?(entry.cases>0?'c':'u'):(pc?'c':'u');
+  let fresh={c:true,u:true},bigOk=false,delOk=false;
+  const lot0=editing?(entry.lot||''):(S.autoLot?lastLotFor(p,pal):'');
+  const lots=recentLotsFor(p).filter(l=>l!==lot0);
+  const existing=S.entries.filter(e=>e.pallet===pal&&pid(e)===pid(p)&&(!entry||e.id!==entry.id)).reduce((a,e)=>a+e.qty,0);
+  const known=!!(p.name||p.ref);
   const sh=openSheet(`
-    <div class="pinfo ${p?'':'unk'}">
-      <div class="pname">${p?esc(p.name)+(p.vol!==''&&p.vol!=null?' <span class="vol">'+esc(p.vol)+' ml</span>':''):'⚠️ Ürün listesinde yok'}</div>
-      <div class="pmeta">${p&&p.ref?esc(p.ref)+' · ':''}${esc(code)} · Palet <b>${esc(pal)}</b></div>
+    <div class="pinfo ${known?'':'unk'}">
+      <div class="pname">${known?esc(p.name||p.ref)+(hasVol(p.vol)?' <span class="vol">'+esc(p.vol)+' ml</span>':''):'⚠️ Ürün listesinde yok'}</div>
+      <div class="pmeta">${p.ref?esc(p.ref)+' · ':''}${p.barcode?esc(p.barcode):'<span class="tag">barkodsuz</span>'} · Palet <b>${esc(pal)}</b></div>
+      ${known?`<button class="pcbtn" data-a="pc" id="pcBtn"></button>`:''}
+      <div class="pcrow hidden" id="pcRow"><input id="pcIn" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="Koli içi adet"><button class="btn primary" data-a="pcok" style="min-height:46px">Tamam</button></div>
     </div>
-    ${existing?`<div class="note">Bu palette bu üründen ${editing?'başka':'zaten'} <b>${existing}</b> adet var${editing?'':' – yeni miktar ayrı satır olarak eklenir'}.</div>`:''}
-    ${!p&&!editing?'<div class="note w">Barkod listede yok ama yine de kaydedilebilir. CSV\'de ürün adı boş kalır.</div>':''}
+    ${existing?`<div class="note">Bu palette bu üründen ${editing?'başka':'zaten'} <b>${existing}</b> adet var${editing?'':' – yeni giriş ayrı satır olarak eklenir'}.</div>`:''}
+    ${!known&&!editing?'<div class="note w">Ürün listede yok ama yine de kaydedilebilir.</div>':''}
     ${editing?`<label class="fld">Palet (yanlış palete girildiyse değiştirin)<input id="edPal" value="${esc(entry.pallet)}" autocomplete="off"></label>`:''}
-    <div class="qty"><span id="qd" class="${qs?'':'ph'}">${qs||'1'}</span><small>adet</small></div>
-    ${editing?'':`<div class="chips">${chips.map(c=>`<button data-chip="${c}">${c}</button>`).join('')}</div>`}
+    <div class="lotrow"><input id="lotIn" value="${esc(lot0)}" placeholder="Lot no (isteğe bağlı)" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="done"><button data-a="lotclr" aria-label="Lotu temizle">✕</button></div>
+    ${lots.length?`<div class="chips left" style="margin:8px 0 0">${lots.map(l=>`<button data-lot="${esc(l)}">${esc(l)}</button>`).join('')}</div>`:''}
+    <div class="cu">
+      <button class="fbox" data-f="c" id="fbC"><small>KOLİ</small><span id="fC"></span><em id="fCe"></em></button>
+      <div class="plus">+</div>
+      <button class="fbox" data-f="u" id="fbU"><small>TEKİL</small><span id="fU"></span><em>adet</em></button>
+    </div>
+    <div class="tot" id="tot"></div>
+    <div class="chips" id="qchips"></div>
     <div class="pad">${['1','2','3','4','5','6','7','8','9','C','0','⌫'].map(k=>`<button data-k="${k}">${k}</button>`).join('')}</div>
     <div class="acts">
       ${editing?'<button class="btn danger" data-a="del">Sil</button>':'<button class="btn ghost" data-a="cancel">İptal</button>'}
-      <button class="btn primary" data-a="save" id="saveBtn">${editing?'Güncelle':'KAYDET'}</button>
+      <button class="btn primary" data-a="save" id="saveBtn"></button>
     </div>`);
-  let fresh=true;
-  const upd=()=>{const d=$('#qd');d.textContent=qs||'1';d.className=qs?'':'ph';bigOk=false;const b=$('#saveBtn');b.textContent=editing?'Güncelle':'KAYDET';b.className='btn primary'};
-  const key=k=>{
-    if(k==='C'){qs='';fresh=false}
-    else if(k==='⌫'){qs=fresh&&editing?'':qs.slice(0,-1);fresh=false}
-    else{if(fresh){qs=k==='0'?'':k;fresh=false}else if(qs.length<5){qs=(qs+k).replace(/^0+/,'')}}
-    upd();
+  const defC=()=>!val.c&&!val.u&&pc&&act==='c'; // nothing typed, koli field active → 1 koli
+  const eff=()=>{let c=pc?(+val.c||0):0,u=+val.u||0;if(!c&&!u){if(defC())c=1;else u=1}return {c,u}};
+  const total=()=>{const {c,u}=eff();return c*pc+u};
+  const upd=()=>{
+    if($('#pcBtn')){$('#pcBtn').textContent=pc?'Koli içi: '+pc+' adet ✎':'⚠️ Koli içi adedi tanımla';$('#pcBtn').className='pcbtn'+(pc?'':' miss')}
+    const fC=$('#fC'),fU=$('#fU');
+    if(!pc&&act==='c')act='u';
+    const {c,u}=eff();
+    if(pc){fC.textContent=val.c||String(c);fC.className=val.c?'':'ph';$('#fCe').textContent='× '+pc;$('#fbC').classList.remove('dis')}
+    else{fC.textContent='Koli içi?';fC.className='';$('#fCe').textContent='';$('#fbC').classList.add('dis')}
+    fU.textContent=val.u||String(u);fU.className=val.u?'':'ph';
+    $('#fbC').classList.toggle('on',act==='c');$('#fbU').classList.toggle('on',act==='u');
+    $('#tot').innerHTML=c?`${c} koli × ${pc}${u?' + '+u:''} = <b>${total()}</b> adet`:`Toplam <b>${u}</b> adet`;
+    const rec=act==='c'?[...new Set([...(S.recentC||[]),1,2,5])].slice(0,5):[...new Set([...(S.recentU||[]),1])].slice(0,5);
+    $('#qchips').innerHTML=rec.map(v=>`<button data-chip="${v}">${v}${act==='c'?' koli':''}</button>`).join('');
+    bigOk=false;const b=$('#saveBtn');b.className='btn primary';
+    b.textContent=(editing?'Güncelle':'KAYDET')+' · '+total();
   };
-  const doSave=q=>{
-    if(!q||q<1){$('#qd').classList.add('shake');setTimeout(()=>$('#qd')&&$('#qd').classList.remove('shake'),300);return}
-    if(q>999&&!bigOk){bigOk=true;const b=$('#saveBtn');b.textContent=q+' adet – emin misin? Onayla';b.className='btn warn';beepErr();return}
+  const key=k=>{
+    if(act==='c'&&!pc)return;
+    let s=val[act];
+    if(k==='C'){s='';fresh[act]=false}
+    else if(k==='⌫'){s=fresh[act]&&editing?'':s.slice(0,-1);fresh[act]=false}
+    else{if(fresh[act]){s=k==='0'?'':k;fresh[act]=false}else if(s.length<5)s=(s+k).replace(/^0+/,'')}
+    val[act]=s;upd();
+  };
+  const setPc=n=>{n=parseInt(n,10);if(!(n>0))return false;pc=n;S.perCase[pid(p)]=n;save();$('#pcRow').classList.add('hidden');if(!val.c&&!val.u)act='c';upd();toast('Koli içi kaydedildi: '+n,'ok');return true};
+  const doSave=()=>{
+    const {c,u}=eff();const q=c*pc+u;
+    if(c>200||u>999||q>20000){if(!bigOk){bigOk=true;const b=$('#saveBtn');b.textContent=q+' adet – emin misin? Onayla';b.className='btn warn';beepErr();return}}
+    const lot=($('#lotIn').value||'').trim();
     if(editing){
       const np=($('#edPal').value||'').trim()||entry.pallet;
-      entry.qty=q;entry.pallet=np;save();closeSheet();renderAll();toast('Güncellendi','ok');
-    }else{closeSheet();addEntry(code,q);pushRecentQty(q);save()}
+      Object.assign(entry,{cases:c,perCase:c?pc:'',units:u,qty:q,lot,pallet:np});save();closeSheet();renderAll();toast('Güncellendi','ok');
+    }else{
+      if(+val.c)S.recentC=pushRecent(S.recentC,c);if(+val.u)S.recentU=pushRecent(S.recentU,u);
+      closeSheet();addEntry(p,{cases:c,perCase:pc,units:u,lot,source});
+    }
   };
+  upd();
   sh.onclick=ev=>{
     const b=ev.target.closest('button');if(!b)return;
     if(b.dataset.k)return key(b.dataset.k);
-    if(b.dataset.chip)return doSave(+b.dataset.chip);
+    if(b.dataset.f){if(b.dataset.f==='c'&&!pc){$('#pcRow').classList.remove('hidden');$('#pcIn').focus();return}act=b.dataset.f;fresh[act]=true;return upd()}
+    if(b.dataset.chip){val[act]=b.dataset.chip;fresh[act]=true;return upd()}
+    if(b.dataset.lot){$('#lotIn').value=b.dataset.lot;return}
     const a=b.dataset.a;
+    if(a==='pc'){const r=$('#pcRow');r.classList.toggle('hidden');if(!r.classList.contains('hidden')){$('#pcIn').value=pc||'';$('#pcIn').focus()}}
+    if(a==='pcok'&&!setPc($('#pcIn').value)){$('#pcIn').classList.add('shake');setTimeout(()=>$('#pcIn').classList.remove('shake'),300)}
+    if(a==='lotclr'){$('#lotIn').value=''}
     if(a==='cancel')closeSheet();
-    if(a==='save')doSave(parseInt(qs||'1',10));
+    if(a==='save')doSave();
     if(a==='del'){if(!delOk){delOk=true;b.textContent='Emin misin? Sil';b.className='btn dangerfill';return}removeEntry(entry.id);closeSheet();toast('Silindi')}
   };
+  $('#lotIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.target.blur()}});
+  $('#pcIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();setPc(e.target.value);e.target.blur()}});
   sheetKey=e=>{
     if(/^\d$/.test(e.key))key(e.key);else if(e.key==='Backspace')key('⌫');
-    else if(e.key==='Enter')doSave(parseInt(qs||'1',10));else if(e.key==='Escape')closeSheet();
+    else if(e.key==='Enter')doSave();else if(e.key==='Escape')closeSheet();
+    else if(e.key==='Tab'){act=act==='c'&&true?'u':(pc?'c':'u');fresh[act]=true;upd()}
   };
 }
 
@@ -533,7 +650,7 @@ function openPalletSheet(after,msg){
       ${sug?`<button data-p="${esc(sug)}">Sonraki: <b>${esc(sug)}</b></button>`:''}
       ${recent.map(r=>`<button data-p="${esc(r)}">${esc(r)}</button>`).join('')}
     </div>
-    <button class="btn ghost wide" data-a="scanp">📷 Palet etiketini tara</button>
+    <button class="btn ghost wide" data-a="scanp">📷 Palet etiketini tara (isteğe bağlı)</button>
     <div class="acts"><button class="btn ghost" data-a="cancel">İptal</button><button class="btn primary" data-a="ok">Başla</button></div>`);
   const inp=$('#pIn');
   const go=v=>{if(!setPallet(v)){inp.classList.add('shake');setTimeout(()=>inp.classList.remove('shake'),300);return}
@@ -555,36 +672,44 @@ function finishPallet(){
   const st=palletStats(S.pallet);
   const sh=openSheet(`
     <h3>Palet ${esc(S.pallet)} tamamlansın mı?</h3>
-    <div class="sum"><div><b>${st.items}</b><span>kalem</span></div><div><b>${st.qty}</b><span>adet</span></div><div><b>${st.rows}</b><span>okutma</span></div></div>
+    <div class="sum"><div><b>${st.items}</b><span>kalem</span></div><div><b>${st.cases}</b><span>koli</span></div><div><b>${st.qty}</b><span>adet</span></div></div>
     <div class="acts"><button class="btn ghost" data-a="cancel">Vazgeç</button><button class="btn primary" data-a="ok">✓ Tamamla → sonraki palet</button></div>`);
   sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;
     if(b.dataset.a==='cancel')closeSheet();
     if(b.dataset.a==='ok'){S.closed[S.pallet]=Date.now();save();closeSheet();renderAll();openPalletSheet()}};
 }
 
-/* ---------- manual entry / search ---------- */
+/* ---------- product search / manual entry (barcode not required) ---------- */
 function openManualSheet(){
   const sh=openSheet(`
-    <h3>Barkodu elle gir veya ürün ara</h3>
-    <input id="mIn" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Barkod, referans veya ürün adı" enterkeyhint="go">
+    <h3>Ürün ara veya elle gir</h3>
+    <input id="mIn" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Ürün adı, referans veya barkod" enterkeyhint="go">
+    <div class="mut" style="margin-top:6px">Barkod zorunlu değil – listeden seçin ya da serbest ürün adı yazın.</div>
     <div id="mRes" class="mres"></div>
-    <div class="acts"><button class="btn ghost" data-a="cancel">Kapat</button><button class="btn primary" data-a="ok">Devam</button></div>`);
-  const inp=$('#mIn'),res=$('#mRes');
-  const all=()=>{const m=new Map();for(const [k,v] of Object.entries(PRODUCTS))m.set(k,v);for(const [k,v] of Object.entries(S.extra))m.set(k,v);return m};
+    <div class="acts"><button class="btn ghost" data-a="cancel">Kapat</button></div>`);
+  const inp=$('#mIn'),res=$('#mRes');let hits=[];
   const render=()=>{
-    const q=inp.value.trim().toLowerCase();if(!q){res.innerHTML='';return}
-    const hits=[];for(const [bc,v] of all()){if((bc+' '+v[0]+' '+v[1]+' '+v[2]).toLowerCase().includes(q))hits.push([bc,v]);if(hits.length>=8)break}
-    res.innerHTML=hits.map(([bc,v])=>`<button class="ritem" data-bc="${esc(bc)}"><div class="nm"><div>${esc(v[1])}${v[2]!==''?' · '+esc(v[2])+' ml':''}</div><div>${esc(v[0])} · ${esc(bc)}</div></div></button>`).join('')
-      ||(/^\d+$/.test(q)?`<div class="mut">Listede yok. "Devam" ile bu barkod kaydedilebilir${[8,12,13,14].includes(q.length)&&!gtinValid(q)?' – <b style="color:var(--warn)">kontrol hanesi tutmuyor, rakamları kontrol edin</b>':''}.</div>`:'<div class="mut">Eşleşme yok.</div>');
+    const q=inp.value.trim().toLowerCase();
+    const words=q.split(/\s+/).filter(Boolean);
+    hits=!q?[]:IDX.all.filter(p=>{const s=(p.barcode+' '+p.ref+' '+p.name+' '+p.vol+' '+(hasVol(p.vol)?p.vol+'ml':'')).toLowerCase();return words.every(w=>s.includes(w))}).slice(0,12);
+    let html=hits.map((p,i)=>`<button class="ritem" data-i="${i}"><div class="nm"><div>${esc(p.name||p.ref)}${hasVol(p.vol)?' · '+esc(p.vol)+' ml':''}</div><div>${esc(p.ref)}${p.ref?' · ':''}${p.barcode?esc(p.barcode):'<span class="tag">barkodsuz</span>'}${perCaseOf(p)?' · koli içi '+perCaseOf(p):''}</div></div></button>`).join('');
+    const raw=inp.value.trim();
+    if(raw){
+      if(/^\d{4,14}$/.test(raw)&&!lookup(raw))html+=`<button class="ritem unk" data-a="code"><div class="nm"><div>Barkod "${esc(raw)}" ile kaydet</div><div>Listede yok${[8,12,13,14].includes(raw.length)&&!gtinValid(raw)?' · ⚠️ kontrol hanesi tutmuyor':''}</div></div></button>`;
+      else if(!/^\d+$/.test(raw))html+=`<button class="ritem unk" data-a="free"><div class="nm"><div>"${esc(raw)}" adıyla barkodsuz kaydet</div><div>Listede olmayan ürün</div></div></button>`;
+    }
+    res.innerHTML=html;
   };
-  const go=code=>{code=String(code||'').replace(/\s/g,'');if(!code){inp.classList.add('shake');setTimeout(()=>inp.classList.remove('shake'),300);return}
-    sheetOnClose=null;closeSheet();processCode(code,true)};
+  const pick=p=>{sheetOnClose=null;closeSheet();processProduct(p)};
   inp.addEventListener('input',render);
-  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const f=res.querySelector('[data-bc]');go(/^\d+$/.test(inp.value.trim())?inp.value:(f?f.dataset.bc:inp.value))}});
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const raw=inp.value.trim();if(!raw)return;
+    const p=/^\d+$/.test(raw)?(lookup(raw)||{barcode:raw,ref:'',name:'',vol:'',unknown:true}):(hits[0]||{barcode:'',ref:'',name:raw,vol:'',unknown:true});pick(p)}});
   sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;
-    if(b.dataset.bc)return go(b.dataset.bc);
-    if(b.dataset.a==='cancel')closeSheet();
-    if(b.dataset.a==='ok'){const f=res.querySelector('[data-bc]');go(/^\d+$/.test(inp.value.trim())||!f?inp.value:f.dataset.bc)}};
+    if(b.dataset.i!=null)return pick(hits[+b.dataset.i]);
+    const raw=inp.value.trim();
+    if(b.dataset.a==='code')return pick({barcode:raw,ref:'',name:'',vol:'',unknown:true});
+    if(b.dataset.a==='free')return pick({barcode:'',ref:'',name:raw,vol:'',unknown:true});
+    if(b.dataset.a==='cancel')closeSheet()};
   try{inp.focus()}catch(e){}
 }
 
@@ -595,44 +720,49 @@ function renderTop(){
   const un=S.entries.filter(e=>e.ts>S.lastExport).length;const b=$('#expBadge');b.textContent=un;b.classList.toggle('hidden',!un);
 }
 function rowHtml(e,cls='ritem'){
-  return `<button class="${cls} ${e.name?'':'unk'}" data-id="${e.id}"><div class="nm"><div>${esc(displayName(e))}</div><div>${fHM(e.ts)} · ${e.ref?esc(e.ref)+' · ':''}${esc(e.barcode)}</div></div><div class="q">${e.qty}</div></button>`;
+  return `<button class="${cls} ${e.name||e.ref?'':'unk'}" data-id="${e.id}"><div class="nm"><div>${esc(displayName(e))}</div><div>${fHM(e.ts)} · ${e.ref?esc(e.ref)+' · ':''}${e.barcode?esc(e.barcode):'barkodsuz'}${e.lot?' · <span class="lot">Lot '+esc(e.lot)+'</span>':''}${e.cases?' · '+e.cases+' koli'+(e.units?' + '+e.units:''):''}</div></div><div class="q">${e.qty}</div></button>`;
 }
 function renderRecent(){
   const rs=S.entries.filter(e=>e.pallet===S.pallet).slice(-4).reverse();
-  $('#recent').innerHTML=rs.length?rs.map(e=>rowHtml(e)).join(''):`<div class="empty">${S.pallet?'Bu palette henüz kayıt yok. Barkod okutun.':'Başlamak için üstten palet seçin veya direkt barkod okutun.'}</div>`;
+  $('#recent').innerHTML=rs.length?rs.map(e=>rowHtml(e)).join(''):`<div class="empty">${S.pallet?'Bu palette henüz kayıt yok. Barkod okutun veya ürün arayın.':'Başlamak için üstten palet seçin.'}</div>`;
+}
+function aggregate(rows,byPallet){
+  const m=new Map();
+  for(const r of rows){const k=(byPallet?r.pallet+'\u0000':'')+pid(r)+'\u0000'+(r.lot||'');
+    if(!m.has(k))m.set(k,{...r,qty:0,cases:0,units:0,n:0,first:r.ts,last:r.ts,pcs:new Set()});
+    const x=m.get(k);x.qty+=r.qty;x.cases+=r.cases||0;x.units+=r.units||0;x.n++;x.first=Math.min(x.first,r.ts);x.last=Math.max(x.last,r.ts);if(r.cases&&r.perCase)x.pcs.add(r.perCase)}
+  return [...m.values()];
 }
 function renderList(){
   const q=$('#lq').value.trim().toLowerCase();
   let es=S.entries;if(S.onlyActive)es=es.filter(e=>e.pallet===S.pallet);
-  if(q)es=es.filter(e=>(e.pallet+' '+e.barcode+' '+e.ref+' '+e.name).toLowerCase().includes(q));
+  if(q)es=es.filter(e=>(e.pallet+' '+e.barcode+' '+e.ref+' '+e.name+' '+e.lot).toLowerCase().includes(q));
   const groups=new Map();
   for(const e of es){if(!groups.has(e.pallet))groups.set(e.pallet,{last:0,rows:[]});const g=groups.get(e.pallet);g.rows.push(e);g.last=Math.max(g.last,e.ts)}
   const gs=[...groups.entries()].sort((a,b)=>(b[0]===S.pallet)-(a[0]===S.pallet)||b[1].last-a[1].last);
   if(!gs.length){$('#listBody').innerHTML=`<div class="empty">${S.entries.length?'Eşleşen kayıt yok.':'Henüz kayıt yok.'}</div>`;return}
   $('#listBody').innerHTML=gs.map(([p,g])=>{
-    const qty=g.rows.reduce((a,r)=>a+r.qty,0),items=new Set(g.rows.map(r=>r.barcode)).size;
+    const qty=g.rows.reduce((a,r)=>a+r.qty,0),cases=g.rows.reduce((a,r)=>a+(r.cases||0),0),items=new Set(g.rows.map(pid)).size;
     let body;
     if(S.listMode==='sum'){
-      const m=new Map();for(const r of g.rows){const k=r.barcode;if(!m.has(k))m.set(k,{...r,qty:0,n:0});const x=m.get(k);x.qty+=r.qty;x.n++}
-      body=[...m.values()].sort((a,b)=>(a.name||'~').localeCompare(b.name||'~')).map(x=>`<div class="lrow ${x.name?'':'unk'}"><div class="nm"><div>${esc(displayName(x))}</div><div>${x.ref?esc(x.ref)+' · ':''}${esc(x.barcode)} · ${x.n} okutma</div></div><div class="q">${x.qty}</div></div>`).join('');
+      body=aggregate(g.rows,false).sort((a,b)=>(a.name||'~').localeCompare(b.name||'~')).map(x=>`<div class="lrow ${x.name||x.ref?'':'unk'}"><div class="nm"><div>${esc(displayName(x))}</div><div>${x.ref?esc(x.ref)+' · ':''}${x.barcode?esc(x.barcode):'barkodsuz'}${x.lot?' · <span class="lot">Lot '+esc(x.lot)+'</span>':''} · ${x.cases?x.cases+' koli'+(x.units?' + '+x.units+' tekil':'')+' · ':''}${x.n} okutma</div></div><div class="q">${x.qty}</div></div>`).join('');
     }else body=g.rows.slice().reverse().map(e=>rowHtml(e,'lrow')).join('');
-    return `<div class="grp ${p===S.pallet?'act':''}"><div class="gh"><div class="t"><b>${esc(p)}</b>${S.closed[p]?' ✓':''}<div>${items} kalem · ${qty} adet · ${g.rows.length} okutma</div></div>${p===S.pallet?'<span class="mut">aktif</span>':`<button data-act="${esc(p)}">Aktif yap</button>`}</div>${body}</div>`;
+    return `<div class="grp ${p===S.pallet?'act':''}"><div class="gh"><div class="t"><b>${esc(p)}</b>${S.closed[p]?' ✓':''}<div>${items} kalem · ${cases?cases+' koli · ':''}${qty} adet · ${g.rows.length} okutma</div></div>${p===S.pallet?'<span class="mut">aktif</span>':`<button data-act="${esc(p)}">Aktif yap</button>`}</div>${body}</div>`;
   }).join('');
 }
 function csvField(v){v=String(v??'');return /[";,\n\r\t]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+function bcField(v){return v&&S.excelText?'="'+v+'"':csvField(v)}
 function buildCsv(){
-  const sep=S.sep||';';const bc=v=>S.excelText?'="'+v+'"':csvField(v);
+  const sep=S.sep||';';
   let es=S.scope==='active'?S.entries.filter(e=>e.pallet===S.pallet):S.entries.slice();
   es.sort((a,b)=>a.pallet.localeCompare(b.pallet,undefined,{numeric:true})||a.ts-b.ts);
   let lines;
   if(S.fmt==='rows'){
-    lines=[['palet_no','barkod','referans','urun_adi','hacim_ml','adet','tarih','saat','cihaz'].join(sep)];
-    for(const e of es)lines.push([csvField(e.pallet),bc(e.barcode),csvField(e.ref),csvField(e.name),csvField(e.vol),e.qty,fDate(e.ts),fTime(e.ts),csvField(e.device)].join(sep));
+    lines=[['palet_no','barkod','referans','urun_adi','hacim_ml','lot','koli','koli_ici','tekil','toplam_adet','tarih','saat','cihaz'].join(sep)];
+    for(const e of es)lines.push([csvField(e.pallet),bcField(e.barcode),csvField(e.ref),csvField(e.name),csvField(e.vol),csvField(e.lot),e.cases||0,e.cases?e.perCase:'',e.units||0,e.qty,fDate(e.ts),fTime(e.ts),csvField(e.device)].join(sep));
   }else{
-    const m=new Map();
-    for(const e of es){const k=e.pallet+'\u0000'+e.barcode;if(!m.has(k))m.set(k,{...e,qty:0,n:0,first:e.ts,last:e.ts});const x=m.get(k);x.qty+=e.qty;x.n++;x.first=Math.min(x.first,e.ts);x.last=Math.max(x.last,e.ts)}
-    lines=[['palet_no','barkod','referans','urun_adi','hacim_ml','toplam_adet','okutma_sayisi','ilk_okutma','son_okutma'].join(sep)];
-    for(const x of m.values())lines.push([csvField(x.pallet),bc(x.barcode),csvField(x.ref),csvField(x.name),csvField(x.vol),x.qty,x.n,fDate(x.first)+' '+fTime(x.first),fDate(x.last)+' '+fTime(x.last)].join(sep));
+    lines=[['palet_no','barkod','referans','urun_adi','hacim_ml','lot','koli','koli_ici','tekil','toplam_adet','okutma_sayisi','ilk_okutma','son_okutma'].join(sep)];
+    for(const x of aggregate(es,true))lines.push([csvField(x.pallet),bcField(x.barcode),csvField(x.ref),csvField(x.name),csvField(x.vol),csvField(x.lot),x.cases,[...x.pcs].join('/'),x.units,x.qty,x.n,fDate(x.first)+' '+fTime(x.first),fDate(x.last)+' '+fTime(x.last)].join(sep));
   }
   return {text:lines.join('\r\n'),count:es.length,lines:lines.length-1};
 }
@@ -652,11 +782,16 @@ function renderExport(){
 }
 function renderSettings(){
   $('#setDevice').value=S.device||'';$('#setSep').value=S.sep;$('#setCool').value=String(S.cool||1200);
-  $('#setSound').classList.toggle('on',!!S.sound);$('#setExcel').classList.toggle('on',!!S.excelText);
-  const ne=Object.keys(S.extra).length;
-  $('#prodInfo').innerHTML=`<b style="color:var(--tx)">${Object.keys(PRODUCTS).length}</b> ürün yüklü (${PRODUCT_SOURCE})${ne?` + <b style="color:var(--tx)">${ne}</b> ek ürün`:''}.`;
+  $('#setSound').classList.toggle('on',!!S.sound);$('#setExcel').classList.toggle('on',!!S.excelText);$('#setLot').classList.toggle('on',!!S.autoLot);
+  const ne=Object.keys(S.extra).length,nb=IDX.all.filter(p=>p.barcode).length,npc=IDX.all.filter(p=>perCaseOf(p)).length;
+  $('#prodInfo').innerHTML=`<b style="color:var(--tx)">${IDX.all.length}</b> ürün (${nb} barkodlu, ${IDX.all.length-nb} barkodsuz) – ${PRODUCT_SOURCE}${ne?` + ${ne} yüklenen satır`:''}.<br>Koli içi tanımlı: <b style="color:${npc?'var(--tx)':'var(--warn)'}">${npc}</b> / ${IDX.all.length}`;
   let kb=0;try{kb=Math.round((localStorage.getItem(LS)||'').length/1024)}catch(e){}
   $('#dataInfo').innerHTML=`Veriler sadece bu telefonda saklanır (${kb} KB). Düzenli CSV export alın.<br>Ana ekrana eklediyseniz her zaman ana ekrandaki simgeden açın – Safari sekmesindeki veriler ayrıdır.<br>Sürüm ${VERSION} · okuyucu: ${nativeDet?'yerleşik':(window.ZXing?'ZXing':'yüklenmedi')}`;
+  if(!$('#pcList').classList.contains('hidden'))renderPcList();
+}
+function renderPcList(){
+  const ps=IDX.all.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'')||(+a.vol||0)-(+b.vol||0));
+  $('#pcList').innerHTML=ps.map(p=>`<div><span>${esc(p.name||p.ref)}${hasVol(p.vol)?' · '+esc(p.vol)+' ml':''}<small>${esc(p.ref)}${p.barcode?' · '+esc(p.barcode):' · barkodsuz'}</small></span><input type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="–" data-pid="${esc(pid(p))}" value="${perCaseOf(p)||''}"></div>`).join('');
 }
 function setSeg(sel,attr,val){$$(sel+' button').forEach(b=>b.classList.toggle('on',b.dataset[attr]===val))}
 function renderAll(){
@@ -690,33 +825,35 @@ $('#zoomBtn').onclick=async()=>{if(!track)return;zoomOn=!zoomOn;try{await track.
 $('#palletBtn').onclick=()=>{unlockAudio();openPalletSheet()};
 $('#finishBtn').onclick=()=>finishPallet();
 $('#manualBtn').onclick=()=>{unlockAudio();openManualSheet()};
-$('#modeSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.mode=b.dataset.mode;save();setSeg('#modeSeg','mode',S.mode);toast(S.mode==='plus'?'Her okutma 1 adet olarak kaydedilir':'Her okutmada adet sorulur')};
-$('#recent').onclick=e=>{const b=e.target.closest('[data-id]');if(!b)return;const en=S.entries.find(x=>x.id===b.dataset.id);if(en)openQtySheet(en.barcode,en)};
+$('#modeSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.mode=b.dataset.mode;save();setSeg('#modeSeg','mode',S.mode);
+  toast(S.mode==='plusc'?'Her okutma 1 koli olarak kaydedilir':S.mode==='plusu'?'Her okutma 1 adet olarak kaydedilir':'Her okutmada koli / tekil adet sorulur')};
+function editEntry(id){const en=S.entries.find(x=>x.id===id);if(en)openQtySheet({barcode:en.barcode,ref:en.ref,name:en.name,vol:en.vol},en)}
+$('#recent').onclick=e=>{const b=e.target.closest('[data-id]');if(b)editEntry(b.dataset.id)};
 $('#listBody').onclick=e=>{
   const a=e.target.closest('[data-act]');if(a){setPallet(a.dataset.act);toast('Aktif palet: '+a.dataset.act,'ok');return}
-  const b=e.target.closest('[data-id]');if(!b)return;const en=S.entries.find(x=>x.id===b.dataset.id);if(en)openQtySheet(en.barcode,en);
+  const b=e.target.closest('[data-id]');if(b)editEntry(b.dataset.id);
 };
 $('#lq').oninput=()=>renderList();
 $('#listSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.listMode=b.dataset.lm;save();renderAll()};
 $('#onlyActive').onclick=()=>{S.onlyActive=!S.onlyActive;save();renderAll()};
 $('#scopeSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.scope=b.dataset.scope;save();renderExport()};
 $('#fmtSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.fmt=b.dataset.fmt;save();renderExport()};
-function csvBlob(){const c=buildCsv();return {blob:new Blob(['﻿'+c.text],{type:'text/csv;charset=utf-8'}),count:c.lines}}
-function markExported(){S.lastExport=Date.now();save();renderAll()}
 function download(blob,name){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
-$('#shareBtn').onclick=async()=>{
-  const {blob,count}=csvBlob();if(!count)return toast('Export edilecek kayıt yok','warn');
-  const name=csvName(),file=new File([blob],name,{type:'text/csv'});
+async function shareOrDownload(text,name){
+  const blob=new Blob(['﻿'+text],{type:'text/csv;charset=utf-8'}),file=new File([blob],name,{type:'text/csv'});
   if(navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],title:name});markExported();toast('Paylaşıldı','ok')}
-    catch(e){if(e&&e.name!=='AbortError'){download(blob,name);markExported()}}
-  }else{download(blob,name);markExported();toast('CSV indirildi','ok')}
-};
-$('#dlBtn').onclick=()=>{const {blob,count}=csvBlob();if(!count)return toast('Export edilecek kayıt yok','warn');download(blob,csvName());markExported();toast('CSV indirildi','ok')};
+    try{await navigator.share({files:[file],title:name});return true}
+    catch(e){if(e&&e.name==='AbortError')return false;download(blob,name);return true}
+  }
+  download(blob,name);return true;
+}
+function markExported(){S.lastExport=Date.now();save();renderAll()}
+$('#shareBtn').onclick=async()=>{const c=buildCsv();if(!c.lines)return toast('Export edilecek kayıt yok','warn');if(await shareOrDownload(c.text,csvName())){markExported();toast('CSV hazır','ok')}};
+$('#dlBtn').onclick=()=>{const c=buildCsv();if(!c.lines)return toast('Export edilecek kayıt yok','warn');download(new Blob(['﻿'+c.text],{type:'text/csv;charset=utf-8'}),csvName());markExported();toast('CSV indirildi','ok')};
 $('#wipeBtn').onclick=()=>{
   const un=S.entries.filter(e=>e.ts>S.lastExport).length;
   const sh=openSheet(`<h3>Tüm kayıtlar silinsin mi?</h3>
-    <p>${S.entries.length} okutma, ${new Set(S.entries.map(e=>e.pallet)).size} palet kalıcı olarak silinecek.</p>
+    <p>${S.entries.length} okutma, ${new Set(S.entries.map(e=>e.pallet)).size} palet kalıcı olarak silinecek. Ürün listesi ve koli içi adetleri kalır.</p>
     ${un?`<div class="note w"><b>${un}</b> okutma henüz export edilmedi!</div>`:''}
     <div class="acts"><button class="btn ghost" data-a="cancel">Vazgeç</button><button class="btn dangerfill" data-a="ok">Evet, hepsini sil</button></div>`);
   sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.a==='cancel')closeSheet();
@@ -727,19 +864,43 @@ $('#setSep').onchange=e=>{S.sep=e.target.value;save()};
 $('#setCool').onchange=e=>{S.cool=+e.target.value;save()};
 $('#setSound').onclick=()=>{S.sound=!S.sound;save();renderSettings();unlockAudio();beepOk()};
 $('#setExcel').onclick=()=>{S.excelText=!S.excelText;save();renderSettings()};
+$('#setLot').onclick=()=>{S.autoLot=!S.autoLot;save();renderSettings()};
+$('#pcEditBtn').onclick=()=>{const l=$('#pcList');l.classList.toggle('hidden');if(!l.classList.contains('hidden'))renderPcList()};
+$('#pcList').addEventListener('change',e=>{const i=e.target.closest('input[data-pid]');if(!i)return;const n=parseInt(i.value,10);
+  if(n>0)S.perCase[i.dataset.pid]=n;else delete S.perCase[i.dataset.pid];save();renderSettings()});
+$('#tplBtn').onclick=async()=>{
+  const sep=S.sep||';';
+  const lines=[['barkod','referans','urun_adi','hacim_ml','koli_ici'].join(sep)];
+  for(const p of IDX.all)lines.push([bcField(p.barcode),csvField(p.ref),csvField(p.name),csvField(p.vol),perCaseOf(p)||''].join(sep));
+  await shareOrDownload(lines.join('\r\n'),'urun_listesi_koli_ici.csv');
+};
+function parseCsvLine(line,sep){
+  const out=[];let cur='',q=false;
+  for(let i=0;i<line.length;i++){const ch=line[i];
+    if(q){if(ch==='"'){if(line[i+1]==='"'){cur+='"';i++}else q=false}else cur+=ch}
+    else if(ch==='"')q=true;else if(ch===sep){out.push(cur);cur=''}else cur+=ch}
+  out.push(cur);return out.map(s=>s.trim().replace(/^=/,'').replace(/^"(.*)"$/,'$1').trim());
+}
 $('#prodFile').onchange=async e=>{
   const f=e.target.files[0];if(!f)return;let t=await f.text();t=t.replace(/^﻿/,'');
-  const first=t.split(/\r?\n/)[0]||'';const sep=[';','\t',','].sort((a,b)=>first.split(b).length-first.split(a).length)[0];
-  let n=0;
-  for(const line of t.split(/\r?\n/)){
-    if(!line.trim())continue;
-    const c=line.split(sep).map(x=>x.trim().replace(/^="?|"$/g,'').replace(/^"|"$/g,''));
-    const code=(c[0]||'').replace(/\s/g,'');if(!/^\d{6,14}$/.test(code))continue;
-    S.extra[code]=[c[1]||'',c[2]||'',c[3]||''];n++;
+  const ls=t.split(/\r?\n/).filter(l=>l.trim());const first=ls[0]||'';
+  const sep=[';','\t',','].sort((a,b)=>first.split(b).length-first.split(a).length)[0];
+  let n=0,npc=0;
+  for(const line of ls){
+    const c=parseCsvLine(line,sep);
+    const bc=(c[0]||'').replace(/\s/g,''),ref=c[1]||'',name=c[2]||'',vol=c[3]||'',pcv=parseInt(c[4],10);
+    if(/barkod|barcode/i.test(c[0]||'')||/referans|reference/i.test(ref))continue;
+    if(bc&&!/^\d{4,14}$/.test(bc))continue;
+    if(!bc&&!ref)continue;
+    const key=bc||'REF:'+ref.toUpperCase();
+    S.extra[key]=[bc,ref,name,vol];n++;
+    buildIndex();
+    const p=(bc&&IDX.bc.get(bc))||IDX.ref.get(ref.toUpperCase());
+    if(p&&pcv>0){S.perCase[pid(p)]=pcv;npc++}
   }
-  save();renderSettings();toast(n+' ürün eklendi',n?'ok':'warn');e.target.value='';
+  buildIndex();save();renderSettings();toast(n+' satır yüklendi, '+npc+' koli içi',n?'ok':'warn');e.target.value='';
 };
-$('#prodClear').onclick=()=>{S.extra={};save();renderSettings();toast('Ek liste silindi')};
+$('#prodClear').onclick=()=>{S.extra={};buildIndex();save();renderSettings();toast('Yüklenen ek ürünler silindi (koli içi adetleri duruyor)')};
 
 /* hardware / Bluetooth keyboard-wedge scanners */
 let kb='',kbT=0;
@@ -752,6 +913,7 @@ window.addEventListener('keydown',e=>{
 
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+buildIndex();
 initDecoder();
 renderAll();
 if(!S.pallet)setTimeout(()=>{if(!sheetOpen())openPalletSheet()},300);

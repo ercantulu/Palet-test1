@@ -1,4 +1,4 @@
-const C='palet-sayim-v1';
+const C='palet-sayim-v2';
 const LIB='https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon-180.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all([...CORE.map(u=>c.add(u).catch(()=>{})),c.add(new Request(LIB,{mode:'cors'})).catch(()=>{})])));self.skipWaiting()});
