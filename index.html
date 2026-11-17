@@ -74,6 +74,7 @@ main{flex:1;overflow:hidden;position:relative}
 .tabs button span{font-size:11px;font-weight:600}
 .tabs button.on{color:var(--acc)}
 .badge{position:absolute;top:4px;left:calc(50% + 8px);background:var(--warn);color:#111;font-size:11px;font-weight:800;border-radius:10px;padding:1px 6px}
+.badge.dot{width:10px;height:10px;padding:0;border-radius:50%}
 /* sheet */
 .sheetbg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--card);border-radius:20px 20px 0 0;padding:10px 16px calc(16px + var(--sb));max-height:94vh;overflow-y:auto;border-top:1px solid var(--line);animation:up .18s ease-out}
@@ -138,6 +139,7 @@ main{flex:1;overflow:hidden;position:relative}
 .sw.on::after{left:23px}
 .mut{color:var(--mut);font-size:13px}
 .toast{position:fixed;left:12px;right:12px;top:calc(var(--st) + 84px);z-index:30;background:#f2f4f8;color:#111;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.toast{pointer-events:none}.toast button{pointer-events:auto}
 .toast span{flex:1}
 .toast.ok{background:var(--ok);color:#06240f}
 .toast.err{background:var(--err);color:#fff}
@@ -276,10 +278,62 @@ main{flex:1;overflow:hidden;position:relative}
   .grip{display:none}
   .expgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start}
   .view:not(#v-scan)>#ordExp,.view:not(#v-scan)>#invExp{max-width:1180px}
-  .toast{left:auto;right:24px;top:18px;width:440px}
+  .toast{left:auto;right:24px;top:auto;bottom:24px;width:440px}
   button:hover,.btn:hover,label.btn:hover{filter:brightness(1.12)}
 }
 @keyframes fadein{from{opacity:0}to{opacity:1}}
+
+/* ---------- v2.5 usability ---------- */
+.edge{position:fixed;inset:0;pointer-events:none;z-index:40;border:0 solid transparent;opacity:0}
+.edge.go{animation:edgeA .7s ease-out}
+.edge.ok{border-color:var(--ok)}.edge.warn{border-color:var(--warn)}.edge.err{border-color:var(--err)}
+@keyframes edgeA{0%{opacity:1;border-width:10px}100%{opacity:0;border-width:10px}}
+.scanres{position:absolute;left:10px;right:10px;bottom:68px;z-index:4;border-radius:14px;padding:10px 14px;display:flex;flex-direction:column;gap:2px;animation:fadein .12s;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.scanres b{font-size:22px;line-height:1.15;font-weight:800}
+.scanres span{font-size:14px;font-weight:600;opacity:.85}
+.scanres em{font-style:normal;font-size:15px;font-weight:700}
+.scanres.ok{background:var(--ok);color:#06240f}.scanres.warn{background:var(--warn);color:#111}.scanres.err{background:var(--err);color:#fff}
+.stepw{display:flex;align-items:stretch;gap:4px;margin-top:3px}
+.stepw input{margin-top:0!important;min-width:0;flex:1}
+.stp{width:42px;flex:none;border-radius:12px;background:var(--card2);border:1px solid var(--line);font-size:24px;font-weight:800;line-height:1;color:var(--acc)}
+.stp:active{filter:brightness(1.4)}
+.cuin label.lc{flex:2.4}
+.safebar{flex-basis:100%;display:flex;align-items:center;gap:8px;background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.45);border-radius:12px;padding:6px 8px 6px 12px;font-size:13px;font-weight:600}
+.safebar span{flex:1}
+.safebar button{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:7px 10px;font-weight:700;font-size:13px}
+.top{flex-wrap:wrap}
+.guide{background:var(--card);border:1px solid var(--acc);border-radius:14px;padding:10px 14px;margin-bottom:12px}
+.guide .ghd{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.guide .ghd button{background:var(--acc);color:#04202e;font-weight:800;border-radius:10px;padding:8px 14px}
+.gsteps{margin:8px 0 2px;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.gk{font-size:13px;margin-top:6px}
+.keys{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.keys div{display:flex;gap:10px;align-items:center;font-size:14px}
+kbd{display:inline-block;min-width:34px;text-align:center;background:var(--card2);border:1px solid var(--line);border-bottom-width:3px;border-radius:7px;padding:3px 7px;font:700 13px ui-monospace,Menlo,monospace}
+.sortbar{display:flex;align-items:center;gap:6px;margin:2px 0 8px;font-size:13px;color:var(--mut);flex-wrap:wrap}
+.sortbar button{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-weight:700;font-size:13px;color:var(--mut)}
+.sortbar button.on{color:var(--tx);border-color:var(--acc)}
+.shortl{display:flex;flex-direction:column;gap:4px;max-height:34vh;overflow:auto;margin:6px 0}
+.shortl div{display:flex;align-items:baseline;gap:8px;background:var(--card2);border-radius:10px;padding:7px 10px;font-size:14px}
+.shortl span{flex:1;min-width:0}.shortl b{white-space:nowrap}.shortl small{color:var(--mut);white-space:nowrap}
+.okc{color:var(--ok);font-size:20px}
+body.dropping::after{content:attr(data-drop);position:fixed;inset:12px;border:3px dashed var(--acc);border-radius:20px;background:rgba(56,189,248,.12);z-index:50;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--acc);pointer-events:none}
+/* large text */
+body.bigtxt #app,body.bigtxt #sheet,body.bigtxt #toast{zoom:1.15}
+/* light theme */
+body.light{--bg:#eef1f5;--card:#ffffff;--card2:#f2f4f7;--line:#d3d8e0;--tx:#111827;--mut:#5b6474;--ok:#16a34a;--warn:#d97706;--err:#dc2626;--acc:#0284c7}
+body.light .toast{background:#1f2937;color:#fff}
+body.light .toast.ok{background:var(--ok);color:#fff}
+body.light .btn.primary,body.light .big,body.light .scanres.ok{color:#fff}
+body.light .prev{background:var(--card2)}
+body.light .sheetbg{background:rgba(15,17,21,.35)}
+body.light .guide .ghd button{color:#fff}
+body.light .camstart{background:#1a1d24}
+@media (min-width:900px){
+  .olines{display:grid;grid-template-columns:1fr 1fr;column-gap:22px}
+  .scanres{bottom:12px}
+  .safebar{flex-basis:auto;flex:1 1 360px}
+}
 </style>
 </head>
 <body>
@@ -290,6 +344,7 @@ main{flex:1;overflow:hidden;position:relative}
     </button>
     <div class="ptot"><b id="pItems">0</b><span data-i="items"></span></div>
     <div class="ptot"><b id="pQty">0</b><span data-i="pcs"></span></div>
+    <div id="safeBar" class="safebar hidden"></div>
   </header>
   <main>
     <section id="v-scan" class="view active">
@@ -297,6 +352,7 @@ main{flex:1;overflow:hidden;position:relative}
         <video id="video" playsinline muted autoplay></video>
         <div class="box" id="box"><div class="laser"></div></div>
         <div id="flash" class="flash"></div>
+        <div id="scanRes" class="scanres hidden"></div>
         <div id="hit" class="hit"></div>
         <div id="banner" class="banner hidden"></div>
         <div class="camtools">
@@ -311,6 +367,7 @@ main{flex:1;overflow:hidden;position:relative}
       </div>
       <div class="kbbox" id="kbBox"><input id="kbIn" data-ip="kbPh" autocomplete="off" inputmode="text"><small data-i="kbHint"></small></div>
       <div class="scanbody">
+        <div id="guideBox" class="hidden"></div>
         <div id="invWork" class="invonly"></div>
         <div id="ordWork" class="ordonly"></div>
         <div class="freeonly">
@@ -376,6 +433,17 @@ main{flex:1;overflow:hidden;position:relative}
     </section>
 
     <section id="v-set" class="view">
+      <div class="sect" data-i="safeHdr"></div>
+      <div class="card" id="safeCard"></div>
+      <div class="sect" data-i="viewHdr"></div>
+      <div class="card">
+        <label class="fld"><span data-i="setTheme"></span>
+          <select id="setTheme"><option value="dark" data-i="thDark"></option><option value="light" data-i="thLight"></option><option value="auto" data-i="thAuto"></option></select>
+        </label>
+        <div class="tgl"><span><span data-i="setBig"></span><small data-i="setBigSub"></small></span><button class="sw" id="setBig"></button></div>
+        <div class="row2"><button id="guideBtn" class="btn ghost wide" data-i="guideBtn"></button></div>
+      </div>
+      <div class="sect" data-i="genHdr"></div>
       <div class="card">
         <label class="fld"><span data-i="setLang"></span>
           <select id="setLang"></select>
@@ -419,9 +487,10 @@ main{flex:1;overflow:hidden;position:relative}
     <button data-v="list">☰<span data-i="tabList"></span></button>
     <button data-v="inv">📋<span data-i="tabInv"></span></button>
     <button data-v="export">⇪<span data-i="tabExport"></span><i id="expBadge" class="badge hidden"></i></button>
-    <button data-v="set">⚙︎<span data-i="tabSet"></span></button>
+    <button data-v="set">⚙︎<span data-i="tabSet"></span><i id="setBadge" class="badge dot hidden"></i></button>
   </nav>
 </div>
+<div id="edge" class="edge"></div>
 <div id="sheetBg" class="sheetbg hidden"></div>
 <div id="sheet" class="sheet hidden"></div>
 <div id="toast" class="toast hidden"></div>
@@ -971,10 +1040,121 @@ Object.assign(I18N.de,{kbPh:'Barcode eingeben / scannen + Enter',kbHint:'Mit ang
 Object.assign(I18N.it,{kbPh:'Digita / scansiona barcode + Invio',kbHint:'Con un lettore USB o Bluetooth collegato scansiona direttamente – funziona anche senza selezionare il campo. Esc chiude le finestre.'});
 Object.assign(I18N.ru,{kbPh:'Введите / отсканируйте штрихкод + Enter',kbHint:'С USB- или Bluetooth-сканером просто сканируйте – работает и без выбора поля. Окна закрываются клавишей Esc.'});
 Object.assign(I18N.en,{kbPh:'Type / scan barcode + Enter',kbHint:'With a USB or Bluetooth scanner connected just scan – works even when the field is not selected. Esc closes dialogs.'});
+/* v2.5 usability */
+Object.assign(I18N.tr,{undoHint:'İşlem yapıldı',removed:'Silindi: {n}',srPallet:'Palet etiketi',bkOffer:'Belge hazır. Verilerin yedeğini de almak ister misin?',bkNow:'Yedek al',
+a2hsTitle:'Ana ekrana ekle',a2hsWhy:'Uygulama tarayıcı sekmesinde açılırsa, birkaç gün kullanılmadığında tarayıcı kayıtlı verileri silebilir. Ana ekrandaki simgeden açılan uygulamada bu olmaz.',
+a2hsIOS:'Safari\'de alttaki <b>Paylaş ⬆︎</b> düğmesine dokun → <b>Ana Ekrana Ekle</b> → <b>Ekle</b>. Sonra uygulamayı her zaman ana ekrandaki simgeden aç.',
+a2hsAndroid:'Chrome\'da sağ üstteki <b>⋮</b> menüsü → <b>Ana ekrana ekle</b> veya <b>Uygulamayı yükle</b>. Sonra uygulamayı her zaman simgeden aç.',
+a2hsInstall:'Şimdi yükle',later:'Sonra',gotIt:'Anladım',how:'Nasıl?',a2hsBar:'Veriler korunsun diye uygulamayı ana ekrana ekle',
+bkBar:'Son yedek: {d} – yeni kayıtlar yedeklenmedi',bkBarNever:'Henüz yedek alınmadı',
+g_title_free:'Serbest sayım nasıl çalışır',g_free1:'Palet numarasını yaz ya da palet etiketini okut.',g_free2:'Ürün barkodunu okut, koli/adet gir. Hızlı sayım için “Okut = +1 koli” seç.',g_free3:'Palet bitince “Palet bitti”. Sonunda Export\'tan Excel/CSV al.',
+g_title_inv:'Envanter sayımı nasıl çalışır',g_inv1:'Mod sekmesinde Giacenza raporunu yükle ve envanter modunu aç.',g_inv2:'Palet etiketini okut. Beklenen ürünleri okut ya da listede dokun, koli sayısını gir (− / + ile).',g_inv3:'Kaydet; farklar işaretlenir. Bitince Export\'tan raporu al.',
+g_title_ord:'Sipariş hazırlama nasıl çalışır',g_ord1:'Mod sekmesinde sipariş Excel\'ini yükle ve sipariş modunu aç (bilgisayarda dosyayı pencereye sürükleyebilirsin).',g_ord2:'“Yeni palet” ya da palet etiketini okut, ürünleri okut. Siparişten fazlası engellenir.',g_ord3:'Paleti kapat (ağırlık/yükseklik). Bitince Export\'tan packing list, palet ve koli etiketlerini al.',
+g_keys:'Kısayollar: / ara · N yeni palet · K paleti kapat · 1–5 sekmeler · ? yardım',guideHdr:'Kısa kılavuz',keysHdr:'Klavye kısayolları (bilgisayar)',guideReset:'İpuçlarını tekrar göster',guideResetDone:'İpuçları her modda tekrar gösterilecek',
+k_search:'Arama / barkod alanı',k_new:'Yeni palet',k_close:'Paleti kapat / kaydet',k_tabs:'Sekmeler arası geçiş',k_esc:'Pencereyi kapat',k_help:'Bu yardım',
+dropBad:'Sadece Excel (.xlsx, .xls) veya CSV dosyası',dropTitle:'Bu dosya ne?',dropOrd:'Sipariş',dropInv:'Envanter raporu (Giacenza)',dropHint:'Excel dosyasını bırak',
+resOrd:'Sipariş {no}',resInv:'Envanter {f}',resFree:'Palet {p}',resMsg:'Kaldığın yer: {w}',resGo:'Devam',
+ordCloseQ:'{no} kapatılsın mı?',ordShortW:'eksik kalem',ordOpenPalWarn:'{n} palet hâlâ açık.',ordShortHdr:'Eksik kalanlar (bakiye)',ordAllDone:'Tüm kalemler tam yüklendi.',ordClosedToast:'{no} kapatıldı',
+a2hsState:'Ana ekrandan açılıyor',a2hsYes:'Evet – veriler korunuyor',a2hsNo:'Hayır – tarayıcı verileri silebilir',bkState:'Yedek',bkDueShort:'yedek gerekli',
+safeHdr:'Veri güvenliği',viewHdr:'Görünüm ve yardım',setTheme:'Tema',thDark:'Koyu',thLight:'Açık (parlak ortam)',thAuto:'Otomatik (cihaz ayarı)',setBig:'Büyük yazı',setBigSub:'Düğmeler ve yazılar %15 daha büyük',guideBtn:'📖 Kısa kılavuz ve kısayollar',genHdr:'Genel',
+sortBy:'Sırala:',sort_ord:'Sipariş sırası',sort_rem:'Kalan',sort_name:'Ad',
+camHint:'Barkodu kutunun içine yatay tutun, kamerayı 15–25 cm uzakta tutun.',langAuto:'Otomatik (cihaz dili)',setDevicePh:'Örn. Depo 1 / Ahmet',setSoundSub:'Cihaz sessizdeyse ses çıkmayabilir, renkli sonuç yine görünür',
+camDenied:'Kamera izni verilmedi. Cihaz ayarlarından tarayıcıya kamera izni verip tekrar deneyin.',
+dataInfo:'Veriler sadece bu cihazda, bu tarayıcıda saklanır ({kb} KB). Düzenli yedek alın.<br>Ana ekrana eklediyseniz her zaman simgeden açın – tarayıcı sekmesindeki veriler ayrıdır.<br>Sürüm {v} · okuyucu: {r}',
+restoreWarn:'Bu cihazdaki mevcut tüm veriler bu yedekle değiştirilecek.',invTeamHdr:'Ekip sayımı (birden fazla cihaz)',invTeamHint:'Her cihaz aynı raporu yükler ve sayar. Sonuçları paylaşıp tek cihazda birleştirin; aynı palet iki kez sayıldıysa en yeni sayım geçerli olur.'});
+Object.assign(I18N.de,{undoHint:'Erledigt',removed:'Entfernt: {n}',srPallet:'Palettenetikett',bkOffer:'Dokument fertig. Auch eine Datensicherung erstellen?',bkNow:'Sichern',
+a2hsTitle:'Zum Home-Bildschirm',a2hsWhy:'Im Browser-Tab kann der Browser gespeicherte Daten löschen, wenn die Seite einige Tage nicht genutzt wird. Als App vom Home-Bildschirm passiert das nicht.',
+a2hsIOS:'In Safari unten auf <b>Teilen ⬆︎</b> → <b>Zum Home-Bildschirm</b> → <b>Hinzufügen</b>. Danach immer über das Symbol öffnen.',
+a2hsAndroid:'In Chrome oben rechts <b>⋮</b> → <b>Zum Startbildschirm hinzufügen</b> bzw. <b>App installieren</b>. Danach immer über das Symbol öffnen.',
+a2hsInstall:'Jetzt installieren',later:'Später',gotIt:'Verstanden',how:'Wie?',a2hsBar:'App zum Home-Bildschirm hinzufügen, damit die Daten sicher bleiben',
+bkBar:'Letzte Sicherung: {d} – neue Daten nicht gesichert',bkBarNever:'Noch keine Sicherung',
+g_title_free:'So funktioniert die freie Zählung',g_free1:'Palettennummer eingeben oder Palettenetikett scannen.',g_free2:'Artikel scannen, Kartons/Stück eingeben. Für Tempo „Scan = +1 Karton“ wählen.',g_free3:'Palette fertig → „Palette fertig“. Am Ende unter Export Excel/CSV erstellen.',
+g_title_inv:'So funktioniert die Inventur',g_inv1:'Im Tab Modus den Giacenza-Bericht laden und den Inventurmodus einschalten.',g_inv2:'Palettenetikett scannen. Erwartete Artikel scannen oder antippen, Kartons eingeben (− / +).',g_inv3:'Speichern; Abweichungen werden markiert. Zum Schluss unter Export den Bericht erstellen.',
+g_title_ord:'So funktioniert die Kommissionierung',g_ord1:'Im Tab Modus die Auftrags-Excel laden und den Auftragsmodus einschalten (am PC Datei ins Fenster ziehen).',g_ord2:'„Neue Palette“ oder Palettenetikett scannen, Artikel scannen. Mehr als bestellt wird blockiert.',g_ord3:'Palette abschließen (Gewicht/Höhe). Danach unter Export Packliste, Paletten- und Kartonetiketten.',
+g_keys:'Tasten: / Suche · N neue Palette · K Palette abschließen · 1–5 Tabs · ? Hilfe',guideHdr:'Kurzanleitung',keysHdr:'Tastenkürzel (PC)',guideReset:'Tipps wieder anzeigen',guideResetDone:'Tipps werden in jedem Modus wieder angezeigt',
+k_search:'Suche / Barcodefeld',k_new:'Neue Palette',k_close:'Palette abschließen / speichern',k_tabs:'Tabs wechseln',k_esc:'Fenster schließen',k_help:'Diese Hilfe',
+dropBad:'Nur Excel (.xlsx, .xls) oder CSV',dropTitle:'Was ist diese Datei?',dropOrd:'Auftrag',dropInv:'Bestandsbericht (Giacenza)',dropHint:'Excel-Datei hier ablegen',
+resOrd:'Auftrag {no}',resInv:'Inventur {f}',resFree:'Palette {p}',resMsg:'Weiter bei: {w}',resGo:'Weiter',
+ordCloseQ:'{no} abschließen?',ordShortW:'Fehlpositionen',ordOpenPalWarn:'{n} Palette(n) noch offen.',ordShortHdr:'Fehlmengen (Rückstand)',ordAllDone:'Alle Positionen vollständig geladen.',ordClosedToast:'{no} abgeschlossen',
+a2hsState:'Start vom Home-Bildschirm',a2hsYes:'Ja – Daten geschützt',a2hsNo:'Nein – Browser kann Daten löschen',bkState:'Sicherung',bkDueShort:'Sicherung fällig',
+safeHdr:'Datensicherheit',viewHdr:'Darstellung und Hilfe',setTheme:'Design',thDark:'Dunkel',thLight:'Hell (helle Umgebung)',thAuto:'Automatisch (Gerät)',setBig:'Große Schrift',setBigSub:'Tasten und Texte 15 % größer',guideBtn:'📖 Kurzanleitung und Tasten',genHdr:'Allgemein',
+sortBy:'Sortieren:',sort_ord:'Auftragsreihenfolge',sort_rem:'Offen',sort_name:'Name',
+langAuto:'Automatisch (Gerätesprache)',setDevicePh:'z. B. Lager 1 / Anna',setSoundSub:'Im Stumm-Modus evtl. kein Ton – das farbige Ergebnis erscheint trotzdem',
+camDenied:'Kamerazugriff verweigert. In den Geräteeinstellungen dem Browser die Kamera erlauben und erneut versuchen.',
+dataInfo:'Daten werden nur auf diesem Gerät in diesem Browser gespeichert ({kb} KB). Regelmäßig sichern.<br>Wenn zum Home-Bildschirm hinzugefügt, immer über das Symbol öffnen – Daten im Browser-Tab sind getrennt.<br>Version {v} · Leser: {r}',
+restoreWarn:'Alle aktuellen Daten auf diesem Gerät werden durch diese Sicherung ersetzt.',invTeamHdr:'Teamzählung (mehrere Geräte)',invTeamHint:'Jedes Gerät lädt denselben Bericht und zählt. Ergebnisse teilen und auf einem Gerät zusammenführen; bei doppelt gezählten Paletten gilt die neueste Zählung.'});
+Object.assign(I18N.it,{undoHint:'Fatto',removed:'Rimosso: {n}',srPallet:'Etichetta pallet',bkOffer:'Documento pronto. Vuoi fare anche un backup dei dati?',bkNow:'Backup',
+a2hsTitle:'Aggiungi alla schermata Home',a2hsWhy:'Aperta in una scheda del browser, se non usata per alcuni giorni il browser può cancellare i dati salvati. Dall\'icona sulla schermata Home questo non succede.',
+a2hsIOS:'In Safari tocca <b>Condividi ⬆︎</b> → <b>Aggiungi alla schermata Home</b> → <b>Aggiungi</b>. Poi aprila sempre dall\'icona.',
+a2hsAndroid:'In Chrome menu <b>⋮</b> in alto a destra → <b>Aggiungi a schermata Home</b> o <b>Installa app</b>. Poi aprila sempre dall\'icona.',
+a2hsInstall:'Installa ora',later:'Più tardi',gotIt:'Ho capito',how:'Come?',a2hsBar:'Aggiungi l\'app alla schermata Home per proteggere i dati',
+bkBar:'Ultimo backup: {d} – nuovi dati non salvati',bkBarNever:'Nessun backup ancora',
+g_title_free:'Come funziona il conteggio libero',g_free1:'Inserisci il numero pallet o scansiona l\'etichetta pallet.',g_free2:'Scansiona il prodotto, inserisci cartoni/pezzi. Per andare veloci scegli «Scan = +1 cartone».',g_free3:'Pallet finito → «Pallet finito». Alla fine esporta Excel/CSV da Export.',
+g_title_inv:'Come funziona l\'inventario',g_inv1:'Nella scheda Modalità carica il report Giacenza e attiva la modalità inventario.',g_inv2:'Scansiona l\'etichetta pallet. Scansiona o tocca i prodotti attesi, inserisci i cartoni (− / +).',g_inv3:'Salva; le differenze vengono segnalate. Alla fine esporta il report da Export.',
+g_title_ord:'Come funziona la preparazione ordini',g_ord1:'Nella scheda Modalità carica l\'Excel dell\'ordine e attiva la modalità ordine (su PC puoi trascinare il file nella finestra).',g_ord2:'«Nuovo pallet» o scansiona l\'etichetta, poi i prodotti. Più dell\'ordinato è bloccato.',g_ord3:'Chiudi il pallet (peso/altezza). Poi da Export packing list, etichette pallet e cartoni.',
+g_keys:'Tasti: / cerca · N nuovo pallet · K chiudi pallet · 1–5 schede · ? aiuto',guideHdr:'Guida rapida',keysHdr:'Scorciatoie da tastiera (PC)',guideReset:'Mostra di nuovo i suggerimenti',guideResetDone:'I suggerimenti verranno mostrati di nuovo',
+k_search:'Cerca / campo barcode',k_new:'Nuovo pallet',k_close:'Chiudi / salva pallet',k_tabs:'Cambia scheda',k_esc:'Chiudi finestra',k_help:'Questo aiuto',
+dropBad:'Solo Excel (.xlsx, .xls) o CSV',dropTitle:'Che file è?',dropOrd:'Ordine',dropInv:'Report giacenza',dropHint:'Rilascia il file Excel',
+resOrd:'Ordine {no}',resInv:'Inventario {f}',resFree:'Pallet {p}',resMsg:'Riprendi da: {w}',resGo:'Continua',
+ordCloseQ:'Chiudere {no}?',ordShortW:'righe mancanti',ordOpenPalWarn:'{n} pallet ancora aperti.',ordShortHdr:'Mancanti (residuo)',ordAllDone:'Tutte le righe caricate.',ordClosedToast:'{no} chiuso',
+a2hsState:'Aperta dalla schermata Home',a2hsYes:'Sì – dati protetti',a2hsNo:'No – il browser può cancellare i dati',bkState:'Backup',bkDueShort:'backup necessario',
+safeHdr:'Sicurezza dati',viewHdr:'Aspetto e aiuto',setTheme:'Tema',thDark:'Scuro',thLight:'Chiaro (ambiente luminoso)',thAuto:'Automatico (dispositivo)',setBig:'Testo grande',setBigSub:'Pulsanti e testi più grandi del 15 %',guideBtn:'📖 Guida rapida e scorciatoie',genHdr:'Generale',
+sortBy:'Ordina:',sort_ord:'Ordine',sort_rem:'Residuo',sort_name:'Nome',
+langAuto:'Automatica (lingua del dispositivo)',setDevicePh:'es. Magazzino 1 / Marco',setSoundSub:'In silenzioso il suono può mancare, il risultato colorato appare comunque',
+camDenied:'Accesso alla fotocamera negato. Consenti la fotocamera al browser nelle impostazioni del dispositivo e riprova.',
+dataInfo:'I dati sono salvati solo su questo dispositivo, in questo browser ({kb} KB). Fai backup regolari.<br>Se aggiunta alla schermata Home, aprila sempre dall\'icona – i dati nella scheda del browser sono separati.<br>Versione {v} · lettore: {r}',
+restoreWarn:'Tutti i dati attuali su questo dispositivo verranno sostituiti da questo backup.',invTeamHdr:'Conteggio in team (più dispositivi)',invTeamHint:'Ogni dispositivo carica lo stesso report e conta. Condividi i risultati e uniscili su un dispositivo; se un pallet è contato due volte vale il conteggio più recente.'});
+Object.assign(I18N.ru,{undoHint:'Готово',removed:'Удалено: {n}',srPallet:'Этикетка паллеты',bkOffer:'Документ готов. Сделать и резервную копию данных?',bkNow:'Копия',
+a2hsTitle:'Добавить на главный экран',a2hsWhy:'Во вкладке браузера данные могут быть удалены, если сайт не открывали несколько дней. Приложение со значка на главном экране этого не допускает.',
+a2hsIOS:'В Safari нажмите <b>Поделиться ⬆︎</b> → <b>На экран «Домой»</b> → <b>Добавить</b>. Затем открывайте только через значок.',
+a2hsAndroid:'В Chrome меню <b>⋮</b> → <b>Добавить на главный экран</b> или <b>Установить приложение</b>. Затем открывайте только через значок.',
+a2hsInstall:'Установить',later:'Позже',gotIt:'Понятно',how:'Как?',a2hsBar:'Добавьте приложение на главный экран, чтобы данные не пропали',
+bkBar:'Последняя копия: {d} – новые данные не сохранены',bkBarNever:'Резервной копии ещё нет',
+g_title_free:'Как работает свободный пересчёт',g_free1:'Введите номер паллеты или отсканируйте её этикетку.',g_free2:'Сканируйте товар, введите короба/штуки. Для скорости выберите «Скан = +1 короб».',g_free3:'Паллета готова → «Паллета готова». В конце выгрузите Excel/CSV в Экспорт.',
+g_title_inv:'Как работает инвентаризация',g_inv1:'Во вкладке Режим загрузите отчёт Giacenza и включите режим инвентаризации.',g_inv2:'Сканируйте этикетку паллеты. Сканируйте или нажмите ожидаемые товары, введите короба (− / +).',g_inv3:'Сохраните; расхождения отмечаются. В конце выгрузите отчёт в Экспорт.',
+g_title_ord:'Как работает комплектация заказа',g_ord1:'Во вкладке Режим загрузите Excel заказа и включите режим заказа (на ПК можно перетащить файл в окно).',g_ord2:'«Новая паллета» или скан этикетки, затем товары. Больше заказанного — блокируется.',g_ord3:'Закройте паллету (вес/высота). Затем в Экспорт: упаковочный лист, этикетки паллет и коробов.',
+g_keys:'Клавиши: / поиск · N новая паллета · K закрыть паллету · 1–5 вкладки · ? помощь',guideHdr:'Краткое руководство',keysHdr:'Горячие клавиши (ПК)',guideReset:'Снова показывать подсказки',guideResetDone:'Подсказки снова будут показаны',
+k_search:'Поиск / поле штрихкода',k_new:'Новая паллета',k_close:'Закрыть / сохранить паллету',k_tabs:'Переключение вкладок',k_esc:'Закрыть окно',k_help:'Эта справка',
+dropBad:'Только Excel (.xlsx, .xls) или CSV',dropTitle:'Что это за файл?',dropOrd:'Заказ',dropInv:'Отчёт об остатках (Giacenza)',dropHint:'Перетащите файл Excel',
+resOrd:'Заказ {no}',resInv:'Инвентаризация {f}',resFree:'Паллета {p}',resMsg:'Продолжить: {w}',resGo:'Продолжить',
+ordCloseQ:'Закрыть {no}?',ordShortW:'недостающих позиций',ordOpenPalWarn:'Открытых паллет: {n}.',ordShortHdr:'Недостача (остаток)',ordAllDone:'Все позиции загружены полностью.',ordClosedToast:'{no} закрыт',
+a2hsState:'Запуск с главного экрана',a2hsYes:'Да – данные защищены',a2hsNo:'Нет – браузер может удалить данные',bkState:'Резервная копия',bkDueShort:'нужна копия',
+safeHdr:'Безопасность данных',viewHdr:'Вид и помощь',setTheme:'Тема',thDark:'Тёмная',thLight:'Светлая (яркое освещение)',thAuto:'Автоматически (устройство)',setBig:'Крупный текст',setBigSub:'Кнопки и текст на 15 % крупнее',guideBtn:'📖 Руководство и клавиши',genHdr:'Общие',
+sortBy:'Сортировка:',sort_ord:'Порядок заказа',sort_rem:'Остаток',sort_name:'Название',
+langAuto:'Автоматически (язык устройства)',setDevicePh:'напр. Склад 1 / Иван',setSoundSub:'В беззвучном режиме звука может не быть, цветной результат всё равно виден',
+camDenied:'Доступ к камере запрещён. Разрешите браузеру камеру в настройках устройства и попробуйте снова.',
+dataInfo:'Данные хранятся только на этом устройстве в этом браузере ({kb} КБ). Регулярно делайте копии.<br>Если приложение добавлено на главный экран, открывайте его через значок – данные во вкладке браузера отдельные.<br>Версия {v} · сканер: {r}',
+restoreWarn:'Все текущие данные на этом устройстве будут заменены этой копией.',invTeamHdr:'Командный пересчёт (несколько устройств)',invTeamHint:'Каждое устройство загружает тот же отчёт и считает. Поделитесь результатами и объедините их на одном устройстве; если паллета посчитана дважды, действует последний пересчёт.'});
+Object.assign(I18N.en,{undoHint:'Done',removed:'Removed: {n}',srPallet:'Pallet label',bkOffer:'Document ready. Also back up your data?',bkNow:'Back up',
+a2hsTitle:'Add to home screen',a2hsWhy:'In a browser tab, the browser may delete saved data if the site is not used for a few days. Opened from the home-screen icon, this does not happen.',
+a2hsIOS:'In Safari tap <b>Share ⬆︎</b> → <b>Add to Home Screen</b> → <b>Add</b>. Then always open it from the icon.',
+a2hsAndroid:'In Chrome open the <b>⋮</b> menu → <b>Add to Home screen</b> or <b>Install app</b>. Then always open it from the icon.',
+a2hsInstall:'Install now',later:'Later',gotIt:'Got it',how:'How?',a2hsBar:'Add the app to your home screen to keep your data safe',
+bkBar:'Last backup: {d} – new data not backed up',bkBarNever:'No backup yet',
+g_title_free:'How free counting works',g_free1:'Type the pallet number or scan the pallet label.',g_free2:'Scan the product, enter cases/units. For speed choose “Scan = +1 case”.',g_free3:'Pallet done → “Pallet done”. At the end export Excel/CSV under Export.',
+g_title_inv:'How the inventory count works',g_inv1:'In the Mode tab load the Giacenza report and turn on inventory mode.',g_inv2:'Scan the pallet label. Scan or tap the expected products, enter cases (− / +).',g_inv3:'Save; differences are flagged. At the end export the report under Export.',
+g_title_ord:'How order picking works',g_ord1:'In the Mode tab load the order Excel and turn on order mode (on a computer you can drag the file into the window).',g_ord2:'“New pallet” or scan a pallet label, then scan products. Over-picking is blocked.',g_ord3:'Close the pallet (weight/height). Then under Export: packing list, pallet and carton labels.',
+g_keys:'Keys: / search · N new pallet · K close pallet · 1–5 tabs · ? help',guideHdr:'Quick guide',keysHdr:'Keyboard shortcuts (computer)',guideReset:'Show tips again',guideResetDone:'Tips will be shown again in every mode',
+k_search:'Search / barcode field',k_new:'New pallet',k_close:'Close / save pallet',k_tabs:'Switch tabs',k_esc:'Close dialog',k_help:'This help',
+dropBad:'Only Excel (.xlsx, .xls) or CSV files',dropTitle:'What is this file?',dropOrd:'Order',dropInv:'Stock report (Giacenza)',dropHint:'Drop the Excel file',
+resOrd:'Order {no}',resInv:'Inventory {f}',resFree:'Pallet {p}',resMsg:'Continue where you left off: {w}',resGo:'Continue',
+ordCloseQ:'Close {no}?',ordShortW:'short lines',ordOpenPalWarn:'{n} pallet(s) still open.',ordShortHdr:'Short (backorder)',ordAllDone:'All lines fully loaded.',ordClosedToast:'{no} closed',
+a2hsState:'Opened from home screen',a2hsYes:'Yes – data protected',a2hsNo:'No – browser may delete data',bkState:'Backup',bkDueShort:'backup needed',
+safeHdr:'Data safety',viewHdr:'Appearance and help',setTheme:'Theme',thDark:'Dark',thLight:'Light (bright places)',thAuto:'Automatic (device)',setBig:'Large text',setBigSub:'Buttons and text 15 % larger',guideBtn:'📖 Quick guide and shortcuts',genHdr:'General',
+sortBy:'Sort:',sort_ord:'Order sequence',sort_rem:'Remaining',sort_name:'Name',
+langAuto:'Automatic (device language)',setDevicePh:'e.g. Warehouse 1 / Anna',setSoundSub:'On silent there may be no sound – the colored result still shows',
+camDenied:'Camera permission denied. Allow camera access for the browser in the device settings and try again.',
+dataInfo:'Data is stored only on this device, in this browser ({kb} KB). Back up regularly.<br>If added to the home screen, always open it from the icon – browser-tab data is separate.<br>Version {v} · reader: {r}',
+restoreWarn:'All current data on this device will be replaced by this backup.',invTeamHdr:'Team count (several devices)',invTeamHint:'Each device loads the same report and counts. Share results and merge them on one device; if a pallet was counted twice, the newest count wins.'});
 
+I18N.tr.addedX='Güncellendi: {n}';
+I18N.de.addedX='Aktualisiert: {n}';
+I18N.it.addedX='Aggiornato: {n}';
+I18N.ru.addedX='Обновлено: {n}';
+I18N.en.addedX='Updated: {n}';
 'use strict';
 const PRODUCTS=[["8053839950161","SAO001","SONO ARGAN OIL",30,200,""],["8053839950178","SAO002","SONO ARGAN OIL",100,36,""],["8053839950109","SASH002","SONO ARGAN SHAMPOO 250",250,48,""],["8053839950093","SACN002","SONO ARGAN CONDITIONER",250,48,""],["8053839950130","SADM001","SONO ARGAN DEEP MASK box",250,32,""],["8053839950123","SALM002","SONO ARGAN LEAVE IN MASK box",150,64,""],["8053839950154","SALMM002","SONO ARGAN LEAVE IN MASK",50,100,""],["8053839950024","SAA001","SONO COLOR SHAMPOO",250,48,""],["8053839950000","SAA002","SONO COLOR MASK box",250,32,""],["8053839950246","SSO002","SONO BLONDER OIL",100,36,""],["8053839950062","SSH001","SONO SILVER SHAMPOO",250,48,""],["8053839950048","SSMA02","SONO SILVER MASK box",250,32,""],["8053839950192","SSSI01","SONO SILVER SILK box",150,64,""],["8053839950321","SSSIM011","SONO SILVER SILK",50,100,""],["8053839950239","SSS003","SONO STYLE SALT WAVE",150,64,""],["8053839950338","SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250,48,""],["8053839950352","SGM001","SONO GOLD RESTRUCTURING MASK",150,64,""],["8053839950376","SSG001","SONO SILKY GOLD",150,64,""],["8053839950277","SKSH001","SONO KERATIN SHAMPOO",250,48,""],["8053839950284","SKCN001","SONO KERATIN CONDITIONER",250,48,""],["8053839950314","SAAP001","Sono Color Potion 150 ml",150,64,""],["8053839950857","SSG002","Silky Gold 50 ml",50,100,""],["8053839950956","SCP050","Sono Color Potion 50 ml",50,100,""],["8053839950116","SASH003","SONO ARGAN SHAMPOO 1000",1000,12,""],["8053839950086","SACN003","SONO ARGAN CONDITIONER",1000,12,""],["8053839950536","SKSH002","SONO KERATIN SHAMPOO",1000,12,""],["8053839951151","SSVS150","VOLUME SPRAY",150,64,""],["8053839951182","SSTP150","THERMO-PROTECTIVE SPRAY",150,80,""],["8053839950031","SAA003","SONO COLOR SHAMPOO 1000 ml",1000,12,""],["8053839950345","SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000,12,""],["8053839951168","SSVM150","Sono Volume Mousse",150,48,""],["8053839951199","SSBW150","BEACH WAVES SPRAY",150,64,""],["8053839950680","SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250,48,""],["8053839950697","SVMA001","THE VOLUMIZING MASK 250 ml",250,32,""],["8053839950079","SSH003","SONO SILVER SHAMPOO 1000 ml",1000,12,""],["8053839951755","SAPGS25","SONO Argan Perfume Gift Set 2025","",18,""],["8053839951472","SGCN1000","SONO GOLD Conditioner 1000 ml",1000,12,""],["8053839951489","SGCN0250","SONO GOLD Conditioner 250 ml",250,48,""],["8053839951496","SSCN1000","SONO Silver Conditioner 1000 ml",1000,12,""],["8053839951502","SSCN0250","SONO Silver Conditioner 250 ml",250,48,""],["8053839951618","SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250,48,""],["8053839951519","SCCN1000","SONO Color Conditioner 1000 ml",1000,12,""],["8053839951649","SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250,48,""],["8053839951700","SKHP001","SONO KERATIN PERFUME",30,256,""],["8053839951526","SCCN0250","SONO Color Conditioner 250 ml",250,48,""],["8053839951281","SSDRS200","SPRAY DRY SHAMPOO","",12,""],["8053839951311","SSFSPR300","FIX SPRAY","",12,""],["8053839951564","SCSH250","SONO THE CURL SHAMPOO",250,48,""],["8053839951588","SCMA250","SONO CURL MASK",250,32,""],["8053839951601","SCLG150","SONO CURL LIQUID GEL",150,64,""],["8053839951632","SDLT150","SONO ANTI-DANDRUFF LOTION",150,64,""],["8053839951656","SGFM050","SONO GOLD  LIQUID FILLER MASK",50,100,""],["8053839951663","SBLM050","SONO BLONDER LIQUID MASK",50,100,""],["8053839951670","SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250,48,""],["8053839951687","SHLCN250","SONO HAIR-LOSS CONDITIONER",250,48,""],["8053839951694","SHLT150","SONO HAIR-LOSS LOTION",150,64,""],["8053839951717","SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100,36,""],["8053839950475","SAOM02","ARGAN OIL 10 ML",10,800,""],["8053839950437","SASHS02","ARGAN SHAMPOO 10 ML",10,800,""],["8053839950444","SACNS02","ARGAN CONDITIONER 10 ML",10,800,""],["8053839950451","SADMS01","ARGAN DEEP MASK 10 ML",10,800,""],["8053839950468","SALMS02","ARGAN LEAVE IN MASK 10 ML",10,800,""],["8053839950482","SAAS001","COLOR SHAMPOO 10 ML",10,800,""],["8053839950499","SAAS002","ANTI-AGE MASK 10 ML",10,800,""],["8053839950390","SAHS01","SILVER SHAMPOO 10 ML",10,800,""],["","","SONO Silver Conditioner 10 ml",10,800,""],["8053839950406","SSMS01","SILVER MASK 10 ML",10,800,""],["8053839950413","SSSS01","SONO SILVER SILK SPRAY 10ML",10,800,""],["8053839950567","SKSHS01","SONO KERATIN SHAMPOO",10,800,""],["8053839950574","SKCNS01","SONO KERATIN CONDITIONER",10,800,""],["8053839950376_","SSGS01","SONO SILKY GOLD",10,800,""],["8053839950529","SACNS02","SONO Kraft Bag 18X24X8 cm","","",""],["8053839951120","SWB001","SMAL SONO WHITE BAG","",200,""],["","SADM002","SONO ARGAN DEEP MASK",500,16,""],["","SAA004","SONO COLOR MASK",500,16,""],["","SSO001","SONO BLONDER OIL",30,200,""],["","SSMA01","SONO SILVER MASK",500,16,""],["","SGM002","SONO GOLD RESTRUCTURING MASK",500,16,""],["","SGF002","SONO GOLD FILLER",250,48,""],["","SGA001","SONO GOLD AMPOULE","6 x 10 ml",32,"noteSGA"],["","SKCN002","SONO KERATIN CONDITIONER",1000,12,""],["","SSS004","SONO STYLE SALT WAVE",50,100,""],["","SSGG150","LIQUID GEL",150,64,""],["","SSDC050","STYLING PASTE",50,112,""],["","SSDCSH250","SONO STYLE DEEP CLEANSING SHAMPOO 250 ml",250,48,""],["","SSDCSH1000","SONO STYLE DEEP CLEANSING SHAMPOO 1000 ml",1000,12,""],["","SAPD001","SONO DETOX LOTION 150 ML",150,64,""],["","SAPSH001","SONO DETOX SHAMPOO 250 ML",250,48,""],["","SAPM001","SONO DETOX MASK 150 ML",150,64,""],["","SAPS001","SONO DETOX SPRAY 150 ML",150,64,""],["","SVSP001","SONO VOLUME VOLUMIZING  SPRAY 150 ml",150,64,""],["","SCSH1000","SONO CURL SHAMPOO 1000 ML",1000,12,""],["","SCMA500","SONO CURL MASK 500 ML",500,16,""],["","SDSH1000","SONO ANTI-DANDRUFF SHAMPOO 1000 ML",1000,12,""],["","SCP010","SONO COLOR POTION",10,800,""],["","SSOS01","SONO SILVER OIL",10,800,""],["","SGSS01","SONO GOLD RESTRUCTURING SHAMPOO",10,800,""],["","SGMS01","SONO GOLD RESTRUCTURING MASK",10,800,""],["","KWB001","SMALL SONO WHITE BAG","",200,""],["","SGP00","SONO GOLD PERFUME",30,256,""],["","SAP00","SONO ARGAN PERFUME",30,256,""],["","SBP00","SONO BLONDER PERFUME",30,256,""]];
-const VERSION='2.4.0';
+const VERSION='2.5.0';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const LS='palet_sayim_v1';
 const DEF={lang:'auto',entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false,inv:null,invBlind:true,invQuick:false,invFilter:'all',invTol:'case',invRecount:'now',invPlusCase:false,appMode:'free',invActive:null,labSupplier:'',labOrigin:''};
@@ -1441,6 +1621,8 @@ function finishPallet(){
 
 /* ---------- shared product search ---------- */
 const normQ=s=>String(s||'').toLowerCase().replace(/(\d)\s+(ml|l|gr|g)\b/g,'$1$2').replace(/\s+/g,' ').trim();
+/* every word of the query must appear somewhere in the text */
+const qWords=q=>normQ(q).split(' ').filter(Boolean),qHit=(words,hay)=>{if(!words.length)return true;const h=normQ(hay);return words.every(w=>h.includes(w))};
 function prodName(p){const n=p.name||p.ref||'';if(!hasVol(p.vol))return n;const v=String(p.vol).trim();
   if(/^\d+([.,]\d+)?$/.test(v)&&new RegExp('\\b'+v.replace('.','\\.')+'\\s*ml\\b','i').test(n))return n;return n+' · '+volTxt(v)}
 function searchProducts(q,limit=12){
@@ -1526,9 +1708,9 @@ function aggregate(rows,byPallet){
   return [...m.values()];
 }
 function renderList(){
-  const q=$('#lq').value.trim().toLowerCase();
+  const qw=qWords($('#lq').value);
   let es=S.entries;if(S.onlyActive)es=es.filter(e=>e.pallet===S.pallet);
-  if(q)es=es.filter(e=>(e.pallet+' '+e.barcode+' '+e.ref+' '+e.name+' '+e.lot).toLowerCase().includes(q));
+  if(qw.length)es=es.filter(e=>qHit(qw,[e.pallet,e.barcode,e.ref,e.name,hasVol(e.vol)?e.vol+'ml':'',e.lot].join(' ')));
   const groups=new Map();
   for(const e of es){if(!groups.has(e.pallet))groups.set(e.pallet,{last:0,rows:[]});const g=groups.get(e.pallet);g.rows.push(e);g.last=Math.max(g.last,e.ts)}
   const gs=[...groups.entries()].sort((a,b)=>(b[0]===S.pallet)-(a[0]===S.pallet)||b[1].last-a[1].last);
@@ -1947,7 +2129,7 @@ function invWorkOpen(id,opts={}){
       ${unknown?`<input data-f="desc" data-k="${k}" placeholder="${esc(t('invProdPh'))}" autocomplete="off"><div class="sug" data-sug="${k}"></div>`:`<div class="pmeta">${esc(f.code||'')}${f.exp?' · '+t('expShort')+' '+esc(f.exp):''}</div>`}
       <div class="lotin"><input data-f="lot" data-k="${k}" value="${esc(f.lot||'')}" placeholder="${esc(t('lot'))}" autocomplete="off" autocapitalize="characters">${lots.slice(0,3).map(l=>`<button class="lchip ${normLot(l)===normLot(f.lot)?'on':''}" data-lot="${esc(l)}" data-k="${k}">${esc(l)}</button>`).join('')}</div>
       <div class="cuin">
-        <label>${t('caseBox')}<input data-f="c" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.c)}"></label>
+        <label class="lc">${t('caseBox')}${stepWrap(`<input data-f="c" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.c)}">`)}</label>
         <span>×</span><label>${t('invPerCase')}<input data-f="pc" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.pc)}"></label>
         <span>+</span><label>${t('unitBox')}<input data-f="u" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.u)}"></label>
         <span>=</span><b class="ltot" data-tot="${k}">${f.c===''&&f.u===''?'–':fQty(f)}</b></div>
@@ -1985,7 +2167,7 @@ function invWorkOpen(id,opts={}){
     vs.scrollTop=keepScroll;if(dirty)saveDraft();
     if(scrollTo){const el=sh.querySelector(`[data-fid="${scrollTo}"]`);if(el)el.scrollIntoView({block:'center'})}
     wire(sh);
-    W={id,onScan:onSheetScan,get dirty(){return dirty},saveDraft,render:()=>render()};
+    W={id,onScan:x=>{const snap=JSON.stringify(found);onSheetScan(x);if(JSON.stringify(found)!==snap)offerUndo(()=>{found=JSON.parse(snap);dirty=true;render()})},get dirty(){return dirty},saveDraft,render:()=>render()};
   };
   const updTot=k=>{const f=found[+k];const el=$(`[data-tot="${k}"]`);if(el)el.textContent=f.c===''&&f.u===''?'–':fQty(f)};
   const showSug=(k,q)=>{const box=$(`[data-sug="${k}"]`);if(!box)return;const w=q.trim().toLowerCase().split(/\s+/).filter(Boolean);
@@ -2034,7 +2216,7 @@ function invWorkOpen(id,opts={}){
       if(b.dataset.pick!=null||b.dataset.lot!=null||['rm','abs','add'].includes(a))dirty=true;
       if(b.dataset.pick!=null){setProduct(found[+k],sugHits[+b.dataset.pick]);hl=found[+k].id;return render(hl)}
       if(b.dataset.lot!=null){found[+k].lot=b.dataset.lot;return render()}
-      if(a==='rm'){found.splice(+k,1);return render()}
+      if(a==='rm'){const snap=JSON.stringify(found),nm=found[+k]&&(found[+k].name||found[+k].code)||'';found.splice(+k,1);render();offerUndo(()=>{found=JSON.parse(snap);dirty=true;render()},t('removed',{n:nm}));return}
       if(a==='abs'){const g=b.dataset.g;if(absent[g])delete absent[g];else absent[g]=true;return render()}
       if(a==='add'){const f={id:uid(),barcode:'',ref:'',code:'',name:'',lot:'',c:'',pc:'',u:''};found.push(f);hl=f.id;render(f.id);const i=$(`[data-fid="${f.id}"] input[data-f=desc]`);if(i)i.focus();return}
       if(a==='plus'){S.invPlusCase=!S.invPlusCase;save();return render()}
@@ -2139,7 +2321,7 @@ function invManualPallet(){
   const sh=openSheet(`<h3>${t('invFindPallet')}</h3><input id="mpIn" autocomplete="off" placeholder="${esc(t('invFindPh'))}"><div id="mpRes" class="mres"></div>
     <div class="acts"><button class="btn ghost" data-a="cancel">${t('close')}</button></div>`);
   const inp=$('#mpIn');
-  inp.addEventListener('input',()=>{const q=inp.value.trim().toLowerCase();const out=!q?[]:invIds().filter(id=>id.includes(q)||invRows(id).some(r=>(r.desc+' '+r.code+' '+r.lot).toLowerCase().includes(q))).slice(0,15);
+  inp.addEventListener('input',()=>{const q=inp.value.trim().toLowerCase();const qw=qWords(q);const out=!qw.length?[]:invIds().filter(id=>qHit(qw,id+' '+invRows(id).map(r=>r.desc+' '+r.code+' '+r.lot).join(' '))).slice(0,15);
     const exact=/^\d{18}$/.test(q)&&!invIds().includes(q);
     $('#mpRes').innerHTML=out.map(id=>palItem(id)).join('')+(exact?`<button class="ritem unk" data-unk="${esc(q)}"><div class="nm"><div>${t('invUnknownTitle')}: ${esc(q)}</div></div></button>`:'')});
   sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.pal){closeSheet();invOpenPallet(b.dataset.pal);return}if(b.dataset.unk){closeSheet();invUnknownPallet(b.dataset.unk);return}if(b.dataset.a==='cancel')closeSheet()};
@@ -2220,21 +2402,21 @@ let invShow=60;
 function renderInvList(){
   const el=$('#invList');if(!el||!S.inv)return;
   const c=invCounts(),F=S.invFilter||'all';
-  const qEl=$('#invQ');const q=(qEl&&qEl.value||'').trim().toLowerCase();const hasQ=qEl&&document.activeElement===qEl;
+  if(!el.querySelector('#invQ')){el.innerHTML=`<div id="invLH"></div><input id="invQ" type="search" placeholder="${esc(t('invSearchPh'))}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" style="margin-bottom:8px"><div id="invLR"></div>`}
+  const qi=el.querySelector('#invQ');qi.placeholder=t('invSearchPh');const terms=qWords(qi.value);
   let ids=invIds().filter(id=>{const st=invStatus(id),r=S.inv.pal[id];
     if(F==='pending'&&st!=='pending')return false;if(F==='diff'&&st!=='diff')return false;if(F==='open'&&!(r&&r.flagOpen))return false;
     if(F==='recount'&&st!=='recount')return false;if(F==='missing'&&st!=='missing')return false;if(F==='new'&&st!=='new')return false;if(F==='ok'&&!(st==='ok'||st==='quick'))return false;
     if(F==='draft'&&!(S.inv.drafts&&S.inv.drafts[id]))return false;
-    if(q&&!(id.includes(q)||invRows(id).some(x=>(x.desc+' '+x.code+' '+x.lot).toLowerCase().includes(q))))return false;return true});
+    if(terms.length&&!qHit(terms,id+' '+invRows(id).map(x=>x.desc+' '+x.code+' '+x.lot).join(' ')))return false;return true});
   const total=ids.length;ids=ids.slice(0,invShow);
   const chip=(k,lab,n)=>`<button data-flt="${k}" class="${F===k?'on':''}">${lab} <b>${n}</b></button>`;
   const nd=Object.keys(S.inv.drafts||{}).length;
-  el.innerHTML=`<div class="row-sp"><b>${esc(S.inv.fileName)}</b><span class="mut">${t('invProgress',{a:c.all-c.pending,b:c.all})}</span></div>
+  el.querySelector('#invLH').innerHTML=`<div class="row-sp"><b>${esc(S.inv.fileName)}</b><span class="mut">${t('invProgress',{a:c.all-c.pending,b:c.all})}</span></div>
     <div class="fchips">${chip('all',t('f_all'),c.all)}${chip('pending',t('st_pending'),c.pending)}${chip('diff',t('st_diff'),c.diff)}${chip('open',t('st_open'),c.open)}${chip('recount',t('st_recount'),c.recount)}${nd?chip('draft',t('invDraft'),nd):''}${chip('missing',t('st_missing'),c.missing)}${chip('new',t('st_new'),c.new)}${chip('ok',t('st_ok'),c.ok+c.quick)}</div>
-    <input id="invQ" type="search" placeholder="${esc(t('invSearchPh'))}" value="${esc(q)}" autocomplete="off" style="margin-bottom:8px">
-    <div class="recent">${ids.map(palItem).join('')||`<div class="empty">${t('noMatch')}</div>`}</div>
+`;
+  el.querySelector('#invLR').innerHTML=`<div class="recent">${ids.map(palItem).join('')||`<div class="empty">${t('noMatch')}</div>`}</div>
     ${total>ids.length?`<button class="btn ghost wide" data-inv="more" style="margin-top:8px">${t('invMore',{n:total-ids.length})}</button>`:''}`;
-  if(hasQ){const i=$('#invQ');i.focus();i.setSelectionRange(i.value.length,i.value.length)}
 }
 
 /* ---------- Export (inventory) ---------- */
@@ -2462,6 +2644,9 @@ function lineRow(o,l,i,compact){
     <div class="oq"><b>${ld}</b><span>/ ${l.qty}</span>${rem>0?`<small>${t('ordRem')} ${rem}${pc&&rem>=pc?' ('+breakdown(rem,pc)+')':''}</small>`:rem<0?`<small class="neg">+${-rem}</small>`:''}</div>
     ${!compact&&!l.matched?`<button class="mini" data-ord="match" data-li="${i}">${t('ordMatch')}</button>`:''}</div>`;
 }
+function ordSorted(o){const ix=o.lines.map((l,i)=>i),m=S.ordSort||'ord';
+  if(m==='rem')ix.sort((a,b)=>(o.lines[b].qty-loadedOf(o,b))-(o.lines[a].qty-loadedOf(o,a)));
+  if(m==='name')ix.sort((a,b)=>lineName(o.lines[a]).localeCompare(lineName(o.lines[b])));return ix}
 function renderOrdSummary(el,o){
   OW={o:o.id,p:null};const tt=ordTot(o),st=ordStatus(o);
   el.innerHTML=`<div class="wsp">
@@ -2469,7 +2654,8 @@ function renderOrdSummary(el,o){
     <input data-ord-f="customer" value="${esc(o.customer||'')}" placeholder="${esc(t('ordCustomerPh'))}" autocomplete="off" style="margin-top:6px">
     <div class="prog"><i style="width:${tt.pct}%"></i></div><div class="mut" style="font-size:13px">${t('ordProgress',{a:tt.ld,b:tt.ord,p:tt.pct})}</div>
     <div class="fold"><span>${t('ordLinesHdr')}</span><span>${o.lines.length}</span></div>
-    ${o.lines.map((l,i)=>lineRow(o,l,i,false)).join('')}
+    <div class="sortbar"><span>${t('sortBy')}</span>${['ord','rem','name'].map(k=>`<button data-ord="sort" data-s="${k}" class="${(S.ordSort||'ord')===k?'on':''}">${t('sort_'+k)}</button>`).join('')}</div>
+    <div class="olines">${ordSorted(o).map(i=>lineRow(o,o.lines[i],i,false)).join('')}</div>
     <div class="fold"><span>${t('ordPalletsHdr')}</span><span>${o.pallets.length}</span></div>
     ${o.pallets.map(p=>{const q=p.found.reduce((a,f)=>a+fQty(f),0),c=p.found.reduce((a,f)=>a+(+f.c||0),0);
       return `<button class="ritem pal" data-opal="${p.id}"><div class="nm"><div><b>P${p.n}</b> <span class="mono">${esc(p.label)}</span></div><div>${p.found.length} ${t('ordLinesW')} · ${c?t('nCases',{n:c})+' · ':''}${q} ${t('pcs')}${p.weight?' · '+esc(p.weight)+' kg':''}${p.height?' · '+esc(p.height)+' cm':''}</div></div><span class="stb ${p.closedAt?'os-complete':'os-progress'}">${p.closedAt?t('ordPalClosed'):t('ordPalOpen')}</span></button>`}).join('')||`<div class="mut">${t('ordNoPallets')}</div>`}
@@ -2487,7 +2673,7 @@ function renderOrdPallet(el,o,p,scrollTo){
       <div class="top"><div class="nm">${esc(l?lineName(l):f.name)}</div><button class="mini" data-ord="rm" data-k="${k}">✕</button></div>
       <div class="pmeta">${esc(f.code||'')}${f.exp?' · '+t('expShort')+' '+esc(f.exp):''}${overLis.has(f.li)?' · <b class="neg">'+t('ordOverShort')+'</b>':''}</div>
       <div class="lotin"><input data-of="lot" data-k="${k}" value="${esc(f.lot||'')}" placeholder="${esc(t('lot'))}" autocomplete="off" autocapitalize="characters"></div>
-      <div class="cuin"><label>${t('caseBox')}<input data-of="c" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.c)}"></label>
+      <div class="cuin"><label class="lc">${t('caseBox')}${stepWrap(`<input data-of="c" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.c)}">`)}</label>
         <span>×</span><label>${t('invPerCase')}<input data-of="pc" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.pc)}"></label>
         <span>+</span><label>${t('unitBox')}<input data-of="u" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.u)}"></label>
         <span>=</span><b class="ltot" data-otot="${k}">${f.c===''&&f.u===''?'–':fQty(f)}</b></div></div>`};
@@ -2508,7 +2694,11 @@ function renderOrdPallet(el,o,p,scrollTo){
   vs.scrollTop=keep;
   if(scrollTo){const e=el.querySelector(`[data-fid="${scrollTo}"]`);if(e)e.scrollIntoView({block:'center'})}
 }
-function ordScan({p,pre,code}){
+function ordScan(x){
+  const o=ordCur();const snap=o&&JSON.stringify({p:o.pallets,a:S.ordActive});ordScan0(x);
+  if(o&&JSON.stringify({p:o.pallets,a:S.ordActive})!==snap)offerUndo(()=>{const s=JSON.parse(snap);o.pallets=s.p;S.ordActive=s.a;save();renderAll()});
+}
+function ordScan0({p,pre,code}){
   const o=ordCur();
   if(!o){scanErr(t('ordPickFirst'));return}
   if(o.closedAt){scanErr(t('ordIsClosed'));return}
@@ -2554,7 +2744,9 @@ document.addEventListener('click',ev=>{
   if(a==='newpal'){if(!o)return;ordNewPallet(o);renderAll();toast(t('ordPalAuto',{n:palCur(o).n}),'ok');return}
   if(a==='back'){S.ordActive.p=null;save();renderAll();return}
   if(a==='plus'){S.ordPlusCase=!S.ordPlusCase;save();renderOrdWork();return}
-  if(a==='rm'){const p=palCur(o);p.found.splice(+b.dataset.k,1);save();renderOrdWork();renderTop();return}
+  if(a==='sort'){S.ordSort=b.dataset.s;save();renderOrdWork();return}
+  if(a==='rm'){const p=palCur(o);const snap=JSON.stringify(p.found),ff=p.found[+b.dataset.k],nm=ff?lineName(o.lines[ff.li]||{}):'';p.found.splice(+b.dataset.k,1);save();renderOrdWork();renderTop();
+    offerUndo(()=>{const pp=palCur(o)||o.pallets.find(z=>z.id===p.id);if(!pp)return;pp.found=JSON.parse(snap);save();renderOrdWork();renderTop()},t('removed',{n:nm}));return}
   if(a==='add'){const box=$('#ordAdd');box.innerHTML=`<input id="ordAddQ" placeholder="${esc(t('invProdPh'))}" autocomplete="off" style="margin-top:8px"><div id="ordAddR" class="mres"></div>`;
     const inp=$('#ordAddQ');const show=()=>{const w=normQ(inp.value).split(' ').filter(Boolean);
       ordSug=o.lines.map((l,i)=>({l,i})).filter(x=>{const h=normQ([x.l.barcode,x.l.ref,x.l.pb,x.l.pr,lineName(x.l)].join(' '));return w.every(q=>h.includes(q))}).slice(0,10);
@@ -2567,7 +2759,7 @@ document.addEventListener('click',ev=>{
   if(a==='packing'){ordExportExcel(ordById(b.dataset.id));return}
   if(a==='labels'){ordLabelsPdf(ordById(b.dataset.id));return}
   if(a==='ctnlabels'){ordCartonsPdf(ordById(b.dataset.id));return}
-  if(a==='closeorder'){const x=ordById(b.dataset.id);x.closedAt=x.closedAt?null:Date.now();save();renderAll();return}
+  if(a==='closeorder'){const x=ordById(b.dataset.id);if(x.closedAt){x.closedAt=null;save();renderAll();return}ordCloseOrderSheet(x);return}
   if(a==='delorder'){const x=ordById(b.dataset.id);const sh=openSheet(`<h3>${t('ordDelQ',{no:esc(x.no)})}</h3><div class="note w">${t('ordDelWarn')}</div><div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button><button class="btn dangerfill" data-a="ok">${t('ordDel')}</button></div>`);
     sh.onclick=e2=>{const y=e2.target.closest('button');if(!y)return;if(y.dataset.a==='cancel')closeSheet();if(y.dataset.a==='ok'){S.orders=S.orders.filter(z=>z.id!==x.id);if(S.ordActive.o===x.id)S.ordActive={o:null,p:null};save();closeSheet();renderAll()}};return}
 });
@@ -2593,6 +2785,7 @@ function ordClosePalletSheet(o,p){
   const q=p.found.reduce((a,f)=>a+fQty(f),0),c=p.found.reduce((a,f)=>a+(+f.c||0),0);
   const sh=openSheet(`<h3>${esc(o.no)} · P${p.n} – ${t('ordPalClose')}</h3>
     <div class="sum"><div><b>${p.found.length}</b><span>${t('ordLinesW')}</span></div><div><b>${c}</b><span>${t('cases')}</span></div><div><b>${q}</b><span>${t('pcs')}</span></div></div>
+    <div class="shortl">${p.found.map(f=>`<div><span>${esc(lineName(o.lines[f.li]||{name:f.name}))}${f.lot?' · '+esc(f.lot):''}</span><b>${+f.c?t('nCases',{n:f.c})+(+f.u?' + '+f.u:''):(+f.u||0)}</b><small>${fQty(f)} ${t('pcs')}</small></div>`).join('')}</div>
     <label class="fld">${t('ordWeight')}<input id="pW" type="number" inputmode="decimal" step="0.1" value="${esc(p.weight||'')}"></label>
     <label class="fld">${t('ordHeight')}<input id="pH" type="number" inputmode="numeric" value="${esc(p.height||'')}"></label>
     <div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button><button class="btn primary" data-a="ok">${t('ordPalCloseOk')}</button></div>`);
@@ -2844,6 +3037,206 @@ function renderInv(){
 }
 document.addEventListener('click',ev=>{const b=ev.target.closest('[data-mtab]');if(!b)return;S.modeTab=b.dataset.mtab;save();renderInv()});
 
+/* ================= usability layer (v2.5) ================= */
+const isStandalone=()=>{try{return !!(navigator.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches)}catch(e){return false}};
+const isIOS=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
+const isTouch=()=>{try{return matchMedia('(pointer:coarse)').matches}catch(e){return false}};
+const isDesk=()=>{try{return matchMedia('(min-width:900px)').matches}catch(e){return false}};
+const hasData=()=>!!((S.entries&&S.entries.length)||S.inv||(S.orders&&S.orders.length));
+const DAY=864e5;
+const backupDue=()=>hasData()&&(S.lastChange||0)>(S.lastBackup||0)&&Date.now()-(S.lastBackup||0)>DAY;
+const a2hsDue=()=>isTouch()&&!isStandalone()&&Date.now()-(S.a2hsHide||0)>7*DAY;
+
+/* ---------- theme + text size ---------- */
+let mqLight=null;try{mqLight=matchMedia('(prefers-color-scheme: light)')}catch(e){}
+function applyUx(){
+  const th=S.theme||'dark',light=th==='light'||(th==='auto'&&mqLight&&mqLight.matches);
+  document.body.classList.toggle('light',!!light);document.body.classList.toggle('bigtxt',!!S.bigText);
+  const m=document.querySelector('meta[name=theme-color]');if(m)m.content=light?'#eef1f5':'#0f1115';
+}
+if(mqLight&&mqLight.addEventListener)mqLight.addEventListener('change',()=>{if(S.theme==='auto')applyUx()});
+
+/* ---------- undo helper: keeps a visible warning text, adds "Geri al" ---------- */
+function offerUndo(fn,msg){
+  const tt=$('#toast'),vis=tt&&!tt.classList.contains('hidden')&&!tt.querySelector('button');
+  const kind=vis?(['ok','warn','err'].find(k=>tt.classList.contains(k))||''):'ok';
+  const li=lastScanInfo&&Date.now()-lastScanInfo.ts<3000?lastScanInfo:null;
+  toast(msg||(vis?tt.querySelector('span').textContent:li?t('addedX',{n:li.title}):t('undoHint')),kind,{label:t('undo'),fn});
+}
+
+/* ---------- big scan result + edge glow ---------- */
+let lastScanInfo=null,srT=null;
+function describeCode(code,format){
+  try{
+    const f=String(format||'').toUpperCase().replace('-','_');const g=parseGS1(code,f);
+    const sscc=(g&&g.sscc)||(/^(CODE_128|DATA_MATRIX|KEYBOARD|ITF|CODE_39)$/.test(f)?findSSCC(code):null);
+    if(sscc)return {title:t('srPallet'),sub:sscc};
+    const clean=String(code).replace(/[\x00-\x1f]/g,'');
+    const ean=g&&g.gtin?gtinToEan13(g.gtin):clean;
+    const p=lookup(ean)||(g&&g.gtin&&lookup(g.gtin))||lookup(clean);
+    return {title:p?prodName(p):clean,sub:[p?(p.barcode||p.ref):'',g&&g.lot?t('lot')+' '+g.lot:''].filter(Boolean).join(' · ')};
+  }catch(e){return {title:String(code),sub:''}}
+}
+function showScanRes(kind,msg){
+  const info=lastScanInfo&&Date.now()-lastScanInfo.ts<1500?lastScanInfo:null;
+  const ed=$('#edge');if(ed){ed.className='edge '+kind;void ed.offsetWidth;ed.classList.add('go')}
+  const el=$('#scanRes');if(!el||(!info&&!msg))return;
+  el.className='scanres '+kind;
+  el.innerHTML=`<b>${esc(info?info.title:msg)}</b>${info&&info.sub?`<span>${esc(info.sub)}</span>`:''}${info&&msg?`<em>${esc(msg)}</em>`:''}`;
+  clearTimeout(srT);srT=setTimeout(()=>{el.className='scanres hidden'},kind==='ok'?1400:2600);
+}
+{
+  const o0=onScan;onScan=function(code,format){if(code)lastScanInfo={...describeCode(code,format),ts:Date.now()};return o0.apply(this,arguments)};
+  const so=scanOk,sw=scanWarn,se=scanErr;
+  scanOk=function(){so.apply(this,arguments);showScanRes('ok')};
+  scanWarn=function(msg){sw.apply(this,arguments);showScanRes('warn',msg)};
+  scanErr=function(msg){se.apply(this,arguments);showScanRes('err',msg)};
+}
+
+/* ---------- −/+ steppers for case count ---------- */
+document.addEventListener('click',ev=>{
+  const b=ev.target.closest('.stp');if(!b)return;ev.preventDefault();ev.stopPropagation();
+  const i=b.parentElement.querySelector('input');if(!i)return;
+  i.value=String(Math.max(0,(parseInt(i.value,10)||0)+(+b.dataset.stp)));
+  i.dispatchEvent(new Event('input',{bubbles:true}));
+},true);
+const stepWrap=inp=>`<div class="stepw"><button type="button" class="stp" data-stp="-1" aria-label="-1">−</button>${inp}<button type="button" class="stp" data-stp="1" aria-label="+1">+</button></div>`;
+
+/* ---------- safety bar (add to home screen / backup) ---------- */
+let instPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();instPrompt=e;uxRender()});
+async function doBackup(){await $('#backupBtn').onclick()}
+function offerBackup(){if((S.lastChange||0)>(S.lastBackup||0))setTimeout(()=>toast(t('bkOffer'),'',{label:t('bkNow'),fn:doBackup}),2800)}
+function a2hsHow(){
+  const how=isIOS()?t('a2hsIOS'):t('a2hsAndroid');
+  const sh=openSheet(`<h3>${t('a2hsTitle')}</h3><p>${t('a2hsWhy')}</p><div class="note">${how}</div>
+    <div class="acts"><button class="btn ghost" data-a="later">${t('later')}</button>${instPrompt?`<button class="btn primary" data-a="inst">${t('a2hsInstall')}</button>`:`<button class="btn primary" data-a="ok">${t('gotIt')}</button>`}</div>`);
+  sh.onclick=async ev=>{const b=ev.target.closest('button');if(!b)return;
+    if(b.dataset.a==='later'){S.a2hsHide=Date.now();save();closeSheet();uxRender()}
+    if(b.dataset.a==='ok')closeSheet();
+    if(b.dataset.a==='inst'){closeSheet();try{instPrompt.prompt();await instPrompt.userChoice}catch(e){}instPrompt=null;uxRender()}};
+}
+function renderSafeBar(){
+  const el=$('#safeBar');if(!el)return;
+  let html='';
+  if(a2hsDue())html=`<span>⚠️ ${t('a2hsBar')}</span><button data-sb="how">${t('how')}</button><button data-sb="x" aria-label="x">✕</button>`;
+  else if(backupDue()&&Date.now()-(S.bkHide||0)>DAY)html=`<span>💾 ${S.lastBackup?t('bkBar',{d:fDate(S.lastBackup)}):t('bkBarNever')}</span><button data-sb="bk">${t('bkNow')}</button><button data-sb="bx" aria-label="x">✕</button>`;
+  el.innerHTML=html;el.classList.toggle('hidden',!html);
+}
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-sb]');if(!b)return;const a=b.dataset.sb;
+  if(a==='how')a2hsHow();if(a==='x'){S.a2hsHide=Date.now();save();uxRender()}
+  if(a==='bk')doBackup();if(a==='bx'){S.bkHide=Date.now();save();uxRender()}});
+
+/* ---------- guides ---------- */
+const GUIDE_MODES=['free','inv','ord'];
+const curMode=()=>inOrd()?'ord':inInv()?'inv':'free';
+function guideHtml(m){return `<ol class="gsteps">${[1,2,3].map(n=>`<li>${t('g_'+m+n)}</li>`).join('')}</ol>`}
+function renderGuideBox(){
+  const el=$('#guideBox');if(!el)return;const m=curMode();S.tipsSeen=S.tipsSeen||{};
+  if(S.tipsSeen[m]){el.innerHTML='';el.classList.add('hidden');return}
+  el.classList.remove('hidden');
+  el.innerHTML=`<div class="guide"><div class="ghd"><b>${t('g_title_'+m)}</b><button data-g="ok">${t('gotIt')}</button></div>${guideHtml(m)}${isDesk()?`<div class="mut gk">${t('g_keys')}</div>`:''}</div>`;
+}
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-g=ok]');if(!b)return;S.tipsSeen=S.tipsSeen||{};S.tipsSeen[curMode()]=true;save();renderGuideBox()});
+function guideSheet(){
+  const sh=openSheet(`<h3>${t('guideHdr')}</h3>${GUIDE_MODES.map(m=>`<div class="sect">${t('g_title_'+m)}</div>${guideHtml(m)}`).join('')}
+    <div class="sect">${t('keysHdr')}</div><div class="keys">${KEYS.map(k=>`<div><kbd>${k[0]}</kbd><span>${t(k[1])}</span></div>`).join('')}</div>
+    <div class="acts"><button class="btn ghost" data-a="reset">${t('guideReset')}</button><button class="btn primary" data-a="ok">${t('close')}</button></div>`);
+  sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.a==='reset'){S.tipsSeen={};save();closeSheet();uxRender();toast(t('guideResetDone'),'ok')}if(b.dataset.a==='ok')closeSheet()};
+}
+
+/* ---------- keyboard shortcuts (ignored for fast scanner input) ---------- */
+const KEYS=[['/','k_search'],['N','k_new'],['K','k_close'],['1–5','k_tabs'],['Esc','k_esc'],['?','k_help']];
+let kPend=null;
+window.addEventListener('keydown',e=>{
+  if(kPend){clearTimeout(kPend);kPend=null}
+  const ae=document.activeElement;if(ae&&['INPUT','TEXTAREA','SELECT'].includes(ae.tagName))return;
+  if(e.ctrlKey||e.metaKey||e.altKey||sheetOpen()||e.key.length!==1)return;
+  const k=e.key;
+  if(!/^[\/nNkK1-5?]$/.test(k))return;
+  if(k==='/'||k==='?')e.preventDefault();
+  kPend=setTimeout(()=>{kPend=null;runKey(k)},90);
+});
+function runKey(k){
+  const tabs=['scan','list','inv','export','set'];
+  if(/[1-5]/.test(k)){showView(tabs[+k-1]);return}
+  if(k==='?'){guideSheet();return}
+  if(k==='/'){const v=document.querySelector('main .view.active');const i=v&&(v.querySelector('#invQ,#lq,#ordAddQ')||(v.id==='v-scan'?$('#kbIn'):null)||v.querySelector('input[type=search]'));if(i){i.focus();i.select&&i.select()}return}
+  if(k==='n'||k==='N'){
+    if(inOrd()){const o=ordCur();if(!o)return showView('list');const nb=$('#ordWork [data-ord=newpal]');if(nb)nb.click();else{S.ordActive.p=null;save();renderAll();setTimeout(()=>{const b=$('#ordWork [data-ord=newpal]');if(b)b.click()},50)}showView('scan');return}
+    if(inInv()){invManualPallet();return}
+    openPalletSheet();return}
+  if(k==='k'||k==='K'){
+    if(inOrd()){const o=ordCur(),p=o&&palCur(o);if(p)ordClosePalletSheet(o,p);return}
+    if(inInv()){const b=$('#invWork [data-a=save]')||$('#invWork [data-a=quick]');if(b)b.click();return}
+    const f=$('#finishBtn');if(f)f.click();return}
+}
+
+/* ---------- drag & drop Excel (desktop) ---------- */
+let dragN=0;
+window.addEventListener('dragenter',e=>{if(e.dataTransfer&&[...e.dataTransfer.types].includes('Files')){dragN++;document.body.classList.add('dropping')}});
+window.addEventListener('dragleave',()=>{dragN=Math.max(0,dragN-1);if(!dragN)document.body.classList.remove('dropping')});
+window.addEventListener('dragover',e=>{if(e.dataTransfer&&[...e.dataTransfer.types].includes('Files'))e.preventDefault()});
+window.addEventListener('drop',e=>{
+  dragN=0;document.body.classList.remove('dropping');
+  const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(!f)return;e.preventDefault();dropFile(f);
+});
+function dropFile(f){
+  if(!/\.(xlsx|xls|csv)$/i.test(f.name)){toast(t('dropBad'),'warn');return}
+  const sh=openSheet(`<h3>${t('dropTitle')}</h3><p class="mut mono">${esc(f.name)}</p>
+    <div class="row2" style="flex-direction:column"><button class="btn primary wide" data-a="ord">🧾 ${t('dropOrd')}</button><button class="btn ghost wide" data-a="inv">📋 ${t('dropInv')}</button></div>
+    <div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button></div>`);
+  sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;const a=b.dataset.a;closeSheet();
+    if(a==='ord'){S.modeTab='ord';ordImport(f);showView('inv')}
+    if(a==='inv'){S.modeTab='inv';invImport(f);showView('inv')}};
+}
+
+/* ---------- resume ---------- */
+function resumeHint(){
+  if(!S.lastChange||Date.now()-S.lastChange<15*60e3)return;
+  let w='';
+  if(inOrd()){const o=ordCur();if(o){const p=palCur(o);w=t('resOrd',{no:o.no})+(p?' · P'+p.n:'')}}
+  else if(inInv()){w=t('resInv',{f:S.inv.fileName||''})+(S.invActive?' · '+shortId(S.invActive):'')}
+  else if(S.pallet)w=t('resFree',{p:S.pallet});
+  if(!w)return;
+  setTimeout(()=>{if(!sheetOpen())toast(t('resMsg',{w}),'',{label:t('resGo'),fn:()=>showView('scan')})},500);
+}
+
+/* ---------- close order with summary ---------- */
+function ordCloseOrderSheet(o){
+  const tt=ordTot(o),short=o.lines.map((l,i)=>({l,ld:loadedOf(o,i)})).filter(x=>x.ld<x.l.qty);
+  const openP=o.pallets.filter(p=>!p.closedAt).length;
+  const sh=openSheet(`<h3>${t('ordCloseQ',{no:esc(o.no)})}</h3>
+    <div class="sum"><div><b>${o.pallets.length}</b><span>${t('pallets')}</span></div><div><b>${tt.ld}</b><span>/ ${tt.ord} ${t('pcs')}</span></div><div><b>${short.length}</b><span>${t('ordShortW')}</span></div></div>
+    ${openP?`<div class="note w">${t('ordOpenPalWarn',{n:openP})}</div>`:''}
+    ${short.length?`<div class="sect">${t('ordShortHdr')}</div><div class="shortl">${short.map(x=>`<div><span>${esc(lineName(x.l))}</span><b>${x.ld} / ${x.l.qty}</b><small>−${x.l.qty-x.ld}</small></div>`).join('')}</div>`:`<div class="note">${t('ordAllDone')}</div>`}
+    <div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button><button class="btn primary" data-a="ok">${t('ordCloseOrder')}</button></div>`);
+  sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.a==='cancel')closeSheet();
+    if(b.dataset.a==='ok'){o.closedAt=Date.now();save();closeSheet();renderAll();toast(t('ordClosedToast',{no:o.no}),'ok');offerBackup()}};
+}
+
+/* ---------- hooks into existing render / export ---------- */
+function uxRender(){
+  applyUx();renderSafeBar();renderGuideBox();
+  const sb=$('#setBadge');if(sb)sb.classList.toggle('hidden',!(backupDue()||a2hsDue()));
+  if($('#setTheme'))$('#setTheme').value=S.theme||'dark';
+  if($('#setBig'))$('#setBig').classList.toggle('on',!!S.bigText);
+  const sc=$('#safeCard');if(sc){
+    sc.innerHTML=`<div class="tgl"><span>${t('a2hsState')}<small>${isStandalone()?t('a2hsYes'):t('a2hsNo')}</small></span>${isStandalone()?'<b class="okc">✓</b>':`<button class="btn ghost" data-sb="how" style="min-height:40px">${t('how')}</button>`}</div>
+      <div class="tgl"><span>${t('bkState')}<small>${S.lastBackup?t('lastBackup',{d:fDate(S.lastBackup)+' '+fHM(S.lastBackup)}):t('noBackup')}${backupDue()?' · <b class="neg">'+t('bkDueShort')+'</b>':''}</small></span>${backupDue()?'<b class="neg">!</b>':'<b class="okc">✓</b>'}</div>`}
+}
+{
+  const ra=renderAll;renderAll=function(){const r=ra.apply(this,arguments);try{uxRender()}catch(e){console.error(e)}return r};
+  const sv=save;save=function(){S.lastChange=Date.now();return sv.apply(this,arguments)};
+  const me=markExported;markExported=function(){const r=me.apply(this,arguments);offerBackup();return r};
+  const ie=invExport;invExport=async function(){const r=await ie.apply(this,arguments);offerBackup();return r};
+  const oe=ordExportExcel;ordExportExcel=async function(){const r=await oe.apply(this,arguments);offerBackup();return r};
+  const bb=$('#backupBtn').onclick;$('#backupBtn').onclick=async function(){const r=await bb.apply(this,arguments);uxRender();return r};
+}
+$('#setTheme').onchange=e=>{S.theme=e.target.value;save();applyUx()};
+$('#setBig').onclick=()=>{S.bigText=!S.bigText;save();uxRender()};
+$('#guideBtn').onclick=()=>guideSheet();
+
 
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
@@ -2852,6 +3245,7 @@ buildIndex();
 initDecoder();
 applyLang();
 renderAll();
+document.body.dataset.drop=t('dropHint');resumeHint();
 if(S.appMode==='inv')setTimeout(()=>{unlockAudio();},0);
 if(!S.pallet&&S.appMode==='free')setTimeout(()=>{if(!sheetOpen())openPalletSheet()},300);
 
