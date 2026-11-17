@@ -1,7 +1,8 @@
-const C='palet-sayim-v4';
+const C='palet-sayim-v5';
 const LIB='https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js';
+const LIB2='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon-180.png','./icon-512.png'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all([...CORE.map(u=>c.add(u).catch(()=>{})),c.add(new Request(LIB,{mode:'cors'})).catch(()=>{})])));self.skipWaiting()});
+self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all([...CORE.map(u=>c.add(u).catch(()=>{})),c.add(new Request(LIB,{mode:'cors'})).catch(()=>{}),c.add(new Request(LIB2,{mode:'cors'})).catch(()=>{})])));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{
   const r=e.request;if(r.method!=='GET')return;
