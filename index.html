@@ -244,6 +244,7 @@ main{flex:1;overflow:hidden;position:relative}
 .note.err{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.5)}
 .prog.sm{height:5px;margin:5px 0 0}
 .modeseg button{font-size:14px}
+.exl.tap{cursor:pointer;border-radius:8px}.exl.tap:active{background:var(--card2)}
 .shake{animation:sh .3s}
 @keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 </style>
@@ -907,9 +908,14 @@ ordBadFile:'Order could not be read – qty and barcode/reference/name required'
 xPackTitle:'PACKING LIST',xOrderNo:'Order no.',xCustomer:'Customer',xDate:'Date',xPallets:'Pallets',xPallet:'Pallet',xPalLabel:'Pallet label',xBarcode:'Barcode',xRef:'Reference',xProduct:'Product',xQty:'Qty',xWeight:'Weight (kg)',xHeight:'Height (cm)',
 xPalTotal:'P{n} total',xGrandTotal:'GRAND TOTAL',xInstrTitle:'ORDER INSTRUCTION / DIFFERENCES',xOrdered:'Ordered',xLoaded:'Loaded',xBalance:'Backorder',xPalletsLots:'Pallet (lot): qty',xLineOk:'OK',xLinePart:'Partial',xLineNone:'Not loaded',xSheetPack:'Packing list',xSheetInstr:'Instruction'});
 
+Object.assign(I18N.tr,{invManualTag:'elle',invVerified:'✓ Barkodla doğrulandı',xManual:'elle eklendi',invTapHint:'Beklenen ürüne dokunarak da ekleyebilirsiniz.'});
+Object.assign(I18N.de,{invManualTag:'manuell',invVerified:'✓ Per Barcode bestätigt',xManual:'manuell erfasst',invTapHint:'Sie können auch auf einen erwarteten Artikel tippen, um ihn hinzuzufügen.'});
+Object.assign(I18N.it,{invManualTag:'a mano',invVerified:'✓ Verificato con barcode',xManual:'aggiunto a mano',invTapHint:'Puoi anche toccare un prodotto atteso per aggiungerlo.'});
+Object.assign(I18N.ru,{invManualTag:'вручную',invVerified:'✓ Подтверждено штрихкодом',xManual:'добавлено вручную',invTapHint:'Можно также нажать на ожидаемый товар, чтобы добавить его.'});
+Object.assign(I18N.en,{invManualTag:'manual',invVerified:'✓ Verified by barcode',xManual:'added manually',invTapHint:'You can also tap an expected product to add it.'});
 'use strict';
 const PRODUCTS=[["8053839950161","SAO001","SONO ARGAN OIL",30,200,""],["8053839950178","SAO002","SONO ARGAN OIL",100,36,""],["8053839950109","SASH002","SONO ARGAN SHAMPOO 250",250,48,""],["8053839950093","SACN002","SONO ARGAN CONDITIONER",250,48,""],["8053839950130","SADM001","SONO ARGAN DEEP MASK box",250,32,""],["8053839950123","SALM002","SONO ARGAN LEAVE IN MASK box",150,64,""],["8053839950154","SALMM002","SONO ARGAN LEAVE IN MASK",50,100,""],["8053839950024","SAA001","SONO COLOR SHAMPOO",250,48,""],["8053839950000","SAA002","SONO COLOR MASK box",250,32,""],["8053839950246","SSO002","SONO BLONDER OIL",100,36,""],["8053839950062","SSH001","SONO SILVER SHAMPOO",250,48,""],["8053839950048","SSMA02","SONO SILVER MASK box",250,32,""],["8053839950192","SSSI01","SONO SILVER SILK box",150,64,""],["8053839950321","SSSIM011","SONO SILVER SILK",50,100,""],["8053839950239","SSS003","SONO STYLE SALT WAVE",150,64,""],["8053839950338","SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250,48,""],["8053839950352","SGM001","SONO GOLD RESTRUCTURING MASK",150,64,""],["8053839950376","SSG001","SONO SILKY GOLD",150,64,""],["8053839950277","SKSH001","SONO KERATIN SHAMPOO",250,48,""],["8053839950284","SKCN001","SONO KERATIN CONDITIONER",250,48,""],["8053839950314","SAAP001","Sono Color Potion 150 ml",150,64,""],["8053839950857","SSG002","Silky Gold 50 ml",50,100,""],["8053839950956","SCP050","Sono Color Potion 50 ml",50,100,""],["8053839950116","SASH003","SONO ARGAN SHAMPOO 1000",1000,12,""],["8053839950086","SACN003","SONO ARGAN CONDITIONER",1000,12,""],["8053839950536","SKSH002","SONO KERATIN SHAMPOO",1000,12,""],["8053839951151","SSVS150","VOLUME SPRAY",150,64,""],["8053839951182","SSTP150","THERMO-PROTECTIVE SPRAY",150,80,""],["8053839950031","SAA003","SONO COLOR SHAMPOO 1000 ml",1000,12,""],["8053839950345","SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000,12,""],["8053839951168","SSVM150","Sono Volume Mousse",150,48,""],["8053839951199","SSBW150","BEACH WAVES SPRAY",150,64,""],["8053839950680","SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250,48,""],["8053839950697","SVMA001","THE VOLUMIZING MASK 250 ml",250,32,""],["8053839950079","SSH003","SONO SILVER SHAMPOO 1000 ml",1000,12,""],["8053839951755","SAPGS25","SONO Argan Perfume Gift Set 2025","",18,""],["8053839951472","SGCN1000","SONO GOLD Conditioner 1000 ml",1000,12,""],["8053839951489","SGCN0250","SONO GOLD Conditioner 250 ml",250,48,""],["8053839951496","SSCN1000","SONO Silver Conditioner 1000 ml",1000,12,""],["8053839951502","SSCN0250","SONO Silver Conditioner 250 ml",250,48,""],["8053839951618","SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250,48,""],["8053839951519","SCCN1000","SONO Color Conditioner 1000 ml",1000,12,""],["8053839951649","SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250,48,""],["8053839951700","SKHP001","SONO KERATIN PERFUME",30,256,""],["8053839951526","SCCN0250","SONO Color Conditioner 250 ml",250,48,""],["8053839951281","SSDRS200","SPRAY DRY SHAMPOO","",12,""],["8053839951311","SSFSPR300","FIX SPRAY","",12,""],["8053839951564","SCSH250","SONO THE CURL SHAMPOO",250,48,""],["8053839951588","SCMA250","SONO CURL MASK",250,32,""],["8053839951601","SCLG150","SONO CURL LIQUID GEL",150,64,""],["8053839951632","SDLT150","SONO ANTI-DANDRUFF LOTION",150,64,""],["8053839951656","SGFM050","SONO GOLD  LIQUID FILLER MASK",50,100,""],["8053839951663","SBLM050","SONO BLONDER LIQUID MASK",50,100,""],["8053839951670","SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250,48,""],["8053839951687","SHLCN250","SONO HAIR-LOSS CONDITIONER",250,48,""],["8053839951694","SHLT150","SONO HAIR-LOSS LOTION",150,64,""],["8053839951717","SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100,36,""],["8053839950475","SAOM02","ARGAN OIL 10 ML",10,800,""],["8053839950437","SASHS02","ARGAN SHAMPOO 10 ML",10,800,""],["8053839950444","SACNS02","ARGAN CONDITIONER 10 ML",10,800,""],["8053839950451","SADMS01","ARGAN DEEP MASK 10 ML",10,800,""],["8053839950468","SALMS02","ARGAN LEAVE IN MASK 10 ML",10,800,""],["8053839950482","SAAS001","COLOR SHAMPOO 10 ML",10,800,""],["8053839950499","SAAS002","ANTI-AGE MASK 10 ML",10,800,""],["8053839950390","SAHS01","SILVER SHAMPOO 10 ML",10,800,""],["","","SONO Silver Conditioner 10 ml",10,800,""],["8053839950406","SSMS01","SILVER MASK 10 ML",10,800,""],["8053839950413","SSSS01","SONO SILVER SILK SPRAY 10ML",10,800,""],["8053839950567","SKSHS01","SONO KERATIN SHAMPOO",10,800,""],["8053839950574","SKCNS01","SONO KERATIN CONDITIONER",10,800,""],["8053839950376_","SSGS01","SONO SILKY GOLD",10,800,""],["8053839950529","SACNS02","SONO Kraft Bag 18X24X8 cm","","",""],["8053839951120","SWB001","SMAL SONO WHITE BAG","",200,""],["","SADM002","SONO ARGAN DEEP MASK",500,16,""],["","SAA004","SONO COLOR MASK",500,16,""],["","SSO001","SONO BLONDER OIL",30,200,""],["","SSMA01","SONO SILVER MASK",500,16,""],["","SGM002","SONO GOLD RESTRUCTURING MASK",500,16,""],["","SGF002","SONO GOLD FILLER",250,48,""],["","SGA001","SONO GOLD AMPOULE","6 x 10 ml",32,"noteSGA"],["","SKCN002","SONO KERATIN CONDITIONER",1000,12,""],["","SSS004","SONO STYLE SALT WAVE",50,100,""],["","SSGG150","LIQUID GEL",150,64,""],["","SSDC050","STYLING PASTE",50,112,""],["","SSDCSH250","SONO STYLE DEEP CLEANSING SHAMPOO 250 ml",250,48,""],["","SSDCSH1000","SONO STYLE DEEP CLEANSING SHAMPOO 1000 ml",1000,12,""],["","SAPD001","SONO DETOX LOTION 150 ML",150,64,""],["","SAPSH001","SONO DETOX SHAMPOO 250 ML",250,48,""],["","SAPM001","SONO DETOX MASK 150 ML",150,64,""],["","SAPS001","SONO DETOX SPRAY 150 ML",150,64,""],["","SVSP001","SONO VOLUME VOLUMIZING  SPRAY 150 ml",150,64,""],["","SCSH1000","SONO CURL SHAMPOO 1000 ML",1000,12,""],["","SCMA500","SONO CURL MASK 500 ML",500,16,""],["","SDSH1000","SONO ANTI-DANDRUFF SHAMPOO 1000 ML",1000,12,""],["","SCP010","SONO COLOR POTION",10,800,""],["","SSOS01","SONO SILVER OIL",10,800,""],["","SGSS01","SONO GOLD RESTRUCTURING SHAMPOO",10,800,""],["","SGMS01","SONO GOLD RESTRUCTURING MASK",10,800,""],["","KWB001","SMALL SONO WHITE BAG","",200,""],["","SGP00","SONO GOLD PERFUME",30,256,""],["","SAP00","SONO ARGAN PERFUME",30,256,""],["","SBP00","SONO BLONDER PERFUME",30,256,""]];
-const VERSION='2.2';
+const VERSION='2.2.1';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const LS='palet_sayim_v1';
 const DEF={lang:'auto',entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false,inv:null,invBlind:true,invQuick:false,invFilter:'all',invTol:'case',invRecount:'now',invPlusCase:false,appMode:'free',invActive:null};
@@ -1827,15 +1833,15 @@ function groupsOf(rows){
 }
 function reconcile(rows,found){
   const G=groupsOf(rows),F=found.map(f=>({f,ids:idsOf(f),used:false})),P=[];
-  const take=(g,list,type)=>{list.forEach(y=>y.used=true);const fs=list.map(y=>y.f);const cnt=fs.reduce((a,f)=>a+fQty(f),0);
+  const take=(g,list,type)=>{list.forEach(y=>y.used=true);const fs=list.map(y=>y.f);const manual=fs.some(f=>f.manual);const cnt=fs.reduce((a,f)=>a+fQty(f),0);
     const pc=+((fs.find(f=>+f.pc)||{}).pc)||perCaseOf(rowProduct(g.rows[0]))||0;
     P.push({key:g.key,type,rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt,diff:cnt-g.exp,lotExp:g.lot,lotCnt:fs.map(f=>f.lot).filter(Boolean).join(' / '),
-      pc,c:fs.reduce((a,f)=>a+(+f.c||0),0),u:fs.reduce((a,f)=>a+(+f.u||0),0)});g.done=true};
+      pc,c:fs.reduce((a,f)=>a+(+f.c||0),0),u:fs.reduce((a,f)=>a+(+f.u||0),0),manual});g.done=true};
   for(const g of G){const m=F.filter(y=>!y.used&&sameIds(g.ids,y.ids)&&normLot(y.f.lot)===normLot(g.lot));if(m.length)take(g,m,'match')}
   for(const g of G){if(g.done)continue;const m=F.filter(y=>!y.used&&sameIds(g.ids,y.ids));if(m.length)take(g,m,'lot')}
   for(const g of G){if(g.done)continue;P.push({key:g.key,type:'missing',rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt:0,diff:-g.exp,lotExp:g.lot,lotCnt:'',pc:perCaseOf(rowProduct(g.rows[0]))||0,c:0,u:0})}
   for(const y of F){if(y.used)continue;const f=y.f;const q=fQty(f);
-    P.push({key:'x:'+f.id,type:'extra',rowIdx:[],code:f.code||f.barcode||f.ref||f.name,name:f.name,exp:0,cnt:q,diff:q,lotExp:'',lotCnt:f.lot||'',pc:+f.pc||0,c:+f.c||0,u:+f.u||0})}
+    P.push({key:'x:'+f.id,type:'extra',manual:!!f.manual,rowIdx:[],code:f.code||f.barcode||f.ref||f.name,name:f.name,exp:0,cnt:q,diff:q,lotExp:'',lotCnt:f.lot||'',pc:+f.pc||0,c:+f.c||0,u:+f.u||0})}
   return P;
 }
 function tolOf(p){const m=S.invTol||'case';if(m==='0')return 0;if(m==='pct')return Math.ceil(p.exp*0.02);return p.pc||0}
@@ -1872,7 +1878,7 @@ function invWorkOpen(id,opts={}){
     const lots=inExp?expLots(f):[];
     const recountLine=round===1&&recKeys.some(key=>{const p=reconcile(rows,found).find(p=>p.key===key);return p&&pairHas(p,f)});
     return `<div class="fl ${inExp||unknown?'':'extra'} ${hl===f.id?'hl':''}" data-fid="${f.id}">
-      <div class="top"><div class="nm">${unknown?t('invProdPh'):esc(prodName({name:f.name||f.code,vol:f.vol}))}</div>${!inExp&&!unknown?`<span class="stb st-diff">${t('invExtraTag')}</span>`:''}${recountLine?`<span class="stb st-recount">2.</span>`:''}<button class="mini" data-a="rm" data-k="${k}">✕</button></div>
+      <div class="top"><div class="nm">${unknown?t('invProdPh'):esc(prodName({name:f.name||f.code,vol:f.vol}))}</div>${!inExp&&!unknown?`<span class="stb st-diff">${t('invExtraTag')}</span>`:''}${recountLine?`<span class="stb st-recount">2.</span>`:''}${f.manual?`<span class="stb st-pending">✋ ${t('invManualTag')}</span>`:''}<button class="mini" data-a="rm" data-k="${k}">✕</button></div>
       ${unknown?`<input data-f="desc" data-k="${k}" placeholder="${esc(t('invProdPh'))}" autocomplete="off"><div class="sug" data-sug="${k}"></div>`:`<div class="pmeta">${esc(f.code||'')}${f.exp?' · '+t('expShort')+' '+esc(f.exp):''}</div>`}
       <div class="lotin"><input data-f="lot" data-k="${k}" value="${esc(f.lot||'')}" placeholder="${esc(t('lot'))}" autocomplete="off" autocapitalize="characters">${lots.slice(0,3).map(l=>`<button class="lchip ${normLot(l)===normLot(f.lot)?'on':''}" data-lot="${esc(l)}" data-k="${k}">${esc(l)}</button>`).join('')}</div>
       <div class="cuin">
@@ -1894,12 +1900,12 @@ function invWorkOpen(id,opts={}){
       ${rows.length>1?`<div class="note w">${t('invMixed',{n:rows.length})}</div>`:''}
       ${isNew?`<div class="note w">${t('invNewPallet')}</div>`:''}
       ${G.length?`<div class="fold"><span>${t('invExpectedHdr')}</span><span>${marks.filter(m=>m.any).length}/${G.length}</span></div>
-      ${marks.map(m=>`<div class="exl ${m.any?'done':''} ${absent[m.g.key]?'abs':''} ${confirmMissing&&!m.any&&!absent[m.g.key]?'warnrow':''}"><span class="mk">${m.any?(m.lotOk?'✓':'⚠'):(absent[m.g.key]?'✕':'○')}</span>
+      ${marks.map(m=>`<div class="exl tap ${m.any?'done':''} ${absent[m.g.key]?'abs':''} ${confirmMissing&&!m.any&&!absent[m.g.key]?'warnrow':''}" data-exp="${esc(m.g.key)}"><span class="mk">${m.any?(m.lotOk?'✓':'⚠'):(absent[m.g.key]?'✕':'○')}</span>
         <div class="nm"><div>${esc(m.g.desc)}</div><div>${esc(m.g.code)} · ${t('lot')} ${esc(m.g.lot||'–')} · ${blind?'●●●':m.g.exp+' '+t('pcs')+(perCaseOf(rowProduct(m.g.rows[0]))?' ('+breakdown(m.g.exp,perCaseOf(rowProduct(m.g.rows[0])))+')':'')}</div></div>
         ${!m.any&&!quickView?`<button class="mini" data-a="abs" data-g="${esc(m.g.key)}">${absent[m.g.key]?t('invUndo'):t('invAbsent')}</button>`:''}</div>`).join('')}`:''}
       ${!live&&!quickView?`<button class="btn primary wide" data-a="cam" style="margin-top:10px">${t('invScanHere')}</button>`:''}
       ${quickView?'':`<div class="fold"><span>${t('invFoundHdr')}</span><span>${found.length}</span></div>
-      ${found.length?found.map(lineHtml).join(''):`<div class="mut" style="padding:8px 0">${live?t('invScanHint'):t('invAddHint')}</div>`}
+      ${found.length?found.map(lineHtml).join(''):`<div class="mut" style="padding:8px 0">${live?t('invScanHint'):t('invAddHint')} ${G.length?t('invTapHint'):''}</div>`}
       <button class="btn ghost wide" data-a="add" style="margin-top:8px">${t('invAddProduct')}</button>
       <div class="tgl"><span>${t('invPlusCase')}<small>${t('invPlusCaseSub')}</small></span><button class="sw ${S.invPlusCase?'on':''}" data-a="plus"></button></div>
       <div class="tgl"><span>${t('invLevel3')}<small>${t('invLevel3Sub')}</small></span><button class="sw ${level3?'on':''}" data-a="lv3"></button></div>`}
@@ -1927,7 +1933,7 @@ function invWorkOpen(id,opts={}){
     if(!p){scanErr(t('invUnknownCode'));return}
     const lots=expLots(p);const lot=(pre&&pre.lot)||(lots.length===1?lots[0]:'');
     let f=found.find(x=>sameIds(idsOf(x),idsOf(p))&&normLot(x.lot)===normLot(lot));
-    if(f){if(S.invPlusCase)f.c=String((+f.c||0)+1);else toast(t('invAlreadyListed'))}
+    if(f){const wasManual=f.manual;f.manual=false;if(S.invPlusCase)f.c=String((+f.c||0)+1);else if(!wasManual)toast(t('invAlreadyListed'));else toast(t('invVerified'),'ok')}
     else{
       const pc=perCaseOf(p)||(pre&&pre.isCase&&pre.count)||0;
       f={id:uid(),barcode:p.barcode||'',ref:p.ref||'',code:p.barcode||p.ref||'',name:p.name||p.ref||'',vol:p.vol??'',lot,exp:(pre&&pre.exp)||'',
@@ -1946,6 +1952,19 @@ function invWorkOpen(id,opts={}){
       if(fl==='desc'){showSug(k,i.value);return}
       f[fl]=i.value.trim();dirty=true;if(fl==='c'||fl==='u'||fl==='pc')updTot(k);clearTimeout(drT);drT=setTimeout(saveDraft,500)};
     sh.onclick=ev=>{
+      const er=ev.target.closest('[data-exp]');
+      if(er&&!ev.target.closest('button')&&!quickView){
+        const g=G.find(x=>x.key===er.dataset.exp);if(!g)return;
+        const lot=lotTypo(g.lot)?normLot(g.lot):g.lot;
+        let f=found.find(x=>sameIds(g.ids,idsOf(x))&&normLot(x.lot)===normLot(g.lot));
+        if(f){hl=f.id;toast(t('invAlreadyListed'));render(f.id);return}
+        const p=rowProduct(g.rows[0]);const pc=perCaseOf(p);
+        f={id:uid(),barcode:p.barcode||'',ref:p.ref||'',code:p.barcode||p.ref||g.code,name:p.name||g.desc,vol:p.vol??'',lot,exp:'',c:'',pc:pc?String(pc):'',u:'',manual:true};
+        if(absent[g.key])delete absent[g.key];
+        found.push(f);hl=f.id;dirty=true;confirmMissing=false;render(f.id);
+        const i=$(`[data-fid="${f.id}"] input[data-f=c]`)||$(`[data-fid="${f.id}"] input[data-f=u]`);if(i)setTimeout(()=>i.focus(),50);
+        return;
+      }
       const b=ev.target.closest('button');if(!b)return;const a=b.dataset.a,k=b.dataset.k;note=($('#invNote')||{}).value||note;
       if(b.dataset.pick!=null||b.dataset.lot!=null||['rm','abs','add'].includes(a))dirty=true;
       if(b.dataset.pick!=null){setProduct(found[+k],sugHits[+b.dataset.pick]);hl=found[+k].id;return render(hl)}
@@ -2287,7 +2306,7 @@ async function invExport(){
     for(const p of list){
       const rc=rec.rcodes&&rec.rcodes[p.key]?t(rec.rcodes[p.key]):'';
       D.push([id,rec.link||'',p.code,p.name,p.lotExp||'',p.lotCnt||'',p.exp,p.cnt==null?'':p.cnt,p.diff==null?'':p.diff,p.c===''?'':p.c,p.c?p.pc:'',p.u===''?'':p.u,p.r1!=null?p.r1:'',p.r2!=null?p.r2:'',
-        p.type==='quick'?t('st_quick'):TYPE_TXT(p)+(p.lotExp&&lotTypo(p.lotExp)?' / '+t('xLotTypo'):''),rc,...meta(rec,st)]);
+        p.type==='quick'?t('st_quick'):TYPE_TXT(p)+(p.lotExp&&lotTypo(p.lotExp)?' / '+t('xLotTypo'):'')+(p.manual?' / '+t('xManual'):''),rc,...meta(rec,st)]);
     }
   };
   for(const id of inv.order){const rec=inv.pal[id]||{};emit(id,invRows(id),rec,invStatus(id))}
