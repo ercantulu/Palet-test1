@@ -781,6 +781,11 @@ invDeviceLbl:'This device / counter',invTeamHdr:'Team count (several phones)',in
 invShareRes:'📤 Share my results',invMergeRes:'📥 Merge results',invNeedDevice:'Enter device / counter name first',invShared:'Results of {n} pallets shared',invMergeOther:'These results belong to a different report',invMergedOver:'Overwrote count from device {d}',
 invMerged:'{d}: {a} new, {u} updated, {k} unchanged',xCount1:'1st count',xCount2:'2nd count',xType:'Result',xRc:'Difference reason'});
 
+Object.assign(I18N.tr,{invScanHere:'📷 Kamerayla okut',invScanSub:'palet etiketi veya koli barkodu',invScanBtn:'📷 Taramaya başla',invAddHint:'Kamerayla okutmak için yukarıdaki butona basın veya ürünü elle ekleyin.',invDraft:'yarım'});
+Object.assign(I18N.de,{invScanHere:'📷 Mit Kamera scannen',invScanSub:'Palettenetikett oder Kartonbarcode',invScanBtn:'📷 Scannen starten',invAddHint:'Zum Scannen oben tippen oder Artikel manuell hinzufügen.',invDraft:'Entwurf'});
+Object.assign(I18N.it,{invScanHere:'📷 Scansiona con fotocamera',invScanSub:'etichetta pallet o barcode cartone',invScanBtn:'📷 Avvia scansione',invAddHint:'Tocca il pulsante sopra per scansionare o aggiungi a mano.',invDraft:'bozza'});
+Object.assign(I18N.ru,{invScanHere:'📷 Сканировать камерой',invScanSub:'этикетка паллеты или штрихкод короба',invScanBtn:'📷 Начать сканирование',invAddHint:'Нажмите кнопку выше для сканирования или добавьте вручную.',invDraft:'черновик'});
+Object.assign(I18N.en,{invScanHere:'📷 Scan with camera',invScanSub:'pallet label or case barcode',invScanBtn:'📷 Start scanning',invAddHint:'Tap the button above to scan, or add the product manually.',invDraft:'draft'});
 'use strict';
 const PRODUCTS=[["8053839950161","SAO001","SONO ARGAN OIL",30,200,""],["8053839950178","SAO002","SONO ARGAN OIL",100,36,""],["8053839950109","SASH002","SONO ARGAN SHAMPOO 250",250,48,""],["8053839950093","SACN002","SONO ARGAN CONDITIONER",250,48,""],["8053839950130","SADM001","SONO ARGAN DEEP MASK box",250,32,""],["8053839950123","SALM002","SONO ARGAN LEAVE IN MASK box",150,64,""],["8053839950154","SALMM002","SONO ARGAN LEAVE IN MASK",50,100,""],["8053839950024","SAA001","SONO COLOR SHAMPOO",250,48,""],["8053839950000","SAA002","SONO COLOR MASK box",250,32,""],["8053839950246","SSO002","SONO BLONDER OIL",100,36,""],["8053839950062","SSH001","SONO SILVER SHAMPOO",250,48,""],["8053839950048","SSMA02","SONO SILVER MASK box",250,32,""],["8053839950192","SSSI01","SONO SILVER SILK box",150,64,""],["8053839950321","SSSIM011","SONO SILVER SILK",50,100,""],["8053839950239","SSS003","SONO STYLE SALT WAVE",150,64,""],["8053839950338","SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250,48,""],["8053839950352","SGM001","SONO GOLD RESTRUCTURING MASK",150,64,""],["8053839950376","SSG001","SONO SILKY GOLD",150,64,""],["8053839950277","SKSH001","SONO KERATIN SHAMPOO",250,48,""],["8053839950284","SKCN001","SONO KERATIN CONDITIONER",250,48,""],["8053839950314","SAAP001","Sono Color Potion 150 ml",150,64,""],["8053839950857","SSG002","Silky Gold 50 ml",50,100,""],["8053839950956","SCP050","Sono Color Potion 50 ml",50,100,""],["8053839950116","SASH003","SONO ARGAN SHAMPOO 1000",1000,12,""],["8053839950086","SACN003","SONO ARGAN CONDITIONER",1000,12,""],["8053839950536","SKSH002","SONO KERATIN SHAMPOO",1000,12,""],["8053839951151","SSVS150","VOLUME SPRAY",150,64,""],["8053839951182","SSTP150","THERMO-PROTECTIVE SPRAY",150,80,""],["8053839950031","SAA003","SONO COLOR SHAMPOO 1000 ml",1000,12,""],["8053839950345","SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000,12,""],["8053839951168","SSVM150","Sono Volume Mousse",150,48,""],["8053839951199","SSBW150","BEACH WAVES SPRAY",150,64,""],["8053839950680","SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250,48,""],["8053839950697","SVMA001","THE VOLUMIZING MASK 250 ml",250,32,""],["8053839950079","SSH003","SONO SILVER SHAMPOO 1000 ml",1000,12,""],["8053839951755","SAPGS25","SONO Argan Perfume Gift Set 2025","",18,""],["8053839951472","SGCN1000","SONO GOLD Conditioner 1000 ml",1000,12,""],["8053839951489","SGCN0250","SONO GOLD Conditioner 250 ml",250,48,""],["8053839951496","SSCN1000","SONO Silver Conditioner 1000 ml",1000,12,""],["8053839951502","SSCN0250","SONO Silver Conditioner 250 ml",250,48,""],["8053839951618","SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250,48,""],["8053839951519","SCCN1000","SONO Color Conditioner 1000 ml",1000,12,""],["8053839951649","SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250,48,""],["8053839951700","SKHP001","SONO KERATIN PERFUME",30,256,""],["8053839951526","SCCN0250","SONO Color Conditioner 250 ml",250,48,""],["8053839951281","SSDRS200","SPRAY DRY SHAMPOO","",12,""],["8053839951311","SSFSPR300","FIX SPRAY","",12,""],["8053839951564","SCSH250","SONO THE CURL SHAMPOO",250,48,""],["8053839951588","SCMA250","SONO CURL MASK",250,32,""],["8053839951601","SCLG150","SONO CURL LIQUID GEL",150,64,""],["8053839951632","SDLT150","SONO ANTI-DANDRUFF LOTION",150,64,""],["8053839951656","SGFM050","SONO GOLD  LIQUID FILLER MASK",50,100,""],["8053839951663","SBLM050","SONO BLONDER LIQUID MASK",50,100,""],["8053839951670","SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250,48,""],["8053839951687","SHLCN250","SONO HAIR-LOSS CONDITIONER",250,48,""],["8053839951694","SHLT150","SONO HAIR-LOSS LOTION",150,64,""],["8053839951717","SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100,36,""],["8053839950475","SAOM02","ARGAN OIL 10 ML",10,800,""],["8053839950437","SASHS02","ARGAN SHAMPOO 10 ML",10,800,""],["8053839950444","SACNS02","ARGAN CONDITIONER 10 ML",10,800,""],["8053839950451","SADMS01","ARGAN DEEP MASK 10 ML",10,800,""],["8053839950468","SALMS02","ARGAN LEAVE IN MASK 10 ML",10,800,""],["8053839950482","SAAS001","COLOR SHAMPOO 10 ML",10,800,""],["8053839950499","SAAS002","ANTI-AGE MASK 10 ML",10,800,""],["8053839950390","SAHS01","SILVER SHAMPOO 10 ML",10,800,""],["","","SONO Silver Conditioner 10 ml",10,800,""],["8053839950406","SSMS01","SILVER MASK 10 ML",10,800,""],["8053839950413","SSSS01","SONO SILVER SILK SPRAY 10ML",10,800,""],["8053839950567","SKSHS01","SONO KERATIN SHAMPOO",10,800,""],["8053839950574","SKCNS01","SONO KERATIN CONDITIONER",10,800,""],["8053839950376_","SSGS01","SONO SILKY GOLD",10,800,""],["8053839950529","SACNS02","SONO Kraft Bag 18X24X8 cm","","",""],["8053839951120","SWB001","SMAL SONO WHITE BAG","",200,""],["","SADM002","SONO ARGAN DEEP MASK",500,16,""],["","SAA004","SONO COLOR MASK",500,16,""],["","SSO001","SONO BLONDER OIL",30,200,""],["","SSMA01","SONO SILVER MASK",500,16,""],["","SGM002","SONO GOLD RESTRUCTURING MASK",500,16,""],["","SGF002","SONO GOLD FILLER",250,48,""],["","SGA001","SONO GOLD AMPOULE","6 x 10 ml",32,"noteSGA"],["","SKCN002","SONO KERATIN CONDITIONER",1000,12,""],["","SSS004","SONO STYLE SALT WAVE",50,100,""],["","SSGG150","LIQUID GEL",150,64,""],["","SSDC050","STYLING PASTE",50,112,""],["","SSDCSH250","SONO STYLE DEEP CLEANSING SHAMPOO 250 ml",250,48,""],["","SSDCSH1000","SONO STYLE DEEP CLEANSING SHAMPOO 1000 ml",1000,12,""],["","SAPD001","SONO DETOX LOTION 150 ML",150,64,""],["","SAPSH001","SONO DETOX SHAMPOO 250 ML",250,48,""],["","SAPM001","SONO DETOX MASK 150 ML",150,64,""],["","SAPS001","SONO DETOX SPRAY 150 ML",150,64,""],["","SVSP001","SONO VOLUME VOLUMIZING  SPRAY 150 ml",150,64,""],["","SCSH1000","SONO CURL SHAMPOO 1000 ML",1000,12,""],["","SCMA500","SONO CURL MASK 500 ML",500,16,""],["","SDSH1000","SONO ANTI-DANDRUFF SHAMPOO 1000 ML",1000,12,""],["","SCP010","SONO COLOR POTION",10,800,""],["","SSOS01","SONO SILVER OIL",10,800,""],["","SGSS01","SONO GOLD RESTRUCTURING SHAMPOO",10,800,""],["","SGMS01","SONO GOLD RESTRUCTURING MASK",10,800,""],["","KWB001","SMALL SONO WHITE BAG","",200,""],["","SGP00","SONO GOLD PERFUME",30,256,""],["","SAP00","SONO ARGAN PERFUME",30,256,""],["","SBP00","SONO BLONDER PERFUME",30,256,""]];
 const VERSION='2.1';
@@ -1694,10 +1699,13 @@ function invOpenPallet(id,opts={}){
   const rec=S.inv.pal[id]||{};legacyFound(rec,invRows(id));
   const rows=invRows(id),isNew=!!rec.isNew,G=groupsOf(rows);
   const live=cur==='scan'&&scanning;
-  let found=(rec.found||[]).map(f=>({...f,c:f.c===''||f.c==null?'':String(f.c),u:f.u===''||f.u==null?'':String(f.u),pc:f.pc?String(f.pc):''}));
-  let absent={...(rec.absent||{})};
+  const dr=S.inv.drafts&&S.inv.drafts[id]&&rec.recount!=='pending'?S.inv.drafts[id]:null;
+  let found=((dr&&dr.found)||rec.found||[]).map(f=>({...f,c:f.c===''||f.c==null?'':String(f.c),u:f.u===''||f.u==null?'':String(f.u),pc:f.pc?String(f.pc):''}));
+  let absent={...((dr&&dr.absent)||rec.absent||{})};
   let quickView=!!S.invQuick&&!isNew&&!rec.recount;
-  let level3=rec.level===3,note=rec.note||'',missOk=false,confirmMissing=false,hl=null;
+  let level3=rec.level===3,note=(dr&&dr.note)||rec.note||'',missOk=false,confirmMissing=false,hl=null,drT=null,dirty=false;
+  const saveDraft=()=>{if(round===1)return;S.inv.drafts=S.inv.drafts||{};note=($('#invNote')||{}).value??note;S.inv.drafts[id]={found,absent,note};save()};
+  const dropDraft=()=>{if(S.inv.drafts&&S.inv.drafts[id]){delete S.inv.drafts[id]}};
   let round=rec.recount==='pending'?1:0,first=rec.rc1||null,recKeys=rec.recount==='pending'?Object.keys(rec.rc1||{}):[];
   if(round===1){for(const p of reconcile(rows,found))if(recKeys.includes(p.key))for(const f of found)if(pairHas(p,f)){f.c='';f.u=''}}
   function pairHas(p,f){if(p.type==='extra')return p.key==='x:'+f.id;const g=G.find(g=>g.key===p.key);return g&&sameIds(g.ids,idsOf(f))&&(p.type==='lot'||normLot(f.lot)===normLot(g.lot))}
@@ -1733,6 +1741,7 @@ function invOpenPallet(id,opts={}){
       ${marks.map(m=>`<div class="exl ${m.any?'done':''} ${absent[m.g.key]?'abs':''} ${confirmMissing&&!m.any&&!absent[m.g.key]?'warnrow':''}"><span class="mk">${m.any?(m.lotOk?'✓':'⚠'):(absent[m.g.key]?'✕':'○')}</span>
         <div class="nm"><div>${esc(m.g.desc)}</div><div>${esc(m.g.code)} · ${t('lot')} ${esc(m.g.lot||'–')} · ${blind?'●●●':m.g.exp+' '+t('pcs')+(perCaseOf(rowProduct(m.g.rows[0]))?' ('+breakdown(m.g.exp,perCaseOf(rowProduct(m.g.rows[0])))+')':'')}</div></div>
         ${!m.any&&!quickView?`<button class="mini" data-a="abs" data-g="${esc(m.g.key)}">${absent[m.g.key]?t('invUndo'):t('invAbsent')}</button>`:''}</div>`).join('')}`:''}
+      ${!live&&!quickView?`<button class="btn primary wide" data-a="cam" style="margin-top:10px">${t('invScanHere')}</button>`:''}
       ${quickView?'':`<div class="fold"><span>${t('invFoundHdr')}</span><span>${found.length}</span></div>
       ${found.length?found.map(lineHtml).join(''):`<div class="mut" style="padding:8px 0">${live?t('invScanHint'):t('invAddHint')}</div>`}
       <button class="btn ghost wide" data-a="add" style="margin-top:8px">${t('invAddProduct')}</button>
@@ -1746,7 +1755,7 @@ function invOpenPallet(id,opts={}){
         ${quickView?`<button class="btn primary" data-a="quick">${t('invQuickOk')}</button>`:`<button class="btn primary" data-a="save">${round===1?t('invSave2'):t('invSave')}</button>`}
       </div>
       ${rec.checkedAt?`<div class="acts"><button class="btn ghost" data-a="reset">${t('invReset')}</button></div>`:''}`,null,{scan:live,half:live});
-    sh.scrollTop=keepScroll;
+    sh.scrollTop=keepScroll;if(dirty)saveDraft();
     if(scrollTo){const el=sh.querySelector(`[data-fid="${scrollTo}"]`);if(el)el.scrollIntoView({block:'nearest'})}
     wire(sh);
     invSheetScan=live?onSheetScan:null;
@@ -1772,16 +1781,17 @@ function invOpenPallet(id,opts={}){
     }
     const inExp=G.some(g=>sameIds(g.ids,idsOf(f)));
     if(inExp&&!p.unknown)scanOk();else scanWarn(t('invNotExpected'));
-    hl=f.id;confirmMissing=false;render(f.id);
+    hl=f.id;confirmMissing=false;dirty=true;render(f.id);
     const allFound=G.length&&G.every(g=>found.some(x=>sameIds(g.ids,idsOf(x))));
     if(allFound&&inExp)setTimeout(()=>toast(t('invAllFound'),'ok'),300);
   }
   const wire=sh=>{
     sh.oninput=ev=>{const i=ev.target.closest('input[data-f]');if(!i)return;const k=i.dataset.k,f=found[+k],fl=i.dataset.f;
       if(fl==='desc'){showSug(k,i.value);return}
-      f[fl]=fl==='lot'?i.value.trim():i.value.trim();if(fl==='c'||fl==='u'||fl==='pc')updTot(k)};
+      f[fl]=i.value.trim();dirty=true;if(fl==='c'||fl==='u'||fl==='pc')updTot(k);clearTimeout(drT);drT=setTimeout(saveDraft,500)};
     sh.onclick=ev=>{
       const b=ev.target.closest('button');if(!b)return;const a=b.dataset.a,k=b.dataset.k;note=($('#invNote')||{}).value||note;
+      if(b.dataset.pick!=null||b.dataset.lot!=null||['rm','abs','add'].includes(a))dirty=true;
       if(b.dataset.pick!=null){setProduct(found[+k],sugHits[+b.dataset.pick]);hl=found[+k].id;return render(hl)}
       if(b.dataset.lot!=null){found[+k].lot=b.dataset.lot;return render()}
       if(a==='rm'){found.splice(+k,1);return render()}
@@ -1791,12 +1801,13 @@ function invOpenPallet(id,opts={}){
       if(a==='qv'){quickView=!quickView;return render()}
       if(a==='lv3'){level3=!level3;return render()}
       if(a==='cancel')return closeSheet();
-      if(a==='reset'){const keep=rec.link?{link:rec.link}:null;delete S.inv.pal[id];if(keep)S.inv.pal[id]=keep;save();closeSheet();renderAll();return toast(t('invResetDone'))}
+      if(a==='cam'){saveDraft();closeSheet();invStartScan();let n=0;const w=()=>{if(scanning)invOpenPallet(id,opts);else if(n++<60)setTimeout(w,150)};w();return}
+      if(a==='reset'){dropDraft();const keep=rec.link?{link:rec.link}:null;delete S.inv.pal[id];if(keep)S.inv.pal[id]=keep;save();closeSheet();renderAll();return toast(t('invResetDone'))}
       if(a==='missing'){if(!missOk){missOk=true;b.textContent=t('invMissingSure');b.className='btn dangerfill';return}
-        S.inv.pal[id]={...base(),missing:true,checkedAt:Date.now(),device:S.device||'',note,flagOpen:false,res:G.map(g=>({key:g.key,type:'missing',rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt:0,diff:-g.exp,lotExp:g.lot,lotCnt:'',pc:0,c:0,u:0}))};
+        dropDraft();S.inv.pal[id]={...base(),missing:true,checkedAt:Date.now(),device:S.device||'',note,flagOpen:false,res:G.map(g=>({key:g.key,type:'missing',rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt:0,diff:-g.exp,lotExp:g.lot,lotCnt:'',pc:0,c:0,u:0}))};
         save();closeSheet();renderAll();beepSaved();return toast(t('invMissingDone'),'warn')}
       if(a==='quick'){
-        S.inv.pal[id]={...base(),quick:true,level:1,checkedAt:Date.now(),device:S.device||'',note,flagOpen:!!rec.link,diff:false,reasons:rec.link?['r_link']:[],
+        dropDraft();S.inv.pal[id]={...base(),quick:true,level:1,checkedAt:Date.now(),device:S.device||'',note,flagOpen:!!rec.link,diff:false,reasons:rec.link?['r_link']:[],
           res:G.map(g=>({key:g.key,type:'quick',rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt:null,diff:null,lotExp:g.lot,lotCnt:g.lot,pc:0,c:'',u:''}))};
         save();closeSheet();renderAll();beepSaved();return toast(t('invQuickDone',{p:shortId(id)}),'ok')}
       if(a==='save')return doSave();
@@ -1820,7 +1831,7 @@ function invOpenPallet(id,opts={}){
     if(round===0&&ex.length&&!level3){
       const rc1=Object.fromEntries(ex.map(p=>[p.key,p.cnt]));
       if(S.invRecount==='later'){
-        S.inv.pal[id]={...base(),recount:'pending',rc1,found:nums,absent,level:2,checkedAt:Date.now(),device:S.device||'',note,flagOpen:false,diff:true,res:P};
+        dropDraft();S.inv.pal[id]={...base(),recount:'pending',rc1,found:nums,absent,level:2,checkedAt:Date.now(),device:S.device||'',note,flagOpen:false,diff:true,res:P};
         save();closeSheet();renderAll();beepWarn();return toast(t('invRecountLater',{n:ex.length}),'warn');
       }
       first=rc1;recKeys=Object.keys(rc1);round=1;
@@ -1837,7 +1848,7 @@ function invOpenPallet(id,opts={}){
     }
     if(rows.length>1)reasons.add('r_mixed');if(rec.link)reasons.add('r_link');if(isNew)reasons.add('r_new');
     const diff=P.some(p=>p.diff!==0||p.type!=='match');
-    S.inv.pal[id]={...base(),level:level3?3:2,checkedAt:Date.now(),device:S.device||'',note,found:nums,absent,res:P,diff,
+    dropDraft();S.inv.pal[id]={...base(),level:level3?3:2,checkedAt:Date.now(),device:S.device||'',note,found:nums,absent,res:P,diff,
       flagOpen:!level3&&reasons.size>0,reasons:[...reasons],recount:round===1?'done':undefined,rc1:round===1?first:undefined,rc2:round===1?rc2:undefined};
     save();closeSheet();renderAll();showResult(id);
   };
@@ -1914,7 +1925,7 @@ function palItem(id){
   const desc=rows.length?rows[0].desc+(rows.length>1?' +'+(rows.length-1):''):(f0?f0.name:'');
   const lot=rows.length?rows[0].lot:(f0?f0.lot:'');
   const q=rows.reduce((a,r)=>a+r.qty,0);
-  return `<button class="ritem pal" data-pal="${esc(id)}"><div class="nm"><div><span class="mono">${esc(shortId(id))}</span> ${esc(desc)}</div><div>${t('lot')} ${esc(lot||'–')}${S.invBlind||!rows.length?'':' · '+q+' '+t('pcs')}${rec.noLabel?' · '+t('invNoLabel'):''}${rec.device&&rec.device!==S.device?' · 📱'+esc(rec.device):''}${rec.note?' · 📝':''}</div></div>${badge(st,rec.flagOpen)}</button>`;
+  return `<button class="ritem pal" data-pal="${esc(id)}"><div class="nm"><div><span class="mono">${esc(shortId(id))}</span> ${esc(desc)}</div><div>${t('lot')} ${esc(lot||'–')}${S.invBlind||!rows.length?'':' · '+q+' '+t('pcs')}${rec.noLabel?' · '+t('invNoLabel'):''}${rec.device&&rec.device!==S.device?' · 📱'+esc(rec.device):''}${rec.note?' · 📝':''}${S.inv.drafts&&S.inv.drafts[id]?' · ✏️ '+t('invDraft'):''}</div></div>${badge(st,rec.flagOpen)}</button>`;
 }
 let invShow=60;
 function renderInv(){
@@ -1946,7 +1957,7 @@ function renderInv(){
       <label class="fld">${t('invRecLbl')}<select data-inv-set="invRecount">${opt('now',S.invRecount,t('recNow'))}${opt('later',S.invRecount,t('recLater'))}</select></label>
       <label class="fld">${t('invDeviceLbl')}<input data-inv-dev value="${esc(S.device||'')}" placeholder="${esc(t('setDevicePh'))}" autocomplete="off"></label>
     </div>
-    <div class="row2" style="margin-top:0"><button class="btn primary wide" data-inv="scan">${t('invScanBtn')}</button><button class="btn ghost" data-inv="find">🔍</button></div>
+    <div class="row2" style="margin-top:0"><button class="btn primary wide" data-inv="scan" style="flex-direction:column;gap:0">${t('invScanBtn')}<small style="font-weight:600;font-size:12px;opacity:.85">${t('invScanSub')}</small></button><button class="btn ghost" data-inv="find">🔍</button></div>
     <div class="fchips">${chip('all',t('f_all'),c.all)}${chip('pending',t('st_pending'),c.pending)}${chip('diff',t('st_diff'),c.diff)}${chip('open',t('st_open'),c.open)}${chip('recount',t('st_recount'),c.recount)}${chip('missing',t('st_missing'),c.missing)}${chip('new',t('st_new'),c.new)}${chip('ok',t('st_ok'),c.ok+c.quick)}</div>
     <input id="invQ" type="search" placeholder="${esc(t('invSearchPh'))}" value="${esc(q)}" autocomplete="off" style="margin-bottom:8px">
     <div class="recent">${ids.map(palItem).join('')||`<div class="empty">${t('noMatch')}</div>`}</div>
