@@ -1,4 +1,4 @@
-const C='palet-sayim-v6';
+const C='palet-sayim-v7';
 const LIB='https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js';
 const LIB2='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon-180.png','./icon-512.png'];

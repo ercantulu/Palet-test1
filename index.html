@@ -225,6 +225,25 @@ main{flex:1;overflow:hidden;position:relative}
 .fold{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);font-weight:800;margin:10px 0 2px;display:flex;justify-content:space-between}
 .exl.warnrow{background:rgba(245,158,11,.15)}
 .st-recount{background:var(--acc);color:#04202e}
+.invonly{display:none}.invmode .invonly{display:block}.invmode .freeonly{display:none!important}
+.invmode .cam{height:32vh;min-height:190px}
+.invmode .top{border-bottom:3px solid var(--acc)}
+.invmode .pallet .lbl{color:var(--acc)}
+.wsp{padding-bottom:4px}
+.sticky-acts{position:sticky;bottom:0;background:var(--bg);padding:10px 0 6px;margin-top:10px;z-index:3;box-shadow:0 -10px 16px var(--bg)}
+.invempty{text-align:center;margin-top:12px}.invempty .bigic{font-size:40px}.invempty p{margin:6px 0 10px}
+.ritem.pal.act{border-color:var(--acc)}
+.card.modeon{border-color:var(--acc)}
+.resc{margin-top:12px}
+.ordonly{display:none}.ordmode .ordonly{display:block}.ordmode .freeonly{display:none!important}
+.ordmode .cam{height:32vh;min-height:190px}.ordmode .top{border-bottom:3px solid var(--warn)}.ordmode .pallet .lbl{color:var(--warn)}
+.os-new{background:var(--card2);color:var(--mut)}.os-progress{background:rgba(56,189,248,.2);color:var(--acc)}.os-complete{background:rgba(34,197,94,.18);color:var(--ok)}.os-closed{background:var(--line);color:var(--tx)}
+.exl.done .mk{color:var(--ok)}.exl.over{background:rgba(239,68,68,.15)}.exl.over .mk{color:var(--err)}
+.oq{display:flex;flex-direction:column;align-items:flex-end;font-variant-numeric:tabular-nums;min-width:70px}.oq b{font-size:18px}.oq span{font-size:12px;color:var(--mut)}.oq small{font-size:11px;color:var(--warn)}
+.fl.over{border-color:var(--err);box-shadow:0 0 0 2px rgba(239,68,68,.4)}
+.note.err{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.5)}
+.prog.sm{height:5px;margin:5px 0 0}
+.modeseg button{font-size:14px}
 .shake{animation:sh .3s}
 @keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 </style>
@@ -257,6 +276,9 @@ main{flex:1;overflow:hidden;position:relative}
         </div>
       </div>
       <div class="scanbody">
+        <div id="invWork" class="invonly"></div>
+        <div id="ordWork" class="ordonly"></div>
+        <div class="freeonly">
         <div class="seg2" id="modeSeg">
           <button data-mode="ask" data-i="modeAsk"></button>
           <button data-mode="plusc" data-i="modePlusC"></button>
@@ -268,10 +290,14 @@ main{flex:1;overflow:hidden;position:relative}
         </div>
         <div class="sect" data-i="recentHdr"></div>
         <div id="recent" class="recent"></div>
+        </div>
       </div>
     </section>
 
     <section id="v-list" class="view">
+      <div id="invList" class="invonly"></div>
+      <div id="ordList" class="ordonly"></div>
+      <div class="freeonly">
       <div class="lhead">
         <input id="lq" type="search" data-ip="listSearch" autocomplete="off">
         <div class="seg2" id="listSeg">
@@ -281,11 +307,15 @@ main{flex:1;overflow:hidden;position:relative}
         <div class="tgl"><span data-i="onlyActive"></span><button class="sw" id="onlyActive"></button></div>
       </div>
       <div id="listBody"></div>
+      </div>
     </section>
 
     <section id="v-inv" class="view"><div id="invBody"></div></section>
 
     <section id="v-export" class="view">
+      <div id="invExp" class="invonly"></div>
+      <div id="ordExp" class="ordonly"></div>
+      <div class="freeonly">
       <div class="stats" id="expStats"></div>
       <div id="expWarn"></div>
       <div class="sect" data-i="scope"></div>
@@ -307,6 +337,7 @@ main{flex:1;overflow:hidden;position:relative}
       <div class="prev" id="prev"></div>
       <div class="sect" data-i="danger"></div>
       <button id="wipeBtn" class="btn danger wide" data-i="wipe"></button>
+      </div>
     </section>
 
     <section id="v-set" class="view">
@@ -791,12 +822,97 @@ Object.assign(I18N.de,{srcList:'SONO-Liste',srcExtra:'Zusatzliste',srcInv:'Lager
 Object.assign(I18N.it,{srcList:'listino SONO',srcExtra:'elenco extra',srcInv:'report magazzino'});
 Object.assign(I18N.ru,{srcList:'список SONO',srcExtra:'доп. список',srcInv:'складской отчёт'});
 Object.assign(I18N.en,{srcList:'SONO list',srcExtra:'extra list',srcInv:'warehouse report'});
+Object.assign(I18N.tr,{invHdr2:'ENVANTER · {a}/{b} · PALET ARA',invScanPallet:'Palet etiketini okutun',invEmptyHint:'Palet etiketi (SSCC) okutunca palet burada açılır. Etiketsiz palette koli barkodunu okutun.',invFromList:'Listeden seç',invDraftsHdr:'Yarım kalan paletler',invRecentHdr:'Son kontrol edilenler',invDraftKept:'{p} yarım kaldı – taslak saklandı',invChecked:'kontrol edildi',invLastExp:'Son export: {d}',invModeOnNote:'Envanter modu aktif: Tara = aktif palet, Liste = rapordaki paletler, Export = rapor formatında Excel.',invGoScan:'📷 Taramaya git',invModeOff:'Serbest sayıma dön',invModeOn:'▶ Envanter modunu başlat',invSettingsHdr:'Sayım ayarları',invReportHdr:'Rapor'});
+Object.assign(I18N.de,{invHdr2:'INVENTUR · {a}/{b} · PALETTE SUCHEN',invScanPallet:'Palettenetikett scannen',invEmptyHint:'Nach dem Scannen des Palettenetiketts (SSCC) öffnet sich die Palette hier. Bei Paletten ohne Etikett den Kartonbarcode scannen.',invFromList:'Aus Liste wählen',invDraftsHdr:'Angefangene Paletten',invRecentHdr:'Zuletzt geprüft',invDraftKept:'{p} offen – Entwurf gespeichert',invChecked:'geprüft',invLastExp:'Letzter Export: {d}',invModeOnNote:'Inventurmodus aktiv: Scannen = aktive Palette, Liste = Paletten im Bericht, Export = Excel im Berichtsformat.',invGoScan:'📷 Zum Scannen',invModeOff:'Zur freien Zählung',invModeOn:'▶ Inventurmodus starten',invSettingsHdr:'Zähleinstellungen',invReportHdr:'Bericht'});
+Object.assign(I18N.it,{invHdr2:'INVENTARIO · {a}/{b} · CERCA PALLET',invScanPallet:'Scansiona etichetta pallet',invEmptyHint:"Dopo la scansione dell'etichetta pallet (SSCC) il pallet si apre qui. Per pallet senza etichetta scansiona il barcode del cartone.",invFromList:'Scegli da elenco',invDraftsHdr:'Pallet in sospeso',invRecentHdr:'Controllati di recente',invDraftKept:'{p} in sospeso – bozza salvata',invChecked:'controllati',invLastExp:'Ultima esportazione: {d}',invModeOnNote:'Modalità inventario attiva: Scansiona = pallet attivo, Elenco = pallet del report, Esporta = Excel nel formato report.',invGoScan:'📷 Vai alla scansione',invModeOff:'Torna al conteggio libero',invModeOn:'▶ Avvia modalità inventario',invSettingsHdr:'Impostazioni conteggio',invReportHdr:'Report'});
+Object.assign(I18N.ru,{invHdr2:'ИНВЕНТАРЬ · {a}/{b} · ПОИСК ПАЛЛЕТЫ',invScanPallet:'Сканируйте этикетку паллеты',invEmptyHint:'После сканирования этикетки (SSCC) паллета откроется здесь. Для паллеты без этикетки сканируйте штрихкод короба.',invFromList:'Выбрать из списка',invDraftsHdr:'Незавершённые паллеты',invRecentHdr:'Недавно проверенные',invDraftKept:'{p} не завершена – черновик сохранён',invChecked:'проверено',invLastExp:'Последний экспорт: {d}',invModeOnNote:'Режим инвентаря активен: Скан = активная паллета, Список = паллеты отчёта, Экспорт = Excel в формате отчёта.',invGoScan:'📷 К сканированию',invModeOff:'Вернуться к свободному счёту',invModeOn:'▶ Начать режим инвентаря',invSettingsHdr:'Настройки пересчёта',invReportHdr:'Отчёт'});
+Object.assign(I18N.en,{invHdr2:'INVENTORY · {a}/{b} · FIND PALLET',invScanPallet:'Scan pallet label',invEmptyHint:'Scan the pallet label (SSCC) and the pallet opens here. For pallets without a label, scan a case barcode.',invFromList:'Pick from list',invDraftsHdr:'Unfinished pallets',invRecentHdr:'Recently checked',invDraftKept:'{p} unfinished – draft kept',invChecked:'checked',invLastExp:'Last export: {d}',invModeOnNote:'Inventory mode on: Scan = active pallet, List = report pallets, Export = Excel in report format.',invGoScan:'📷 Go to scanning',invModeOff:'Back to free counting',invModeOn:'▶ Start inventory mode',invSettingsHdr:'Count settings',invReportHdr:'Report'});Object.assign(I18N.tr,{tabInv:'Mod',modeFree:'Serbest',modeInv:'Envanter',modeOrd:'Sipariş',freeTitle:'Serbest sayım',freeIntro:'Kendi palet numaranla barkod okut, adet gir, CSV/Excel al.',freeActive:'Serbest sayım aktif.',freeModeOn:'▶ Serbest sayımı başlat',
+os_new:'Yeni',os_progress:'Yükleniyor',os_complete:'Tamamlandı',os_closed:'Kapalı',os_open:'Açık',ordHdr:'SİPARİŞ · {no} · %{p}',ordSummary:'Sipariş özeti',
+ordPick:'Sipariş seçin veya yükleyin',ordPickHint:'Barkod / referans / ürün adı / adet sütunları olan bir Excel yükleyin. 1 dosya = 1 sipariş.',ordLoadBtn:'📄 Sipariş yükle (.xlsx)',ordOpenHdr:'Açık siparişler',ordLinesW:'kalem',
+ordNoMatch:'listede yok',ordRem:'kalan',ordMatch:'Eşleştir',ordCustomerPh:'Müşteri adı',ordProgress:'{a} / {b} adet yüklendi (%{p})',ordLinesHdr:'Sipariş kalemleri',ordPalletsHdr:'Paletler',ordPalClosed:'kapalı',ordPalOpen:'açık',
+ordNoPallets:'Henüz palet yok',ordClosedNote:'Sipariş {d} tarihinde kapatıldı.',ordNewPal:'+ Yeni palet',ordSsccHint:'Mi.Da. paletini kontrol ediyorsanız palet etiketini (SSCC) okutun – palet o numarayla açılır.',
+ordOverShort:'FAZLA',ordOverNote:'⛔ Fazla yükleme var – kırmızı satırların adedini düzeltin.',ordToLoad:'Yüklenecek',ordAllLoaded:'Tüm kalemler yüklendi ✓',ordOnPallet:'Bu palette',ordScanHint:'Koli barkodlarını okutun – ürünler bu palete eklenir.',
+ordToOrder:'Siparişe dön',ordPalEdit:'Paleti güncelle',ordPalClose:'Paleti kapat',ordPickFirst:'Önce bir sipariş seçin',ordIsClosed:'Sipariş kapalı',ordNotInOrder:'Bu ürün siparişte yok',ordLineFull:'Bu kalem tamam ({n}) – fazla yüklenemez',
+ordPalAuto:'Palet P{n} açıldı',ordOverCase:'Fazla yükleme olur – kalan {r} adet',ordComplete:'✓ Sipariş {no} tamamlandı',ordWeight:'Palet ağırlığı (kg)',ordHeight:'Palet yüksekliği (cm)',ordPalCloseOk:'✓ Paleti kapat',ordPalDone:'Palet P{n} kapatıldı',
+ordMatchTitle:'Ürünle eşleştir',ordMatched:'Eşleştirildi',ordPalOpened:'Palet P{n} açıldı',ordSsccOther:'Bu palet {no} siparişine ait',ordPalSscc:'Mi.Da. paleti P{n} olarak eklendi',ordNone:'Sipariş yok',ordShortNote:'{n} kalem eksik – bakiye olarak raporlanır.',
+ordDocsHdr:'Belgeler',ordPackingBtn:'⬇︎ Packing list + talimat (Excel)',ordPackingHint:'1. sayfa müşteri için packing list (palet, ürün, lot, koli, adet, ağırlık, yükseklik). 2. sayfa Mi.Da. için talimat: sipariş / yüklenen / bakiye.',
+ordLabelsBtn:'🏷 Palet etiketleri (PDF)',ordLabelsHint:'Her palet için 100×150 mm etiket: sipariş no, palet 1/3, içerik, ağırlık, barkod.',ordManageHdr:'Sipariş',ordReopen:'Siparişi yeniden aç',ordCloseOrder:'Siparişi kapat',ordDel:'Siparişi sil',ordOtherHdr:'Diğer siparişler',
+ordTitle:'Sipariş kontrolü',ordIntro:'Sipariş Excel\'ini yükleyin, paletleri oluşturun veya Mi.Da. paletlerini okutun; her kolide sipariş kontrol edilir. Fazla yükleme engellenir, eksikler bakiye olur.',ordModeOnNote:'Sipariş modu aktif: Tara = aktif palet, Liste = siparişler, Export = packing list ve etiketler.',
+ordModeOn:'▶ Sipariş modunu başlat',ordFileHint:'Excel sütunları: barkod, referans, ürün adı, adet (başlık adları Türkçe/İngilizce/İtalyanca/Almanca olabilir). Sipariş no dosya adından alınır.',ordDelQ:'{no} silinsin mi?',ordDelWarn:'Sipariş ve tüm paletleri silinir.',
+ordBadFile:'Sipariş okunamadı – adet ve barkod/referans/ürün adı sütunları gerekli',ordLoaded:'Sipariş {no}: {n} kalem yüklendi',ordUnmatched:'{n} kalem listede yok, eşleştirin',ordLabelsReady:'Etiketler hazır',
+xPackTitle:'PACKING LIST',xOrderNo:'Sipariş no',xCustomer:'Müşteri',xDate:'Tarih',xPallets:'Palet sayısı',xPallet:'Palet',xPalLabel:'Palet etiketi',xBarcode:'Barkod',xRef:'Referans',xProduct:'Ürün',xQty:'Adet',xWeight:'Ağırlık (kg)',xHeight:'Yükseklik (cm)',
+xPalTotal:'P{n} toplam',xGrandTotal:'GENEL TOPLAM',xInstrTitle:'SİPARİŞ TALİMATI / FARK',xOrdered:'Sipariş',xLoaded:'Yüklenen',xBalance:'Bakiye',xPalletsLots:'Palet (lot): adet',xLineOk:'Tamam',xLinePart:'Eksik',xLineNone:'Yüklenmedi',xSheetPack:'Packing list',xSheetInstr:'Talimat'});
+Object.assign(I18N.de,{tabInv:'Modus',modeFree:'Frei',modeInv:'Inventur',modeOrd:'Auftrag',freeTitle:'Freie Zählung',freeIntro:'Mit eigener Palettennummer scannen, Menge erfassen, CSV/Excel exportieren.',freeActive:'Freie Zählung aktiv.',freeModeOn:'▶ Freie Zählung starten',
+os_new:'Neu',os_progress:'In Arbeit',os_complete:'Komplett',os_closed:'Geschlossen',os_open:'Offen',ordHdr:'AUFTRAG · {no} · {p}%',ordSummary:'Auftragsübersicht',
+ordPick:'Auftrag wählen oder laden',ordPickHint:'Excel mit Spalten Barcode / Referenz / Artikelname / Menge laden. 1 Datei = 1 Auftrag.',ordLoadBtn:'📄 Auftrag laden (.xlsx)',ordOpenHdr:'Offene Aufträge',ordLinesW:'Pos.',
+ordNoMatch:'nicht in Liste',ordRem:'offen',ordMatch:'Zuordnen',ordCustomerPh:'Kunde',ordProgress:'{a} / {b} Stk geladen ({p}%)',ordLinesHdr:'Auftragspositionen',ordPalletsHdr:'Paletten',ordPalClosed:'geschlossen',ordPalOpen:'offen',
+ordNoPallets:'Noch keine Paletten',ordClosedNote:'Auftrag am {d} geschlossen.',ordNewPal:'+ Neue Palette',ordSsccHint:'Bei Prüfung einer Mi.Da.-Palette das Palettenetikett (SSCC) scannen – die Palette wird mit dieser Nummer angelegt.',
+ordOverShort:'ZU VIEL',ordOverNote:'⛔ Überladung – Mengen der roten Zeilen korrigieren.',ordToLoad:'Zu laden',ordAllLoaded:'Alle Positionen geladen ✓',ordOnPallet:'Auf dieser Palette',ordScanHint:'Kartonbarcodes scannen – Artikel werden dieser Palette hinzugefügt.',
+ordToOrder:'Zum Auftrag',ordPalEdit:'Palette aktualisieren',ordPalClose:'Palette abschließen',ordPickFirst:'Bitte zuerst einen Auftrag wählen',ordIsClosed:'Auftrag geschlossen',ordNotInOrder:'Artikel nicht im Auftrag',ordLineFull:'Position komplett ({n}) – keine Überladung',
+ordPalAuto:'Palette P{n} angelegt',ordOverCase:'Das wäre zu viel – offen {r} Stk',ordComplete:'✓ Auftrag {no} komplett',ordWeight:'Palettengewicht (kg)',ordHeight:'Palettenhöhe (cm)',ordPalCloseOk:'✓ Palette abschließen',ordPalDone:'Palette P{n} abgeschlossen',
+ordMatchTitle:'Artikel zuordnen',ordMatched:'Zugeordnet',ordPalOpened:'Palette P{n} geöffnet',ordSsccOther:'Diese Palette gehört zu Auftrag {no}',ordPalSscc:'Mi.Da.-Palette als P{n} angelegt',ordNone:'Keine Aufträge',ordShortNote:'{n} Positionen unvollständig – werden als Rückstand ausgewiesen.',
+ordDocsHdr:'Dokumente',ordPackingBtn:'⬇︎ Packliste + Anweisung (Excel)',ordPackingHint:'Blatt 1: Packliste für den Kunden (Palette, Artikel, Charge, Kartons, Menge, Gewicht, Höhe). Blatt 2: Anweisung für Mi.Da.: bestellt / geladen / Rückstand.',
+ordLabelsBtn:'🏷 Palettenetiketten (PDF)',ordLabelsHint:'Je Palette ein Etikett 100×150 mm: Auftragsnr., Palette 1/3, Inhalt, Gewicht, Barcode.',ordManageHdr:'Auftrag',ordReopen:'Auftrag wieder öffnen',ordCloseOrder:'Auftrag schließen',ordDel:'Auftrag löschen',ordOtherHdr:'Weitere Aufträge',
+ordTitle:'Auftragskontrolle',ordIntro:'Auftrags-Excel laden, Paletten anlegen oder Mi.Da.-Paletten scannen; jeder Karton wird gegen den Auftrag geprüft. Überladung wird blockiert, Fehlmengen werden Rückstand.',ordModeOnNote:'Auftragsmodus aktiv: Scannen = aktive Palette, Liste = Aufträge, Export = Packliste und Etiketten.',
+ordModeOn:'▶ Auftragsmodus starten',ordFileHint:'Excel-Spalten: Barcode, Referenz, Artikelname, Menge (Spaltennamen TR/EN/IT/DE). Auftragsnr. aus dem Dateinamen.',ordDelQ:'{no} löschen?',ordDelWarn:'Auftrag und alle Paletten werden gelöscht.',
+ordBadFile:'Auftrag nicht lesbar – Menge und Barcode/Referenz/Name benötigt',ordLoaded:'Auftrag {no}: {n} Positionen geladen',ordUnmatched:'{n} Positionen nicht in der Liste, bitte zuordnen',ordLabelsReady:'Etiketten bereit',
+xPackTitle:'PACKLISTE',xOrderNo:'Auftragsnr.',xCustomer:'Kunde',xDate:'Datum',xPallets:'Anzahl Paletten',xPallet:'Palette',xPalLabel:'Palettenetikett',xBarcode:'Barcode',xRef:'Referenz',xProduct:'Artikel',xQty:'Menge',xWeight:'Gewicht (kg)',xHeight:'Höhe (cm)',
+xPalTotal:'P{n} gesamt',xGrandTotal:'GESAMT',xInstrTitle:'AUFTRAGSANWEISUNG / DIFFERENZ',xOrdered:'Bestellt',xLoaded:'Geladen',xBalance:'Rückstand',xPalletsLots:'Palette (Charge): Menge',xLineOk:'OK',xLinePart:'Teilweise',xLineNone:'Nicht geladen',xSheetPack:'Packliste',xSheetInstr:'Anweisung'});
+Object.assign(I18N.it,{tabInv:'Modalità',modeFree:'Libero',modeInv:'Inventario',modeOrd:'Ordine',freeTitle:'Conteggio libero',freeIntro:'Scansiona con il tuo numero pallet, inserisci quantità, esporta CSV/Excel.',freeActive:'Conteggio libero attivo.',freeModeOn:'▶ Avvia conteggio libero',
+os_new:'Nuovo',os_progress:'In corso',os_complete:'Completo',os_closed:'Chiuso',os_open:'Aperti',ordHdr:'ORDINE · {no} · {p}%',ordSummary:'Riepilogo ordine',
+ordPick:'Scegli o carica un ordine',ordPickHint:'Carica un Excel con colonne barcode / codice / prodotto / quantità. 1 file = 1 ordine.',ordLoadBtn:'📄 Carica ordine (.xlsx)',ordOpenHdr:'Ordini aperti',ordLinesW:'righe',
+ordNoMatch:'non in elenco',ordRem:'mancano',ordMatch:'Abbina',ordCustomerPh:'Cliente',ordProgress:'{a} / {b} pz caricati ({p}%)',ordLinesHdr:'Righe ordine',ordPalletsHdr:'Pallet',ordPalClosed:'chiuso',ordPalOpen:'aperto',
+ordNoPallets:'Nessun pallet',ordClosedNote:'Ordine chiuso il {d}.',ordNewPal:'+ Nuovo pallet',ordSsccHint:"Se controlli un pallet Mi.Da. scansiona l'etichetta (SSCC) – il pallet viene creato con quel numero.",
+ordOverShort:'ECCEDENZA',ordOverNote:'⛔ Carico eccessivo – correggi le righe rosse.',ordToLoad:'Da caricare',ordAllLoaded:'Tutte le righe caricate ✓',ordOnPallet:'Su questo pallet',ordScanHint:'Scansiona i barcode dei cartoni – i prodotti vengono aggiunti a questo pallet.',
+ordToOrder:"Torna all'ordine",ordPalEdit:'Aggiorna pallet',ordPalClose:'Chiudi pallet',ordPickFirst:'Scegli prima un ordine',ordIsClosed:'Ordine chiuso',ordNotInOrder:"Prodotto non presente nell'ordine",ordLineFull:'Riga completa ({n}) – nessuna eccedenza',
+ordPalAuto:'Pallet P{n} creato',ordOverCase:'Sarebbe in eccesso – mancano {r} pz',ordComplete:'✓ Ordine {no} completo',ordWeight:'Peso pallet (kg)',ordHeight:'Altezza pallet (cm)',ordPalCloseOk:'✓ Chiudi pallet',ordPalDone:'Pallet P{n} chiuso',
+ordMatchTitle:'Abbina prodotto',ordMatched:'Abbinato',ordPalOpened:'Pallet P{n} aperto',ordSsccOther:"Questo pallet appartiene all'ordine {no}",ordPalSscc:'Pallet Mi.Da. aggiunto come P{n}',ordNone:'Nessun ordine',ordShortNote:'{n} righe incomplete – riportate come residuo.',
+ordDocsHdr:'Documenti',ordPackingBtn:'⬇︎ Packing list + istruzioni (Excel)',ordPackingHint:'Foglio 1: packing list per il cliente (pallet, prodotto, lotto, cartoni, quantità, peso, altezza). Foglio 2: istruzioni per Mi.Da.: ordinato / caricato / residuo.',
+ordLabelsBtn:'🏷 Etichette pallet (PDF)',ordLabelsHint:'Un\'etichetta 100×150 mm per pallet: n. ordine, pallet 1/3, contenuto, peso, barcode.',ordManageHdr:'Ordine',ordReopen:'Riapri ordine',ordCloseOrder:'Chiudi ordine',ordDel:'Elimina ordine',ordOtherHdr:'Altri ordini',
+ordTitle:'Controllo ordini',ordIntro:"Carica l'Excel dell'ordine, crea i pallet o scansiona i pallet Mi.Da.; ogni cartone viene verificato sull'ordine. L'eccedenza è bloccata, le mancanze diventano residuo.",ordModeOnNote:'Modalità ordine attiva: Scansiona = pallet attivo, Elenco = ordini, Esporta = packing list ed etichette.',
+ordModeOn:'▶ Avvia modalità ordine',ordFileHint:"Colonne Excel: barcode, codice, prodotto, quantità (intestazioni TR/EN/IT/DE). N. ordine dal nome file.",ordDelQ:'Eliminare {no}?',ordDelWarn:"L'ordine e tutti i suoi pallet verranno eliminati.",
+ordBadFile:'Ordine non leggibile – servono quantità e barcode/codice/prodotto',ordLoaded:'Ordine {no}: {n} righe caricate',ordUnmatched:'{n} righe non in elenco, abbinale',ordLabelsReady:'Etichette pronte',
+xPackTitle:'PACKING LIST',xOrderNo:'N. ordine',xCustomer:'Cliente',xDate:'Data',xPallets:'Numero pallet',xPallet:'Pallet',xPalLabel:'Etichetta pallet',xBarcode:'Barcode',xRef:'Codice',xProduct:'Prodotto',xQty:'Quantità',xWeight:'Peso (kg)',xHeight:'Altezza (cm)',
+xPalTotal:'Totale P{n}',xGrandTotal:'TOTALE',xInstrTitle:'ISTRUZIONI ORDINE / DIFFERENZE',xOrdered:'Ordinato',xLoaded:'Caricato',xBalance:'Residuo',xPalletsLots:'Pallet (lotto): q.tà',xLineOk:'OK',xLinePart:'Parziale',xLineNone:'Non caricato',xSheetPack:'Packing list',xSheetInstr:'Istruzioni'});
+Object.assign(I18N.ru,{tabInv:'Режим',modeFree:'Свободный',modeInv:'Инвентарь',modeOrd:'Заказ',freeTitle:'Свободный счёт',freeIntro:'Сканируйте со своим номером паллеты, вводите количество, экспорт CSV/Excel.',freeActive:'Свободный счёт активен.',freeModeOn:'▶ Начать свободный счёт',
+os_new:'Новый',os_progress:'В работе',os_complete:'Собран',os_closed:'Закрыт',os_open:'Открытые',ordHdr:'ЗАКАЗ · {no} · {p}%',ordSummary:'Сводка заказа',
+ordPick:'Выберите или загрузите заказ',ordPickHint:'Загрузите Excel со столбцами штрихкод / артикул / название / количество. 1 файл = 1 заказ.',ordLoadBtn:'📄 Загрузить заказ (.xlsx)',ordOpenHdr:'Открытые заказы',ordLinesW:'поз.',
+ordNoMatch:'нет в списке',ordRem:'осталось',ordMatch:'Сопоставить',ordCustomerPh:'Клиент',ordProgress:'Загружено {a} / {b} шт ({p}%)',ordLinesHdr:'Позиции заказа',ordPalletsHdr:'Паллеты',ordPalClosed:'закрыта',ordPalOpen:'открыта',
+ordNoPallets:'Паллет пока нет',ordClosedNote:'Заказ закрыт {d}.',ordNewPal:'+ Новая паллета',ordSsccHint:'При проверке паллеты Mi.Da. отсканируйте её этикетку (SSCC) – паллета создастся с этим номером.',
+ordOverShort:'ЛИШНЕЕ',ordOverNote:'⛔ Перегруз – исправьте количество в красных строках.',ordToLoad:'Загрузить',ordAllLoaded:'Все позиции загружены ✓',ordOnPallet:'На этой паллете',ordScanHint:'Сканируйте штрихкоды коробов – товары добавятся на эту паллету.',
+ordToOrder:'К заказу',ordPalEdit:'Обновить паллету',ordPalClose:'Закрыть паллету',ordPickFirst:'Сначала выберите заказ',ordIsClosed:'Заказ закрыт',ordNotInOrder:'Этого товара нет в заказе',ordLineFull:'Позиция собрана ({n}) – больше нельзя',
+ordPalAuto:'Открыта паллета P{n}',ordOverCase:'Будет перегруз – осталось {r} шт',ordComplete:'✓ Заказ {no} собран',ordWeight:'Вес паллеты (кг)',ordHeight:'Высота паллеты (см)',ordPalCloseOk:'✓ Закрыть паллету',ordPalDone:'Паллета P{n} закрыта',
+ordMatchTitle:'Сопоставить товар',ordMatched:'Сопоставлено',ordPalOpened:'Паллета P{n} открыта',ordSsccOther:'Эта паллета относится к заказу {no}',ordPalSscc:'Паллета Mi.Da. добавлена как P{n}',ordNone:'Заказов нет',ordShortNote:'Недогруз в {n} позициях – будет показан как остаток.',
+ordDocsHdr:'Документы',ordPackingBtn:'⬇︎ Упаковочный лист + указания (Excel)',ordPackingHint:'Лист 1: упаковочный лист для клиента (паллета, товар, партия, короба, кол-во, вес, высота). Лист 2: указания для Mi.Da.: заказано / загружено / остаток.',
+ordLabelsBtn:'🏷 Этикетки паллет (PDF)',ordLabelsHint:'Этикетка 100×150 мм на каждую паллету: № заказа, паллета 1/3, содержимое, вес, штрихкод.',ordManageHdr:'Заказ',ordReopen:'Открыть заказ снова',ordCloseOrder:'Закрыть заказ',ordDel:'Удалить заказ',ordOtherHdr:'Другие заказы',
+ordTitle:'Контроль заказов',ordIntro:'Загрузите Excel заказа, создайте паллеты или сканируйте паллеты Mi.Da.; каждый короб проверяется по заказу. Перегруз блокируется, недогруз становится остатком.',ordModeOnNote:'Режим заказа активен: Скан = активная паллета, Список = заказы, Экспорт = упаковочный лист и этикетки.',
+ordModeOn:'▶ Начать режим заказа',ordFileHint:'Столбцы Excel: штрихкод, артикул, название, количество (заголовки TR/EN/IT/DE). № заказа берётся из имени файла.',ordDelQ:'Удалить {no}?',ordDelWarn:'Заказ и все его паллеты будут удалены.',
+ordBadFile:'Не удалось прочитать заказ – нужны количество и штрихкод/артикул/название',ordLoaded:'Заказ {no}: загружено позиций {n}',ordUnmatched:'{n} позиций нет в списке, сопоставьте',ordLabelsReady:'Этикетки готовы',
+xPackTitle:'УПАКОВОЧНЫЙ ЛИСТ',xOrderNo:'№ заказа',xCustomer:'Клиент',xDate:'Дата',xPallets:'Кол-во паллет',xPallet:'Паллета',xPalLabel:'Этикетка паллеты',xBarcode:'Штрихкод',xRef:'Артикул',xProduct:'Товар',xQty:'Кол-во',xWeight:'Вес (кг)',xHeight:'Высота (см)',
+xPalTotal:'Итого P{n}',xGrandTotal:'ВСЕГО',xInstrTitle:'УКАЗАНИЯ ПО ЗАКАЗУ / РАСХОЖДЕНИЯ',xOrdered:'Заказано',xLoaded:'Загружено',xBalance:'Остаток',xPalletsLots:'Паллета (партия): кол-во',xLineOk:'ОК',xLinePart:'Частично',xLineNone:'Не загружено',xSheetPack:'Упаковочный лист',xSheetInstr:'Указания'});
+Object.assign(I18N.en,{tabInv:'Mode',modeFree:'Free',modeInv:'Inventory',modeOrd:'Order',freeTitle:'Free counting',freeIntro:'Scan with your own pallet number, enter quantities, export CSV/Excel.',freeActive:'Free counting is active.',freeModeOn:'▶ Start free counting',
+os_new:'New',os_progress:'In progress',os_complete:'Complete',os_closed:'Closed',os_open:'Open',ordHdr:'ORDER · {no} · {p}%',ordSummary:'Order summary',
+ordPick:'Pick or load an order',ordPickHint:'Load an Excel with barcode / reference / product name / qty columns. 1 file = 1 order.',ordLoadBtn:'📄 Load order (.xlsx)',ordOpenHdr:'Open orders',ordLinesW:'lines',
+ordNoMatch:'not in list',ordRem:'left',ordMatch:'Match',ordCustomerPh:'Customer',ordProgress:'{a} / {b} pcs loaded ({p}%)',ordLinesHdr:'Order lines',ordPalletsHdr:'Pallets',ordPalClosed:'closed',ordPalOpen:'open',
+ordNoPallets:'No pallets yet',ordClosedNote:'Order closed on {d}.',ordNewPal:'+ New pallet',ordSsccHint:'If you are checking a Mi.Da. pallet, scan its label (SSCC) – the pallet is created with that number.',
+ordOverShort:'OVER',ordOverNote:'⛔ Overloaded – correct the red lines.',ordToLoad:'To load',ordAllLoaded:'All lines loaded ✓',ordOnPallet:'On this pallet',ordScanHint:'Scan case barcodes – products are added to this pallet.',
+ordToOrder:'Back to order',ordPalEdit:'Update pallet',ordPalClose:'Close pallet',ordPickFirst:'Pick an order first',ordIsClosed:'Order is closed',ordNotInOrder:'Product not in this order',ordLineFull:'Line complete ({n}) – cannot overload',
+ordPalAuto:'Pallet P{n} opened',ordOverCase:'That would overload – {r} pcs left',ordComplete:'✓ Order {no} complete',ordWeight:'Pallet weight (kg)',ordHeight:'Pallet height (cm)',ordPalCloseOk:'✓ Close pallet',ordPalDone:'Pallet P{n} closed',
+ordMatchTitle:'Match product',ordMatched:'Matched',ordPalOpened:'Pallet P{n} opened',ordSsccOther:'This pallet belongs to order {no}',ordPalSscc:'Mi.Da. pallet added as P{n}',ordNone:'No orders',ordShortNote:'{n} lines short – reported as backorder.',
+ordDocsHdr:'Documents',ordPackingBtn:'⬇︎ Packing list + instruction (Excel)',ordPackingHint:'Sheet 1: packing list for the customer (pallet, product, lot, cases, qty, weight, height). Sheet 2: instruction for Mi.Da.: ordered / loaded / backorder.',
+ordLabelsBtn:'🏷 Pallet labels (PDF)',ordLabelsHint:'One 100×150 mm label per pallet: order no., pallet 1/3, contents, weight, barcode.',ordManageHdr:'Order',ordReopen:'Reopen order',ordCloseOrder:'Close order',ordDel:'Delete order',ordOtherHdr:'Other orders',
+ordTitle:'Order check',ordIntro:'Load the order Excel, build pallets or scan Mi.Da. pallets; every case is checked against the order. Overloading is blocked, shortages become backorder.',ordModeOnNote:'Order mode on: Scan = active pallet, List = orders, Export = packing list and labels.',
+ordModeOn:'▶ Start order mode',ordFileHint:'Excel columns: barcode, reference, product name, qty (headers TR/EN/IT/DE). Order no. from file name.',ordDelQ:'Delete {no}?',ordDelWarn:'The order and all its pallets will be deleted.',
+ordBadFile:'Order could not be read – qty and barcode/reference/name required',ordLoaded:'Order {no}: {n} lines loaded',ordUnmatched:'{n} lines not in list, please match',ordLabelsReady:'Labels ready',
+xPackTitle:'PACKING LIST',xOrderNo:'Order no.',xCustomer:'Customer',xDate:'Date',xPallets:'Pallets',xPallet:'Pallet',xPalLabel:'Pallet label',xBarcode:'Barcode',xRef:'Reference',xProduct:'Product',xQty:'Qty',xWeight:'Weight (kg)',xHeight:'Height (cm)',
+xPalTotal:'P{n} total',xGrandTotal:'GRAND TOTAL',xInstrTitle:'ORDER INSTRUCTION / DIFFERENCES',xOrdered:'Ordered',xLoaded:'Loaded',xBalance:'Backorder',xPalletsLots:'Pallet (lot): qty',xLineOk:'OK',xLinePart:'Partial',xLineNone:'Not loaded',xSheetPack:'Packing list',xSheetInstr:'Instruction'});
+
 'use strict';
 const PRODUCTS=[["8053839950161","SAO001","SONO ARGAN OIL",30,200,""],["8053839950178","SAO002","SONO ARGAN OIL",100,36,""],["8053839950109","SASH002","SONO ARGAN SHAMPOO 250",250,48,""],["8053839950093","SACN002","SONO ARGAN CONDITIONER",250,48,""],["8053839950130","SADM001","SONO ARGAN DEEP MASK box",250,32,""],["8053839950123","SALM002","SONO ARGAN LEAVE IN MASK box",150,64,""],["8053839950154","SALMM002","SONO ARGAN LEAVE IN MASK",50,100,""],["8053839950024","SAA001","SONO COLOR SHAMPOO",250,48,""],["8053839950000","SAA002","SONO COLOR MASK box",250,32,""],["8053839950246","SSO002","SONO BLONDER OIL",100,36,""],["8053839950062","SSH001","SONO SILVER SHAMPOO",250,48,""],["8053839950048","SSMA02","SONO SILVER MASK box",250,32,""],["8053839950192","SSSI01","SONO SILVER SILK box",150,64,""],["8053839950321","SSSIM011","SONO SILVER SILK",50,100,""],["8053839950239","SSS003","SONO STYLE SALT WAVE",150,64,""],["8053839950338","SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250,48,""],["8053839950352","SGM001","SONO GOLD RESTRUCTURING MASK",150,64,""],["8053839950376","SSG001","SONO SILKY GOLD",150,64,""],["8053839950277","SKSH001","SONO KERATIN SHAMPOO",250,48,""],["8053839950284","SKCN001","SONO KERATIN CONDITIONER",250,48,""],["8053839950314","SAAP001","Sono Color Potion 150 ml",150,64,""],["8053839950857","SSG002","Silky Gold 50 ml",50,100,""],["8053839950956","SCP050","Sono Color Potion 50 ml",50,100,""],["8053839950116","SASH003","SONO ARGAN SHAMPOO 1000",1000,12,""],["8053839950086","SACN003","SONO ARGAN CONDITIONER",1000,12,""],["8053839950536","SKSH002","SONO KERATIN SHAMPOO",1000,12,""],["8053839951151","SSVS150","VOLUME SPRAY",150,64,""],["8053839951182","SSTP150","THERMO-PROTECTIVE SPRAY",150,80,""],["8053839950031","SAA003","SONO COLOR SHAMPOO 1000 ml",1000,12,""],["8053839950345","SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000,12,""],["8053839951168","SSVM150","Sono Volume Mousse",150,48,""],["8053839951199","SSBW150","BEACH WAVES SPRAY",150,64,""],["8053839950680","SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250,48,""],["8053839950697","SVMA001","THE VOLUMIZING MASK 250 ml",250,32,""],["8053839950079","SSH003","SONO SILVER SHAMPOO 1000 ml",1000,12,""],["8053839951755","SAPGS25","SONO Argan Perfume Gift Set 2025","",18,""],["8053839951472","SGCN1000","SONO GOLD Conditioner 1000 ml",1000,12,""],["8053839951489","SGCN0250","SONO GOLD Conditioner 250 ml",250,48,""],["8053839951496","SSCN1000","SONO Silver Conditioner 1000 ml",1000,12,""],["8053839951502","SSCN0250","SONO Silver Conditioner 250 ml",250,48,""],["8053839951618","SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250,48,""],["8053839951519","SCCN1000","SONO Color Conditioner 1000 ml",1000,12,""],["8053839951649","SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250,48,""],["8053839951700","SKHP001","SONO KERATIN PERFUME",30,256,""],["8053839951526","SCCN0250","SONO Color Conditioner 250 ml",250,48,""],["8053839951281","SSDRS200","SPRAY DRY SHAMPOO","",12,""],["8053839951311","SSFSPR300","FIX SPRAY","",12,""],["8053839951564","SCSH250","SONO THE CURL SHAMPOO",250,48,""],["8053839951588","SCMA250","SONO CURL MASK",250,32,""],["8053839951601","SCLG150","SONO CURL LIQUID GEL",150,64,""],["8053839951632","SDLT150","SONO ANTI-DANDRUFF LOTION",150,64,""],["8053839951656","SGFM050","SONO GOLD  LIQUID FILLER MASK",50,100,""],["8053839951663","SBLM050","SONO BLONDER LIQUID MASK",50,100,""],["8053839951670","SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250,48,""],["8053839951687","SHLCN250","SONO HAIR-LOSS CONDITIONER",250,48,""],["8053839951694","SHLT150","SONO HAIR-LOSS LOTION",150,64,""],["8053839951717","SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100,36,""],["8053839950475","SAOM02","ARGAN OIL 10 ML",10,800,""],["8053839950437","SASHS02","ARGAN SHAMPOO 10 ML",10,800,""],["8053839950444","SACNS02","ARGAN CONDITIONER 10 ML",10,800,""],["8053839950451","SADMS01","ARGAN DEEP MASK 10 ML",10,800,""],["8053839950468","SALMS02","ARGAN LEAVE IN MASK 10 ML",10,800,""],["8053839950482","SAAS001","COLOR SHAMPOO 10 ML",10,800,""],["8053839950499","SAAS002","ANTI-AGE MASK 10 ML",10,800,""],["8053839950390","SAHS01","SILVER SHAMPOO 10 ML",10,800,""],["","","SONO Silver Conditioner 10 ml",10,800,""],["8053839950406","SSMS01","SILVER MASK 10 ML",10,800,""],["8053839950413","SSSS01","SONO SILVER SILK SPRAY 10ML",10,800,""],["8053839950567","SKSHS01","SONO KERATIN SHAMPOO",10,800,""],["8053839950574","SKCNS01","SONO KERATIN CONDITIONER",10,800,""],["8053839950376_","SSGS01","SONO SILKY GOLD",10,800,""],["8053839950529","SACNS02","SONO Kraft Bag 18X24X8 cm","","",""],["8053839951120","SWB001","SMAL SONO WHITE BAG","",200,""],["","SADM002","SONO ARGAN DEEP MASK",500,16,""],["","SAA004","SONO COLOR MASK",500,16,""],["","SSO001","SONO BLONDER OIL",30,200,""],["","SSMA01","SONO SILVER MASK",500,16,""],["","SGM002","SONO GOLD RESTRUCTURING MASK",500,16,""],["","SGF002","SONO GOLD FILLER",250,48,""],["","SGA001","SONO GOLD AMPOULE","6 x 10 ml",32,"noteSGA"],["","SKCN002","SONO KERATIN CONDITIONER",1000,12,""],["","SSS004","SONO STYLE SALT WAVE",50,100,""],["","SSGG150","LIQUID GEL",150,64,""],["","SSDC050","STYLING PASTE",50,112,""],["","SSDCSH250","SONO STYLE DEEP CLEANSING SHAMPOO 250 ml",250,48,""],["","SSDCSH1000","SONO STYLE DEEP CLEANSING SHAMPOO 1000 ml",1000,12,""],["","SAPD001","SONO DETOX LOTION 150 ML",150,64,""],["","SAPSH001","SONO DETOX SHAMPOO 250 ML",250,48,""],["","SAPM001","SONO DETOX MASK 150 ML",150,64,""],["","SAPS001","SONO DETOX SPRAY 150 ML",150,64,""],["","SVSP001","SONO VOLUME VOLUMIZING  SPRAY 150 ml",150,64,""],["","SCSH1000","SONO CURL SHAMPOO 1000 ML",1000,12,""],["","SCMA500","SONO CURL MASK 500 ML",500,16,""],["","SDSH1000","SONO ANTI-DANDRUFF SHAMPOO 1000 ML",1000,12,""],["","SCP010","SONO COLOR POTION",10,800,""],["","SSOS01","SONO SILVER OIL",10,800,""],["","SGSS01","SONO GOLD RESTRUCTURING SHAMPOO",10,800,""],["","SGMS01","SONO GOLD RESTRUCTURING MASK",10,800,""],["","KWB001","SMALL SONO WHITE BAG","",200,""],["","SGP00","SONO GOLD PERFUME",30,256,""],["","SAP00","SONO ARGAN PERFUME",30,256,""],["","SBP00","SONO BLONDER PERFUME",30,256,""]];
-const VERSION='2.1';
+const VERSION='2.2';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const LS='palet_sayim_v1';
-const DEF={lang:'auto',entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false,inv:null,invBlind:true,invQuick:false,invFilter:'all',invTol:'case',invRecount:'now',invPlusCase:false};
+const DEF={lang:'auto',entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false,inv:null,invBlind:true,invQuick:false,invFilter:'all',invTol:'case',invRecount:'now',invPlusCase:false,appMode:'free',invActive:null};
 let S=Object.assign({},DEF,(()=>{try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}}})());
 if(S.mode==='plus')S.mode='plusu';
 if(Array.isArray(S.extra)||typeof S.extra!=='object')S.extra={};
@@ -987,6 +1103,8 @@ async function startCamera(){
   torchOn=false;zoomOn=false;$('#torchBtn').classList.remove('on');$('#zoomBtn').classList.remove('on');
   $('#camStart').classList.add('hidden');
   scanning=true;requestAnimationFrame(loop);
+  if(inInv()){if(W&&W.render)W.render();else ensureWork()}
+  if(inOrd())renderOrdWork();
 }
 function stopCamera(userIntent=true){
   if(userIntent)wantCam=false;
@@ -1061,10 +1179,18 @@ function onScan(code,format){
   // product from GS1 or plain code
   let p=null,pre=null;
   if(g&&g.gtin){const ean=gtinToEan13(g.gtin);p=lookup(ean)||lookup(g.gtin)||{barcode:ean,ref:'',name:'',vol:'',unknown:true};pre={lot:g.lot||'',exp:g.exp||'',count:g.count||0,isCase:g.isCase}}
-  if(ctx==='invPallet'){
-    if(sheetScan&&invSheetScan){cool={code:ck,until:Date.now()+(S.invPlusCase?(+S.cool||1200):4000)};if(!p&&!sscc)p=lookup(code.replace(/[\x00-\x1f]/g,''))||invCodeProduct(code)||null;invSheetScan({p,pre,sscc,code});return}
+  if(inOrd()){
+    if(sscc){cool={code:ck,until:Date.now()+2500};scanOk();ordPalletBySSCC(sscc);return}
+    cool={code:ck,until:Date.now()+(S.ordPlusCase?(+S.cool||1200):3000)};
+    const cc=code.replace(/[\x00-\x1f]/g,'');
+    if(!p&&!(f==='DATA_MATRIX'&&!g))p=lookup(cc)||{barcode:/^\d{8,14}$/.test(cc)?cc:'',ref:/^\d{8,14}$/.test(cc)?'':cc,name:'',unknown:true};
+    if(!p&&f==='DATA_MATRIX'){scanOk();showRawCode(code,f);return}
+    ordScan({p,pre,code:cc});return;
+  }
+  if(inInv()){
+    if(sscc){cool={code:ck,until:Date.now()+2500};if(W&&W.id===sscc){scanOk();toast(t('invSamePallet'));return}scanOk();invOpenPallet(sscc);return}
+    if(W&&W.onScan){cool={code:ck,until:Date.now()+(S.invPlusCase?(+S.cool||1200):4000)};if(!p&&!(f==='DATA_MATRIX'&&!g))p=lookup(code.replace(/[\x00-\x1f]/g,''))||invCodeProduct(code)||null;if(!p&&f==='DATA_MATRIX'){scanOk();showRawCode(code,f);return}W.onScan({p,pre,sscc:null,code});return}
     cool={code:ck,until:Date.now()+2500};
-    if(sscc){scanOk();invOpenPallet(sscc);return}
     if(!p&&!(f==='DATA_MATRIX'&&!g))p=lookup(code)||invCodeProduct(code);
     if(p){scanOk();invProductPick(p,code);return}
     scanOk();showRawCode(code,f);return;
@@ -1307,13 +1433,18 @@ function openManualSheet(){
 
 /* ---------- render ---------- */
 function renderTop(){
-  const invHead=!!S.inv&&(cur==='inv'||ctx==='invPallet');
+  const invHead=inInv();
   $$('.ptot').forEach(e=>e.classList.toggle('hidden',invHead));
-  $('#palletBtn .lbl').textContent=invHead?t('invHdr'):t('palletLbl');
-  if(invHead){const c=invCounts();const n=$('#palletNo');n.textContent='📋 '+(c.all-c.pending)+' / '+c.all;n.className='pno';}
+  if(invHead){const c=invCounts();$('#palletBtn .lbl').textContent=t('invHdr2',{a:c.all-c.pending,b:c.all});const n=$('#palletNo');
+    if(S.invActive){n.textContent='📦 '+shortId(S.invActive);n.className='pno mono'}else{n.textContent=t('invScanPallet');n.className='pno none'}}
+  else if(inOrd()){const o=ordCur(),pl=palCur(o);$$('.ptot').forEach(e=>e.classList.add('hidden'));
+    $('#palletBtn .lbl').textContent=o?t('ordHdr',{no:o.no,p:ordTot(o).pct}):t('modeOrd').toUpperCase();const n=$('#palletNo');
+    if(pl){n.textContent='📦 P'+pl.n+' · '+shortId(pl.label);n.className='pno'}else{n.textContent=o?t('ordSummary'):t('ordPick');n.className='pno'+(o?'':' none')}}
+  else $('#palletBtn .lbl').textContent=t('palletLbl');
+  if(invHead||inOrd()){}
   else{const n=$('#palletNo');n.textContent=S.pallet||t('palletPick');n.className='pno'+(S.pallet?'':' none');}
   const st=palletStats(S.pallet);$('#pItems').textContent=st.items;$('#pQty').textContent=st.qty;
-  const un=S.entries.filter(e=>e.ts>S.lastExport).length;const b=$('#expBadge');b.textContent=un;b.classList.toggle('hidden',!un);
+  const un=S.entries.filter(e=>e.ts>S.lastExport).length;const b=$('#expBadge');b.textContent=un;b.classList.toggle('hidden',!un||inInv()||inOrd());
 }
 function rowHtml(e,cls='ritem'){
   return `<button class="${cls} ${e.name||e.ref?'':'unk'}" data-id="${e.id}"><div class="nm"><div>${esc(displayName(e))}</div><div>${fHM(e.ts)} · ${e.ref?esc(e.ref)+' · ':''}${e.barcode?esc(e.barcode):t('noBarcode')}${e.lot?' · <span class="lot">'+t('lot')+' '+esc(e.lot)+'</span>':''}${e.cases?' · '+t('nCases',{n:e.cases})+(e.units?' + '+e.units:''):''}</div></div><div class="q">${e.qty}</div></button>`;
@@ -1409,8 +1540,8 @@ function renderPcList(){
 function setSeg(sel,attr,val){$$(sel+' button').forEach(b=>b.classList.toggle('on',b.dataset[attr]===val))}
 function renderAll(){
   renderTop();renderRecent();setSeg('#modeSeg','mode',S.mode);
-  if(cur==='list'){setSeg('#listSeg','lm',S.listMode);$('#onlyActive').classList.toggle('on',!!S.onlyActive);renderList()}
-  if(cur==='export')renderExport();
+  if(cur==='list'&&!inInv()&&!inOrd()){setSeg('#listSeg','lm',S.listMode);$('#onlyActive').classList.toggle('on',!!S.onlyActive);renderList()}
+  if(cur==='export'&&!inInv()&&!inOrd())renderExport();
   if(cur==='set')renderSettings();
   if(cur==='inv')renderInv();
   renderBanner();
@@ -1433,14 +1564,14 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 /* ---------- wire up ---------- */
-function needPallet(after){if(ctx==='free'&&!S.pallet){openPalletSheet(after,t('enterPalletFirst'));return true}return false}
+function needPallet(after){if(!inInv()&&!inOrd()&&!S.pallet){openPalletSheet(after,t('enterPalletFirst'));return true}return false}
 $('#startBtn').onclick=()=>{unlockAudio();if(needPallet(()=>startCamera()))return;startCamera()};
 $('#stopBtn').onclick=()=>stopCamera(true);
 $('#torchBtn').onclick=async()=>{if(!track)return;torchOn=!torchOn;try{await track.applyConstraints({advanced:[{torch:torchOn}]})}catch(e){torchOn=false}$('#torchBtn').classList.toggle('on',torchOn)};
 $('#zoomBtn').onclick=async()=>{if(!track)return;zoomOn=!zoomOn;try{await track.applyConstraints({advanced:[{zoom:zoomOn?2:1}]})}catch(e){zoomOn=false}$('#zoomBtn').classList.toggle('on',zoomOn)};
-$('#palletBtn').onclick=()=>{unlockAudio();if(S.inv&&(cur==='inv'||ctx==='invPallet'))return invManualPallet();openPalletSheet()};
+$('#palletBtn').onclick=()=>{unlockAudio();if(inInv())return invManualPallet();if(inOrd()){if(ordCur()){S.ordActive.p=null;save();showView('scan');renderAll()}else showView('list');return}openPalletSheet()};
 $('#finishBtn').onclick=()=>finishPallet();
-$('#manualBtn').onclick=()=>{unlockAudio();if(ctx==='invPallet')return invManualPallet();if(needPallet(()=>openManualSheet()))return;openManualSheet()};
+$('#manualBtn').onclick=()=>{unlockAudio();if(inInv())return invManualPallet();if(needPallet(()=>openManualSheet()))return;openManualSheet()};
 $('#modeSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.mode=b.dataset.mode;save();setSeg('#modeSeg','mode',S.mode);
   toast(t(S.mode==='plusc'?'modeToastC':S.mode==='plusu'?'modeToastU':'modeToastAsk'))};
 function editEntry(id){const en=S.entries.find(x=>x.id===id);if(en)openQtySheet({barcode:en.barcode,ref:en.ref,name:en.name,vol:en.vol},en)}
@@ -1619,7 +1750,8 @@ function ensureXLSX(){
 }
 
 /* ---------- Inventory control ---------- */
-let ctx='free'; // 'free' | 'invPallet'
+const inInv=()=>S.appMode==='inv'&&!!S.inv;
+let W=null; // active inventory workspace
 const normLot=l=>String(l||'').toUpperCase().replace(/\s+/g,'').replace(/O/g,'0');
 const lotTypo=l=>{const s=String(l||'').toUpperCase();return /O/.test(s)&&/^[0-9A-FO]+$/.test(s)&&/\d/.test(s)};
 const shortId=id=>String(id).length>10?'…'+String(id).slice(-10):String(id);
@@ -1718,15 +1850,11 @@ function legacyFound(rec,rows){
 function badge(st,open){return `<span class="stb st-${st}">${t('st_'+st)}</span>${open?` <span class="stb st-open">${t('st_open')}</span>`:''}`}
 
 /* ---------- pallet sheet ---------- */
-function invOpenPallet(id,opts={}){
+function invWorkOpen(id,opts={}){
   if(!S.inv)return;
-  if(!S.inv.order.includes(id)&&!(S.inv.pal[id]&&S.inv.pal[id].isNew)){
-    const linked=Object.keys(S.inv.pal).find(k=>S.inv.pal[k].link===id);
-    if(linked)id=linked;else return invUnknownPallet(id);
-  }
   const rec=S.inv.pal[id]||{};legacyFound(rec,invRows(id));
   const rows=invRows(id),isNew=!!rec.isNew,G=groupsOf(rows);
-  const live=cur==='scan'&&scanning;
+  const live=scanning;
   const dr=S.inv.drafts&&S.inv.drafts[id]&&rec.recount!=='pending'?S.inv.drafts[id]:null;
   let found=((dr&&dr.found)||rec.found||[]).map(f=>({...f,c:f.c===''||f.c==null?'':String(f.c),u:f.u===''||f.u==null?'':String(f.u),pc:f.pc?String(f.pc):''}));
   let absent={...((dr&&dr.absent)||rec.absent||{})};
@@ -1755,11 +1883,11 @@ function invOpenPallet(id,opts={}){
     </div>`;
   };
   const render=(scrollTo)=>{
-    const keepScroll=$('#sheet').classList.contains('hidden')?0:$('#sheet').scrollTop;
+    const vs=$('#v-scan'),keepScroll=vs.scrollTop;
     const st=invStatus(id);const blind=!!S.invBlind||round===1;
     const marks=G.map(g=>{const fs=found.filter(f=>sameIds(g.ids,idsOf(f)));return {g,any:fs.length>0,lotOk:fs.some(f=>normLot(f.lot)===normLot(g.lot))}});
     const unmatched=marks.filter(m=>!m.any&&!absent[m.g.key]);
-    const sh=openSheet(`
+    const sh=$('#invWork');sh.innerHTML=`<div class="wsp">
       <div class="hd"><h3>${t('palletWord')} <span class="mono">${esc(shortId(id))}</span> ${badge(st,rec.flagOpen)}</h3><button class="mini" data-a="cancel" style="font-size:20px">✕</button></div>
       <div class="pmeta mono">${esc(id)}${rec.link?' · '+t('invLinkedTo',{p:esc(rec.link)}):''}${opts.noLabel||rec.noLabel?' · '+t('invNoLabel'):''}</div>
       ${round===1?`<div class="rbanner">${t('invRecountBanner')}</div>`:''}
@@ -1778,15 +1906,15 @@ function invOpenPallet(id,opts={}){
       <div class="tgl"><span>${t('invQuickMode')}</span><button class="sw ${quickView?'on':''}" data-a="qv"></button></div>
       ${confirmMissing&&unmatched.length?`<div class="note w">${t('invUnmatchedWarn',{n:unmatched.length})}</div>`:''}
       <input id="invNote" placeholder="${esc(t('invNotePh'))}" value="${esc(note)}" autocomplete="off" style="margin-top:8px">
-      <div class="acts">
+      <div class="acts sticky-acts">
         ${isNew?'':`<button class="btn danger" data-a="missing">${t('invMissing')}</button>`}
         ${quickView?`<button class="btn primary" data-a="quick">${t('invQuickOk')}</button>`:`<button class="btn primary" data-a="save">${round===1?t('invSave2'):t('invSave')}</button>`}
       </div>
-      ${rec.checkedAt?`<div class="acts"><button class="btn ghost" data-a="reset">${t('invReset')}</button></div>`:''}`,null,{scan:live,half:live});
-    sh.scrollTop=keepScroll;if(dirty)saveDraft();
-    if(scrollTo){const el=sh.querySelector(`[data-fid="${scrollTo}"]`);if(el)el.scrollIntoView({block:'nearest'})}
+      ${rec.checkedAt?`<div class="acts"><button class="btn ghost" data-a="reset">${t('invReset')}</button></div>`:''}</div>`;
+    vs.scrollTop=keepScroll;if(dirty)saveDraft();
+    if(scrollTo){const el=sh.querySelector(`[data-fid="${scrollTo}"]`);if(el)el.scrollIntoView({block:'center'})}
     wire(sh);
-    invSheetScan=live?onSheetScan:null;
+    W={id,onScan:onSheetScan,get dirty(){return dirty},saveDraft,render:()=>render()};
   };
   const updTot=k=>{const f=found[+k];const el=$(`[data-tot="${k}"]`);if(el)el.textContent=f.c===''&&f.u===''?'–':fQty(f)};
   const showSug=(k,q)=>{const box=$(`[data-sug="${k}"]`);if(!box)return;const w=q.trim().toLowerCase().split(/\s+/).filter(Boolean);
@@ -1828,19 +1956,20 @@ function invOpenPallet(id,opts={}){
       if(a==='plus'){S.invPlusCase=!S.invPlusCase;save();return render()}
       if(a==='qv'){quickView=!quickView;return render()}
       if(a==='lv3'){level3=!level3;return render()}
-      if(a==='cancel')return closeSheet();
-      if(a==='cam'){saveDraft();closeSheet();invStartScan();let n=0;const w=()=>{if(scanning)invOpenPallet(id,opts);else if(n++<60)setTimeout(w,150)};w();return}
-      if(a==='reset'){dropDraft();const keep=rec.link?{link:rec.link}:null;delete S.inv.pal[id];if(keep)S.inv.pal[id]=keep;save();closeSheet();renderAll();return toast(t('invResetDone'))}
+      if(a==='cancel')return wsClose(true);
+      if(a==='cam'){unlockAudio();startCamera().then(()=>render());return}
+      if(a==='reset'){dropDraft();const keep=rec.link?{link:rec.link}:null;delete S.inv.pal[id];if(keep)S.inv.pal[id]=keep;save();wsClose();return toast(t('invResetDone'))}
       if(a==='missing'){if(!missOk){missOk=true;b.textContent=t('invMissingSure');b.className='btn dangerfill';return}
         dropDraft();S.inv.pal[id]={...base(),missing:true,checkedAt:Date.now(),device:S.device||'',note,flagOpen:false,res:G.map(g=>({key:g.key,type:'missing',rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt:0,diff:-g.exp,lotExp:g.lot,lotCnt:'',pc:0,c:0,u:0}))};
-        save();closeSheet();renderAll();beepSaved();return toast(t('invMissingDone'),'warn')}
+        save();wsClose();beepSaved();return toast(t('invMissingDone'),'warn')}
       if(a==='quick'){
         dropDraft();S.inv.pal[id]={...base(),quick:true,level:1,checkedAt:Date.now(),device:S.device||'',note,flagOpen:!!rec.link,diff:false,reasons:rec.link?['r_link']:[],
           res:G.map(g=>({key:g.key,type:'quick',rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt:null,diff:null,lotExp:g.lot,lotCnt:g.lot,pc:0,c:'',u:''}))};
-        save();closeSheet();renderAll();beepSaved();return toast(t('invQuickDone',{p:shortId(id)}),'ok')}
+        save();wsClose();beepSaved();return toast(t('invQuickDone',{p:shortId(id)}),'ok')}
       if(a==='save')return doSave();
     };
   };
+  const wsClose=keepDraft=>{if(keepDraft&&dirty)saveDraft();S.invActive=null;W=null;save();renderAll()};
   const base=()=>{const o={};if(rec.link)o.link=rec.link;if(isNew)o.isNew=true;if(opts.noLabel||rec.noLabel)o.noLabel=true;if(rec.rcodes)o.rcodes=rec.rcodes;return o};
   const doSave=()=>{
     note=($('#invNote')||{}).value||'';
@@ -1860,7 +1989,7 @@ function invOpenPallet(id,opts={}){
       const rc1=Object.fromEntries(ex.map(p=>[p.key,p.cnt]));
       if(S.invRecount==='later'){
         dropDraft();S.inv.pal[id]={...base(),recount:'pending',rc1,found:nums,absent,level:2,checkedAt:Date.now(),device:S.device||'',note,flagOpen:false,diff:true,res:P};
-        save();closeSheet();renderAll();beepWarn();return toast(t('invRecountLater',{n:ex.length}),'warn');
+        save();wsClose();beepWarn();return toast(t('invRecountLater',{n:ex.length}),'warn');
       }
       first=rc1;recKeys=Object.keys(rc1);round=1;
       for(const p of ex)for(const f of found)if(pairHas(p,f)){f.c='';f.u=''}
@@ -1878,27 +2007,12 @@ function invOpenPallet(id,opts={}){
     const diff=P.some(p=>p.diff!==0||p.type!=='match');
     dropDraft();S.inv.pal[id]={...base(),level:level3?3:2,checkedAt:Date.now(),device:S.device||'',note,found:nums,absent,res:P,diff,
       flagOpen:!level3&&reasons.size>0,reasons:[...reasons],recount:round===1?'done':undefined,rc1:round===1?first:undefined,rc2:round===1?rc2:undefined};
-    save();closeSheet();renderAll();showResult(id);
+    save();showResult(id);
   };
   render();
 }
 const TYPE_TXT=p=>p.type==='match'?(p.diff===0?t('ty_ok'):t('ty_qty')):t('ty_'+p.type);
 const RCODES=['rc_count','rc_damaged','rc_uom','rc_moved','rc_shipped','rc_label','rc_lot','rc_other'];
-function showResult(id){
-  const rec=S.inv.pal[id];const P=rec.res||[];
-  if(!rec.diff&&!rec.flagOpen){beepSaved();toast(t('invOk',{p:shortId(id)}),'ok');return}
-  if(rec.flagOpen)beepErr();else beepSaved();
-  rec.rcodes=rec.rcodes||{};
-  const sh=openSheet(`<h3>${t('palletWord')} <span class="mono">${esc(shortId(id))}</span> ${badge(invStatus(id),rec.flagOpen)}</h3>
-    ${P.map(p=>`<div class="resl"><div class="nm"><div>${p.type==='extra'?'+ ':''}${esc(p.name||p.code)}</div>
-      <div>${TYPE_TXT(p)} · ${t('lot')} ${esc(p.lotCnt||p.lotExp||'–')}${p.type==='lot'?' <span class="tag warnt">≠ '+esc(p.lotExp)+'</span>':''}${p.r1!=null?' · '+t('invCounts',{a:p.r1,b:p.r2}):''}</div>
-      ${p.diff!==0||p.type!=='match'?`<select class="rcs" data-rc="${esc(p.key)}"><option value="">${t('rcPick')}</option>${RCODES.map(c=>`<option value="${c}" ${rec.rcodes[p.key]===c?'selected':''}>${t(c)}</option>`).join('')}</select>`:''}</div>
-      <div class="rq"><span class="mut">${t('invReport')} ${p.exp}</span><b>${p.cnt}</b><span class="${p.diff>0?'pos':p.diff<0?'neg':'mut'}">${p.diff>0?'+':''}${p.diff}</span></div></div>`).join('')}
-    ${rec.flagOpen?`<div class="note w">${t('invOpenNote')}<br>${rec.reasons.map(r=>'• '+t(r)).join('<br>')}</div>`:''}
-    <div class="acts"><button class="btn ghost" data-a="edit">${t('invEdit')}</button><button class="btn primary" data-a="next">${t('invNext')}</button></div>`);
-  sh.onchange=ev=>{const s=ev.target.closest('select[data-rc]');if(!s)return;rec.rcodes[s.dataset.rc]=s.value;save()};
-  sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.a==='edit'){closeSheet();invOpenPallet(id)}if(b.dataset.a==='next')closeSheet()};
-}
 function invUnknownPallet(sid){
   const sh=openSheet(`<h3>${t('invUnknownTitle')}</h3><div class="pmeta mono">${esc(sid)}</div>
     <div class="note w">${t('invUnknownHint')}</div>
@@ -1947,17 +2061,115 @@ function invManualPallet(){
   sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.pal){closeSheet();invOpenPallet(b.dataset.pal);return}if(b.dataset.unk){closeSheet();invUnknownPallet(b.dataset.unk);return}if(b.dataset.a==='cancel')closeSheet()};
   try{inp.focus()}catch(e){}
 }
+
+/* ---------- mode & active pallet ---------- */
+function invOpenPallet(id,opts={}){
+  if(!S.inv)return;
+  if(!S.inv.order.includes(id)&&!(S.inv.pal[id]&&S.inv.pal[id].isNew)){
+    const linked=Object.keys(S.inv.pal).find(k=>S.inv.pal[k].link===id);
+    if(linked)id=linked;else return invUnknownPallet(id);
+  }
+  if(W&&W.id&&W.id!==id&&W.dirty&&W.saveDraft){W.saveDraft();toast(t('invDraftKept',{p:shortId(W.id)}),'warn')}
+  S.appMode='inv';S.invActive=id;S.invActiveOpts=opts||{};save();W=null;
+  if(sheetOpen())closeSheet();
+  if(cur!=='scan')showView('scan');else renderAll();
+  setTimeout(()=>{const v=$('#v-scan'),w=$('#invWork');if(v&&w)v.scrollTop=Math.max(0,w.offsetTop-$('#cam').offsetHeight*0.15)},30);
+}
+function ensureWork(){
+  if(!inInv())return;
+  if(S.invActive){if(!W||W.id!==S.invActive||W.result){if(W&&W.result&&W.id===S.invActive)return;invWorkOpen(S.invActive,S.invActiveOpts||{})}return}
+  if(W&&W.result)return;
+  renderWorkEmpty();
+}
+function renderWorkEmpty(){
+  W=null;const el=$('#invWork');if(!el)return;
+  const c=invCounts();
+  const recent=Object.entries(S.inv.pal).filter(([k,v])=>v.checkedAt).sort((a,b)=>b[1].checkedAt-a[1].checkedAt).slice(0,4).map(([k])=>k);
+  const drafts=Object.keys(S.inv.drafts||{}).filter(k=>!(S.inv.pal[k]&&S.inv.pal[k].checkedAt)).slice(0,4);
+  el.innerHTML=`<div class="card invempty">
+      <div class="bigic">📦</div><b>${t('invScanPallet')}</b>
+      <p class="mut">${t('invEmptyHint')}</p>
+      ${!scanning?`<button class="btn primary wide" data-w="cam">${t('invScanHere')}</button>`:''}
+      <div class="row2"><button class="btn ghost wide" data-w="find">🔍 ${t('invFindPallet')}</button><button class="btn ghost wide" data-w="list">☰ ${t('invFromList')}</button></div>
+      <div class="prog"><i style="width:${c.all?Math.round((c.all-c.pending)*100/c.all):0}%"></i></div>
+      <div class="mut" style="font-size:13px">${t('invProgress',{a:c.all-c.pending,b:c.all})}${c.open?' · '+c.open+' '+t('st_open'):''}${c.recount?' · '+c.recount+' '+t('st_recount'):''}</div>
+    </div>
+    ${drafts.length?`<div class="sect">${t('invDraftsHdr')}</div><div class="recent">${drafts.map(palItem).join('')}</div>`:''}
+    ${recent.length?`<div class="sect">${t('invRecentHdr')}</div><div class="recent">${recent.map(palItem).join('')}</div>`:''}`;
+}
+function showResult(id){
+  const rec=S.inv.pal[id];const P=rec.res||[];
+  S.invActive=null;save();
+  if(!rec.diff&&!rec.flagOpen){W=null;beepSaved();toast(t('invOk',{p:shortId(id)}),'ok');renderAll();return}
+  if(rec.flagOpen)beepErr();else beepSaved();
+  rec.rcodes=rec.rcodes||{};
+  W={id,result:true};
+  const el=$('#invWork');
+  el.innerHTML=`<div class="card resc"><h3 style="margin:0 0 6px">${t('palletWord')} <span class="mono">${esc(shortId(id))}</span> ${badge(invStatus(id),rec.flagOpen)}</h3>
+    ${P.map(p=>`<div class="resl"><div class="nm"><div>${p.type==='extra'?'+ ':''}${esc(p.name||p.code)}</div>
+      <div>${TYPE_TXT(p)} · ${t('lot')} ${esc(p.lotCnt||p.lotExp||'–')}${p.type==='lot'?' <span class="tag warnt">≠ '+esc(p.lotExp)+'</span>':''}${p.r1!=null?' · '+t('invCounts',{a:p.r1,b:p.r2}):''}</div>
+      ${p.diff!==0||p.type!=='match'?`<select class="rcs" data-rc="${esc(p.key)}"><option value="">${t('rcPick')}</option>${RCODES.map(c=>`<option value="${c}" ${rec.rcodes[p.key]===c?'selected':''}>${t(c)}</option>`).join('')}</select>`:''}</div>
+      <div class="rq"><span class="mut">${t('invReport')} ${p.exp}</span><b>${p.cnt}</b><span class="${p.diff>0?'pos':p.diff<0?'neg':'mut'}">${p.diff>0?'+':''}${p.diff}</span></div></div>`).join('')}
+    ${rec.flagOpen?`<div class="note w">${t('invOpenNote')}<br>${rec.reasons.map(r=>'• '+t(r)).join('<br>')}</div>`:''}
+    <div class="acts"><button class="btn ghost" data-w="edit" data-id="${esc(id)}">${t('invEdit')}</button><button class="btn primary" data-w="next">${t('invNext')}</button></div></div>`;
+  el.onchange=ev=>{const s=ev.target.closest('select[data-rc]');if(!s)return;rec.rcodes[s.dataset.rc]=s.value;save()};
+  el.onclick=null;el.oninput=null;
+  renderTop();
+}
+function invSetMode(on){
+  if(on&&!S.inv)return;
+  if(!on&&W&&W.dirty&&W.saveDraft)W.saveDraft();
+  S.appMode=on?'inv':'free';S.modeTab=null;if(!on){W=null}save();
+  if(on){showView('scan');renderAll();unlockAudio();if(!scanning)startCamera()}else renderAll();
+}
+
+/* ---------- Liste (inventory pallets) ---------- */
 function palItem(id){
   const rows=invRows(id),rec=S.inv.pal[id]||{},st=invStatus(id);
   const f0=(rec.found||[])[0];
   const desc=rows.length?rows[0].desc+(rows.length>1?' +'+(rows.length-1):''):(f0?f0.name:'');
   const lot=rows.length?rows[0].lot:(f0?f0.lot:'');
   const q=rows.reduce((a,r)=>a+r.qty,0);
-  return `<button class="ritem pal" data-pal="${esc(id)}"><div class="nm"><div><span class="mono">${esc(shortId(id))}</span> ${esc(desc)}</div><div>${t('lot')} ${esc(lot||'–')}${S.invBlind||!rows.length?'':' · '+q+' '+t('pcs')}${rec.noLabel?' · '+t('invNoLabel'):''}${rec.device&&rec.device!==S.device?' · 📱'+esc(rec.device):''}${rec.note?' · 📝':''}${S.inv.drafts&&S.inv.drafts[id]?' · ✏️ '+t('invDraft'):''}</div></div>${badge(st,rec.flagOpen)}</button>`;
+  return `<button class="ritem pal ${S.invActive===id?'act':''}" data-pal="${esc(id)}"><div class="nm"><div><span class="mono">${esc(shortId(id))}</span> ${esc(desc)}</div><div>${t('lot')} ${esc(lot||'–')}${S.invBlind||!rows.length?'':' · '+q+' '+t('pcs')}${rec.noLabel?' · '+t('invNoLabel'):''}${rec.device&&rec.device!==S.device?' · 📱'+esc(rec.device):''}${rec.note?' · 📝':''}${S.inv.drafts&&S.inv.drafts[id]?' · ✏️ '+t('invDraft'):''}</div></div>${badge(st,rec.flagOpen)}</button>`;
 }
 let invShow=60;
-function renderInv(){
-  const el=$('#invBody');if(!el)return;
+function renderInvList(){
+  const el=$('#invList');if(!el||!S.inv)return;
+  const c=invCounts(),F=S.invFilter||'all';
+  const qEl=$('#invQ');const q=(qEl&&qEl.value||'').trim().toLowerCase();const hasQ=qEl&&document.activeElement===qEl;
+  let ids=invIds().filter(id=>{const st=invStatus(id),r=S.inv.pal[id];
+    if(F==='pending'&&st!=='pending')return false;if(F==='diff'&&st!=='diff')return false;if(F==='open'&&!(r&&r.flagOpen))return false;
+    if(F==='recount'&&st!=='recount')return false;if(F==='missing'&&st!=='missing')return false;if(F==='new'&&st!=='new')return false;if(F==='ok'&&!(st==='ok'||st==='quick'))return false;
+    if(F==='draft'&&!(S.inv.drafts&&S.inv.drafts[id]))return false;
+    if(q&&!(id.includes(q)||invRows(id).some(x=>(x.desc+' '+x.code+' '+x.lot).toLowerCase().includes(q))))return false;return true});
+  const total=ids.length;ids=ids.slice(0,invShow);
+  const chip=(k,lab,n)=>`<button data-flt="${k}" class="${F===k?'on':''}">${lab} <b>${n}</b></button>`;
+  const nd=Object.keys(S.inv.drafts||{}).length;
+  el.innerHTML=`<div class="row-sp"><b>${esc(S.inv.fileName)}</b><span class="mut">${t('invProgress',{a:c.all-c.pending,b:c.all})}</span></div>
+    <div class="fchips">${chip('all',t('f_all'),c.all)}${chip('pending',t('st_pending'),c.pending)}${chip('diff',t('st_diff'),c.diff)}${chip('open',t('st_open'),c.open)}${chip('recount',t('st_recount'),c.recount)}${nd?chip('draft',t('invDraft'),nd):''}${chip('missing',t('st_missing'),c.missing)}${chip('new',t('st_new'),c.new)}${chip('ok',t('st_ok'),c.ok+c.quick)}</div>
+    <input id="invQ" type="search" placeholder="${esc(t('invSearchPh'))}" value="${esc(q)}" autocomplete="off" style="margin-bottom:8px">
+    <div class="recent">${ids.map(palItem).join('')||`<div class="empty">${t('noMatch')}</div>`}</div>
+    ${total>ids.length?`<button class="btn ghost wide" data-inv="more" style="margin-top:8px">${t('invMore',{n:total-ids.length})}</button>`:''}`;
+  if(hasQ){const i=$('#invQ');i.focus();i.setSelectionRange(i.value.length,i.value.length)}
+}
+
+/* ---------- Export (inventory) ---------- */
+function renderInvExport(){
+  const el=$('#invExp');if(!el||!S.inv)return;
+  const c=invCounts();
+  el.innerHTML=`<div class="stats"><div><b>${c.all-c.pending}</b><span>${t('invChecked')}</span></div><div><b>${c.diff}</b><span>${t('st_diff')}</span></div><div><b>${c.missing}</b><span>${t('st_missing')}</span></div></div>
+    ${S.inv.lastExport?`<div class="note" style="margin-top:10px">${t('invLastExp',{d:fDate(S.inv.lastExport)+' '+fHM(S.inv.lastExport)})}</div>`:''}
+    <div class="sect">${t('invExportHdr')}</div>
+    <button class="btn primary wide" data-inv="export">${t('invExportBtn')}</button>
+    <p class="mut">${t('invExportHint')}</p>
+    <div class="sect">${t('invTeamHdr')}</div>
+    <div class="card"><p class="mut" style="margin-top:0">${t('invTeamHint')}</p>
+      <div class="row2"><button class="btn ghost wide" data-inv="share">${t('invShareRes')}</button>
+      <label class="btn ghost wide" style="cursor:pointer">${t('invMergeRes')}<input type="file" accept=".json,application/json" class="hidden" data-inv="merge"></label></div></div>`;
+}
+
+/* ---------- Envanter tab = control panel ---------- */
+function renderInvPanel(el){
   if(!S.inv){
     el.innerHTML=`<div class="card"><h3 style="margin:2px 0 8px">${t('invTitle')}</h3><p class="mut">${t('invIntro')}</p>
       <label class="btn primary wide" style="cursor:pointer">${t('invLoadBtn')}<input type="file" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" class="hidden" data-inv="file"></label></div>`;
@@ -1965,64 +2177,60 @@ function renderInv(){
   }
   const c=invCounts(),checked=c.all-c.pending,pct=c.all?Math.round(checked*100/c.all):0;
   const info=S.inv.head.map(r=>r.filter(Boolean).join('  ')).filter(Boolean).slice(1).join(' · ');
-  const F=S.invFilter||'all';
-  const qEl=$('#invQ');const q=(qEl&&qEl.value||'').trim().toLowerCase();const hasQ=qEl&&document.activeElement===qEl;
-  let ids=invIds().filter(id=>{const st=invStatus(id),r=S.inv.pal[id];
-    if(F==='pending'&&st!=='pending')return false;if(F==='diff'&&st!=='diff')return false;if(F==='open'&&!(r&&r.flagOpen))return false;
-    if(F==='recount'&&st!=='recount')return false;if(F==='missing'&&st!=='missing')return false;if(F==='new'&&st!=='new')return false;if(F==='ok'&&!(st==='ok'||st==='quick'))return false;
-    if(q&&!(id.includes(q)||invRows(id).some(x=>(x.desc+' '+x.code+' '+x.lot).toLowerCase().includes(q))))return false;return true});
-  const total=ids.length;ids=ids.slice(0,invShow);
-  const chip=(k,lab,n)=>`<button data-flt="${k}" class="${F===k?'on':''}">${lab} <b>${n}</b></button>`;
   const opt=(v,cur2,lab)=>`<option value="${v}" ${v===cur2?'selected':''}>${lab}</option>`;
-  el.innerHTML=`<div class="card">
+  el.innerHTML=`<div class="card ${inInv()?'modeon':''}">
       <div class="row-sp"><b>${esc(S.inv.fileName)}</b><span class="mut">${c.all} ${t('pallets')}</span></div>
       <div class="mut" style="font-size:12px">${esc(info)}</div>
       <div class="prog"><i style="width:${pct}%"></i></div>
       <div class="row-sp mut" style="font-size:13px"><span>${t('invProgress',{a:checked,b:c.all})}</span><b>${pct}%</b></div>
+      ${inInv()?`<div class="note" style="margin-top:10px">${t('invModeOnNote')}</div>
+        <div class="row2"><button class="btn primary wide" data-inv="goscan">${t('invGoScan')}</button></div>
+        <button class="btn ghost wide" data-inv="modeoff" style="margin-top:8px">${t('invModeOff')}</button>`
+      :`<button class="btn primary wide" data-inv="modeon" style="margin-top:12px">${t('invModeOn')}</button>`}
+    </div>
+    <div class="sect">${t('invSettingsHdr')}</div>
+    <div class="card">
       <div class="tgl"><span>${t('invBlind')}<small>${t('invBlindSub')}</small></span><button class="sw ${S.invBlind?'on':''}" data-inv="blind"></button></div>
       <div class="tgl"><span>${t('invQuickMode')}<small>${t('invQuickSub')}</small></span><button class="sw ${S.invQuick?'on':''}" data-inv="quick"></button></div>
       <label class="fld">${t('invTolLbl')}<select data-inv-set="invTol">${opt('0',S.invTol,t('tol0'))}${opt('case',S.invTol,t('tolCase'))}${opt('pct',S.invTol,t('tolPct'))}</select></label>
       <label class="fld">${t('invRecLbl')}<select data-inv-set="invRecount">${opt('now',S.invRecount,t('recNow'))}${opt('later',S.invRecount,t('recLater'))}</select></label>
       <label class="fld">${t('invDeviceLbl')}<input data-inv-dev value="${esc(S.device||'')}" placeholder="${esc(t('setDevicePh'))}" autocomplete="off"></label>
     </div>
-    <div class="row2" style="margin-top:0"><button class="btn primary wide" data-inv="scan" style="flex-direction:column;gap:0">${t('invScanBtn')}<small style="font-weight:600;font-size:12px;opacity:.85">${t('invScanSub')}</small></button><button class="btn ghost" data-inv="find">🔍</button></div>
-    <div class="fchips">${chip('all',t('f_all'),c.all)}${chip('pending',t('st_pending'),c.pending)}${chip('diff',t('st_diff'),c.diff)}${chip('open',t('st_open'),c.open)}${chip('recount',t('st_recount'),c.recount)}${chip('missing',t('st_missing'),c.missing)}${chip('new',t('st_new'),c.new)}${chip('ok',t('st_ok'),c.ok+c.quick)}</div>
-    <input id="invQ" type="search" placeholder="${esc(t('invSearchPh'))}" value="${esc(q)}" autocomplete="off" style="margin-bottom:8px">
-    <div class="recent">${ids.map(palItem).join('')||`<div class="empty">${t('noMatch')}</div>`}</div>
-    ${total>ids.length?`<button class="btn ghost wide" data-inv="more" style="margin-top:8px">${t('invMore',{n:total-ids.length})}</button>`:''}
-    <div class="sect">${t('invTeamHdr')}</div>
-    <div class="card"><p class="mut" style="margin-top:0">${t('invTeamHint')}</p>
-      <div class="row2"><button class="btn ghost wide" data-inv="share">${t('invShareRes')}</button>
-      <label class="btn ghost wide" style="cursor:pointer">${t('invMergeRes')}<input type="file" accept=".json,application/json" class="hidden" data-inv="merge"></label></div></div>
-    <div class="sect">${t('invExportHdr')}</div>
-    <button class="btn primary wide" data-inv="export">${t('invExportBtn')}</button>
-    <p class="mut">${t('invExportHint')}</p>
+    <div class="sect">${t('invReportHdr')}</div>
     <div class="row2"><label class="btn ghost wide" style="cursor:pointer">${t('invNewReport')}<input type="file" accept=".xlsx,.xls" class="hidden" data-inv="file"></label><button class="btn danger" data-inv="del">${t('invDelete')}</button></div>`;
-  if(hasQ){const i=$('#invQ');i.focus();i.setSelectionRange(i.value.length,i.value.length)}
 }
-function invStartScan(){ctx='invPallet';showView('scan');renderBanner();unlockAudio();if(!scanning)startCamera()}
 function renderBanner(){
-  const bn=$('#banner');if(!bn)return;
-  document.body.classList.toggle('invctx',ctx==='invPallet');
-  $('#manualBtn').textContent=t(ctx==='invPallet'?'invFindPallet':'manualBtn');
-  if(ctx==='invPallet'){const c=invCounts();bn.innerHTML=`<span>${t('invScanBanner')} · ${c.all-c.pending}/${c.all}</span><button data-a="endinv">✕</button>`;bn.classList.remove('hidden');bn.classList.add('inv')}
-  else if(!awaitPallet){bn.classList.add('hidden');bn.classList.remove('inv')}
+  const inv=inInv(),ord=inOrd();
+  document.body.classList.toggle('invmode',inv);document.body.classList.toggle('ordmode',ord);
+  const bn=$('#banner');if(bn&&!awaitPallet){bn.classList.add('hidden');bn.classList.remove('inv')}
+  if(inv){if(cur==='scan')ensureWork();if(cur==='list')renderInvList();if(cur==='export')renderInvExport()}
+  if(ord){if(cur==='scan')renderOrdWork();if(cur==='list')renderOrdList();if(cur==='export')renderOrdExport()}
 }
 document.addEventListener('click',ev=>{
-  const b=ev.target.closest('[data-inv],[data-flt],[data-pal],#banner [data-a="endinv"]');if(!b)return;
-  if(b.matches('#banner [data-a="endinv"]')){ctx='free';renderAll();return}
-  if(b.dataset.flt){S.invFilter=b.dataset.flt;invShow=60;save();renderInv();return}
-  if(b.dataset.pal&&b.closest('#invBody')){invOpenPallet(b.dataset.pal);return}
+  const b=ev.target.closest('[data-inv],[data-flt],[data-pal],[data-w]');if(!b)return;
+  if(b.dataset.flt){S.invFilter=b.dataset.flt;invShow=60;save();renderInvList();return}
+  if(b.dataset.pal){if(b.closest('#invList,#invWork')){invOpenPallet(b.dataset.pal)}return}
+  const w=b.dataset.w;
+  if(w){
+    if(w==='cam'){unlockAudio();startCamera().then(()=>{if(!S.invActive)renderWorkEmpty()})}
+    if(w==='find')invManualPallet();
+    if(w==='list')showView('list');
+    if(w==='edit')invOpenPallet(b.dataset.id);
+    if(w==='next'){W=null;renderAll()}
+    return;
+  }
   const a=b.dataset.inv;
   if(a==='blind'){S.invBlind=!S.invBlind;save();renderInv()}
   if(a==='quick'){S.invQuick=!S.invQuick;save();renderInv()}
-  if(a==='scan')invStartScan();
-  if(a==='find')invManualPallet();
-  if(a==='more'){invShow+=100;renderInv()}
+  if(a==='freeon'){invSetMode(false)}
+  if(a==='modeon')invSetMode(true);
+  if(a==='modeoff')invSetMode(false);
+  if(a==='goscan'){showView('scan');unlockAudio();if(!scanning)startCamera()}
+  if(a==='more'){invShow+=100;renderInvList()}
   if(a==='export')invExport();
   if(a==='share')invShareResults();
   if(a==='del'){const sh=openSheet(`<h3>${t('invDeleteQ')}</h3><div class="note w">${t('invDeleteWarn')}</div><div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button><button class="btn dangerfill" data-a="ok">${t('invDelete')}</button></div>`);
-    sh.onclick=ev2=>{const x=ev2.target.closest('button');if(!x)return;if(x.dataset.a==='cancel')closeSheet();if(x.dataset.a==='ok'){S.inv=null;ctx='free';save();buildIndex();closeSheet();renderAll()}}}
+    sh.onclick=ev2=>{const x=ev2.target.closest('button');if(!x)return;if(x.dataset.a==='cancel')closeSheet();if(x.dataset.a==='ok'){S.inv=null;S.appMode='free';S.invActive=null;W=null;save();buildIndex();closeSheet();renderAll()}}}
 });
 document.addEventListener('change',ev=>{
   const i=ev.target.closest('input[data-inv="file"]');if(i){const f=i.files[0];i.value='';if(f)invImport(f);return}
@@ -2030,8 +2238,7 @@ document.addEventListener('change',ev=>{
   const s=ev.target.closest('select[data-inv-set]');if(s){S[s.dataset.invSet]=s.value;save();return}
   const d=ev.target.closest('input[data-inv-dev]');if(d){S.device=d.value.trim();save();return}
 });
-document.addEventListener('input',ev=>{if(ev.target.id==='invQ'){invShow=60;renderInv()}});
-
+document.addEventListener('input',ev=>{if(ev.target.id==='invQ'){invShow=60;renderInvList()}});
 /* ---------- team: share & merge results ---------- */
 async function invShareResults(){
   if(!S.device)toast(t('invNeedDevice'),'warn');
@@ -2095,13 +2302,378 @@ async function invExport(){
 }
 
 
+/* =================== ORDER MODE (Sipariş) =================== */
+const inOrd=()=>S.appMode==='ord';
+if(!Array.isArray(S.orders))S.orders=[];
+if(!S.ordActive)S.ordActive={o:null,p:null};
+function ordCur(){return S.orders.find(o=>o.id===S.ordActive.o)||null}
+function palCur(o){o=o||ordCur();return o&&S.ordActive.p?o.pallets.find(p=>p.id===S.ordActive.p)||null:null}
+function lineIdsO(l){const s=idsOf({barcode:l.barcode,ref:l.ref});if(l.pb)s.add(String(l.pb).toUpperCase());if(l.pr)s.add(String(l.pr).toUpperCase());return s}
+function loadedOf(o,li){let q=0;for(const p of o.pallets)for(const f of p.found)if(f.li===li)q+=fQty(f);return q}
+function ordTot(o){let ord=0,ld=0,over=0;o.lines.forEach((l,i)=>{const x=loadedOf(o,i);ord+=l.qty;ld+=Math.min(x,l.qty);if(x>l.qty)over++});return {ord,ld,over,pct:ord?Math.round(ld*100/ord):0}}
+function ordStatus(o){if(o.closedAt)return 'closed';const t2=ordTot(o);if(t2.ld>=t2.ord&&t2.ord>0)return 'complete';return t2.ld>0?'progress':'new'}
+const ordBadge=st=>`<span class="stb os-${st}">${t('os_'+st)}</span>`;
+function lineName(l){return prodName({name:l.name||l.ref||l.barcode,vol:l.vol})}
+
+/* ---------- import ---------- */
+const OH=[['barcode',/^(barkod|barcode|bar code|ean|gtin|codice a barre|strichcode)/i],['qty',/^(adet|miktar|qty|quantity|quantit|q\.?\s*t[àa]|qta|menge|anzahl|pcs|pz|amount|кол)/i],
+  ['name',/(ürün|urun|adı|name|descr|bezeichnung|prodotto|product|articolo|artikelbez|наимен|товар)/i],['ref',/^(referans|ref|reference|codice|code|kod|art|artikel|sku|item|артикул)/i]];
+async function ordImport(file){
+  let XL;try{XL=await ensureXLSX()}catch(e){return toast(t('xlsxFail'),'err')}
+  let wb;try{wb=XL.read(await file.arrayBuffer(),{type:'array',cellDates:true})}catch(e){return toast(t('ordBadFile'),'err')}
+  const ws=wb.Sheets[wb.SheetNames[0]],aoa=XL.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
+  let hi=-1,col={};
+  for(let r=0;r<Math.min(aoa.length,15)&&hi<0;r++){
+    const c={};aoa[r].forEach((v,ci)=>{const s=cellStr(v);if(!s)return;for(const [k,re] of OH){if(c[k]==null&&re.test(s)){c[k]=ci;break}}});
+    if(c.qty!=null&&(c.barcode!=null||c.ref!=null||c.name!=null)){hi=r;col=c}
+  }
+  if(hi<0)return toast(t('ordBadFile'),'err');
+  let no='';for(let r=0;r<hi;r++){const row=aoa[r].map(cellStr);const k=row.findIndex(s=>/(sipari[sş]|order|ordine|auftrag|bestell|заказ)/i.test(s));if(k>=0){no=row.slice(k+1).find(Boolean)||'';const m=/[:#]\s*(\S+)/.exec(row[k]);if(!no&&m)no=m[1];if(no)break}}
+  if(!no)no=String(file.name).replace(/\.[^.]+$/,'');
+  const lines=[];let unmatched=0;
+  for(let r=hi+1;r<aoa.length;r++){
+    const a=aoa[r],g=k=>col[k]!=null?cellStr(a[col[k]]):'';
+    const qty=parseInt(String(g('qty')).replace(/[^\d]/g,''),10)||0;
+    let barcode=g('barcode').replace(/\s/g,''),ref=g('ref'),name=g('name');
+    if(!qty||!(barcode||ref||name))continue;
+    if(/^\d+(\.0+)?$/.test(barcode))barcode=barcode.replace(/\.0+$/,'');
+    let p=(barcode&&(lookup(barcode)||null))||(ref&&IDX.ref.get(ref.toUpperCase()))||null;
+    if(!p&&name){const n=normQ(name);p=IDX.all.find(x=>normQ(x.name)===n||normQ(prodName(x))===n)||null}
+    if(!p)unmatched++;
+    lines.push({barcode,ref,name:name||(p?p.name:''),vol:p?p.vol:'',qty,pb:p?p.barcode:'',pr:p?p.ref:'',matched:!!p});
+  }
+  if(!lines.length)return toast(t('ordBadFile'),'err');
+  const o={id:uid(),no:String(no).trim(),customer:'',fileName:file.name,createdAt:Date.now(),lines,pallets:[],closedAt:null};
+  S.orders.unshift(o);S.ordActive={o:o.id,p:null};save();buildIndex();
+  toast(t('ordLoaded',{no:o.no,n:lines.length})+(unmatched?' · '+t('ordUnmatched',{n:unmatched}):''),unmatched?'warn':'ok');
+  renderAll();
+}
+
+/* ---------- workspace (Tara) ---------- */
+let OW=null;
+function ordOpen(oid,pid){const o=S.orders.find(x=>x.id===oid);if(!o)return;S.appMode='ord';S.ordActive={o:oid,p:pid||null};save();if(sheetOpen())closeSheet();if(cur!=='scan')showView('scan');else renderAll()}
+function ordNewPallet(o,label,sscc){
+  const n=o.pallets.length?Math.max(...o.pallets.map(p=>p.n))+1:1;
+  const p={id:uid(),n,label:label||(asciiNo(o.no)+'-P'+n),sscc:!!sscc,found:[],weight:'',height:'',createdAt:Date.now(),closedAt:null};
+  o.pallets.push(p);S.ordActive={o:o.id,p:p.id};save();return p;
+}
+const asciiNo=s=>String(s).normalize('NFKD').replace(/[^\x20-\x7e]/g,'').replace(/\s+/g,'').slice(0,20)||'ORD';
+function renderOrdWork(scrollTo){
+  const el=$('#ordWork');if(!el)return;const o=ordCur();
+  if(!o){OW=null;const open=S.orders.filter(x=>!x.closedAt);
+    el.innerHTML=`<div class="card invempty"><div class="bigic">🧾</div><b>${t('ordPick')}</b><p class="mut">${t('ordPickHint')}</p>
+      <label class="btn primary wide" style="cursor:pointer">${t('ordLoadBtn')}<input type="file" accept=".xlsx,.xls,.csv" class="hidden" data-ord="file"></label></div>
+      ${open.length?`<div class="sect">${t('ordOpenHdr')}</div><div class="recent">${open.map(ordItem).join('')}</div>`:''}`;return}
+  const p=palCur(o);
+  if(!p)return renderOrdSummary(el,o);
+  renderOrdPallet(el,o,p,scrollTo);
+}
+function ordItem(o){const tt=ordTot(o),st=ordStatus(o);
+  return `<button class="ritem pal ${S.ordActive.o===o.id?'act':''}" data-oid="${o.id}"><div class="nm"><div><b>${esc(o.no)}</b>${o.customer?' · '+esc(o.customer):''}</div><div>${o.lines.length} ${t('ordLinesW')} · ${o.pallets.length} ${t('pallets')} · ${tt.ld}/${tt.ord} ${t('pcs')} (${tt.pct}%)</div><div class="prog sm"><i style="width:${tt.pct}%"></i></div></div>${ordBadge(st)}</button>`}
+function lineRow(o,l,i,compact){
+  const ld=loadedOf(o,i),rem=l.qty-ld,pc=perCaseOf({barcode:l.pb||l.barcode,ref:l.pr||l.ref})||0;
+  const cls=ld>l.qty?'over':ld>=l.qty?'done':'';
+  return `<div class="exl ${cls}"><span class="mk">${ld>l.qty?'⛔':ld>=l.qty?'✓':ld>0?'◐':'○'}</span>
+    <div class="nm"><div>${esc(lineName(l))}${!l.matched?' <span class="tag warnt">'+t('ordNoMatch')+'</span>':''}</div><div>${esc(l.pb||l.barcode||'')}${l.pr||l.ref?' · '+esc(l.pr||l.ref):''}${pc?' · '+t('casePerShort',{n:pc}):''}</div></div>
+    <div class="oq"><b>${ld}</b><span>/ ${l.qty}</span>${rem>0?`<small>${t('ordRem')} ${rem}${pc&&rem>=pc?' ('+breakdown(rem,pc)+')':''}</small>`:rem<0?`<small class="neg">+${-rem}</small>`:''}</div>
+    ${!compact&&!l.matched?`<button class="mini" data-ord="match" data-li="${i}">${t('ordMatch')}</button>`:''}</div>`;
+}
+function renderOrdSummary(el,o){
+  OW={o:o.id,p:null};const tt=ordTot(o),st=ordStatus(o);
+  el.innerHTML=`<div class="wsp">
+    <div class="hd"><h3>${esc(o.no)} ${ordBadge(st)}</h3><button class="mini" data-ord="closeo" style="font-size:20px">✕</button></div>
+    <input data-ord-f="customer" value="${esc(o.customer||'')}" placeholder="${esc(t('ordCustomerPh'))}" autocomplete="off" style="margin-top:6px">
+    <div class="prog"><i style="width:${tt.pct}%"></i></div><div class="mut" style="font-size:13px">${t('ordProgress',{a:tt.ld,b:tt.ord,p:tt.pct})}</div>
+    <div class="fold"><span>${t('ordLinesHdr')}</span><span>${o.lines.length}</span></div>
+    ${o.lines.map((l,i)=>lineRow(o,l,i,false)).join('')}
+    <div class="fold"><span>${t('ordPalletsHdr')}</span><span>${o.pallets.length}</span></div>
+    ${o.pallets.map(p=>{const q=p.found.reduce((a,f)=>a+fQty(f),0),c=p.found.reduce((a,f)=>a+(+f.c||0),0);
+      return `<button class="ritem pal" data-opal="${p.id}"><div class="nm"><div><b>P${p.n}</b> <span class="mono">${esc(p.label)}</span></div><div>${p.found.length} ${t('ordLinesW')} · ${c?t('nCases',{n:c})+' · ':''}${q} ${t('pcs')}${p.weight?' · '+esc(p.weight)+' kg':''}${p.height?' · '+esc(p.height)+' cm':''}</div></div><span class="stb ${p.closedAt?'os-complete':'os-progress'}">${p.closedAt?t('ordPalClosed'):t('ordPalOpen')}</span></button>`}).join('')||`<div class="mut">${t('ordNoPallets')}</div>`}
+    ${o.closedAt?`<div class="note">${t('ordClosedNote',{d:fDate(o.closedAt)})}</div>`:`<button class="btn primary wide" data-ord="newpal" style="margin-top:10px">${t('ordNewPal')}</button><p class="mut" style="font-size:13px">${t('ordSsccHint')}</p>`}
+    ${!scanning&&!o.closedAt?`<button class="btn ghost wide" data-ord="cam">${t('invScanHere')}</button>`:''}
+  </div>`;
+}
+function renderOrdPallet(el,o,p,scrollTo){
+  const vs=$('#v-scan'),keep=vs.scrollTop;
+  OW={o:o.id,p:p.id};
+  const remLines=o.lines.map((l,i)=>({l,i})).filter(x=>loadedOf(o,x.i)<x.l.qty||p.found.some(f=>f.li===x.i));
+  const overLis=new Set(o.lines.map((l,i)=>loadedOf(o,i)>l.qty?i:-1).filter(i=>i>=0));
+  const fl=(f,k)=>{const l=o.lines[f.li];const pc=+f.pc||0;
+    return `<div class="fl ${overLis.has(f.li)?'over':''} ${OW.hl===f.id?'hl':''}" data-fid="${f.id}">
+      <div class="top"><div class="nm">${esc(l?lineName(l):f.name)}</div><button class="mini" data-ord="rm" data-k="${k}">✕</button></div>
+      <div class="pmeta">${esc(f.code||'')}${f.exp?' · '+t('expShort')+' '+esc(f.exp):''}${overLis.has(f.li)?' · <b class="neg">'+t('ordOverShort')+'</b>':''}</div>
+      <div class="lotin"><input data-of="lot" data-k="${k}" value="${esc(f.lot||'')}" placeholder="${esc(t('lot'))}" autocomplete="off" autocapitalize="characters"></div>
+      <div class="cuin"><label>${t('caseBox')}<input data-of="c" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.c)}"></label>
+        <span>×</span><label>${t('invPerCase')}<input data-of="pc" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.pc)}"></label>
+        <span>+</span><label>${t('unitBox')}<input data-of="u" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.u)}"></label>
+        <span>=</span><b class="ltot" data-otot="${k}">${f.c===''&&f.u===''?'–':fQty(f)}</b></div></div>`};
+  el.innerHTML=`<div class="wsp">
+    <div class="hd"><h3>${esc(o.no)} · P${p.n} ${p.closedAt?'<span class="stb os-complete">'+t('ordPalClosed')+'</span>':''}</h3><button class="mini" data-ord="back" style="font-size:20px">✕</button></div>
+    <div class="pmeta mono">${esc(p.label)}${p.sscc?' · SSCC':''}</div>
+    ${overLis.size?`<div class="note err">${t('ordOverNote')}</div>`:''}
+    <div class="fold"><span>${t('ordToLoad')}</span><span>${remLines.length}</span></div>
+    ${remLines.map(x=>lineRow(o,x.l,x.i,true)).join('')||`<div class="mut">${t('ordAllLoaded')}</div>`}
+    ${!scanning?`<button class="btn primary wide" data-ord="cam" style="margin-top:10px">${t('invScanHere')}</button>`:''}
+    <div class="fold"><span>${t('ordOnPallet')}</span><span>${p.found.length}</span></div>
+    ${p.found.map(fl).join('')||`<div class="mut" style="padding:8px 0">${t('ordScanHint')}</div>`}
+    <button class="btn ghost wide" data-ord="add" style="margin-top:8px">${t('invAddProduct')}</button>
+    <div id="ordAdd"></div>
+    <div class="tgl"><span>${t('invPlusCase')}<small>${t('invPlusCaseSub')}</small></span><button class="sw ${S.ordPlusCase?'on':''}" data-ord="plus"></button></div>
+    <div class="acts sticky-acts"><button class="btn ghost" data-ord="back">${t('ordToOrder')}</button><button class="btn primary" data-ord="closepal">${p.closedAt?t('ordPalEdit'):t('ordPalClose')}</button></div>
+  </div>`;
+  vs.scrollTop=keep;
+  if(scrollTo){const e=el.querySelector(`[data-fid="${scrollTo}"]`);if(e)e.scrollIntoView({block:'center'})}
+}
+function ordScan({p,pre,code}){
+  const o=ordCur();
+  if(!o){scanErr(t('ordPickFirst'));return}
+  if(o.closedAt){scanErr(t('ordIsClosed'));return}
+  if(!p){scanErr(t('invUnknownCode'));return}
+  const ids=idsOf(p);const li=o.lines.findIndex(l=>sameIds(lineIdsO(l),ids));
+  if(li<0){scanErr(p.unknown?t('invUnknownCode')+' · '+t('ordNotInOrder'):t('ordNotInOrder'));return}
+  const l=o.lines[li],rem=l.qty-loadedOf(o,li);
+  if(rem<=0){scanErr(t('ordLineFull',{n:l.qty}));return}
+  let pal=palCur(o);
+  if(!pal||pal.closedAt){pal=ordNewPallet(o);toast(t('ordPalAuto',{n:pal.n}))}
+  const lot=(pre&&pre.lot)||'';
+  const pc=perCaseOf(p)||(pre&&pre.isCase&&pre.count)||0;
+  let f=pal.found.find(x=>x.li===li&&normLot(x.lot)===normLot(lot));
+  if(f){
+    if(S.ordPlusCase){if(!(+f.pc)){scanErr(t('invNeedPc'));return}if(+f.pc>rem){scanErr(t('ordOverCase',{r:rem}));return}f.c=String((+f.c||0)+1)}
+    else toast(t('invAlreadyListed'));
+  }else{
+    let c='',u='';
+    if(S.ordPlusCase&&pc){if(pc>rem){scanErr(t('ordOverCase',{r:rem}));return}c='1'}
+    else if(pre&&pre.count){if(pre.count>rem){scanErr(t('ordOverCase',{r:rem}));return}if(pc&&pre.count%pc===0)c=String(pre.count/pc);else u=String(pre.count)}
+    f={id:uid(),li,barcode:p.barcode||'',ref:p.ref||'',code:p.barcode||p.ref||code,name:p.name||o.lines[li].name||'',lot,exp:(pre&&pre.exp)||'',c,pc:pc?String(pc):'',u};
+    pal.found.push(f);
+  }
+  scanOk();save();OW.hl=f.id;renderOrdWork(f.id);renderTop();
+  if(ordStatus(o)==='complete')setTimeout(()=>toast(t('ordComplete',{no:o.no}),'ok'),300);
+}
+let ordSug=[];
+document.addEventListener('click',ev=>{
+  const b=ev.target.closest('[data-ord],[data-oid],[data-opal],[data-osug],[data-oflt]');if(!b)return;
+  if(b.dataset.oflt){S.ordFilter=b.dataset.oflt;save();renderOrdList();return}
+  if(b.dataset.oid){if(b.closest('#ordList,#ordWork,#invBody'))ordOpen(b.dataset.oid);return}
+  const o=ordCur();
+  if(b.dataset.opal){S.ordActive.p=b.dataset.opal;save();renderAll();return}
+  if(b.dataset.osug!=null){const p=palCur(o),x=ordSug[+b.dataset.osug];if(!p||!x)return;
+    if(loadedOf(o,x.i)>=x.l.qty){scanErr(t('ordLineFull',{n:x.l.qty}));return}
+    const pc=perCaseOf({barcode:x.l.pb||x.l.barcode,ref:x.l.pr||x.l.ref})||'';
+    const f={id:uid(),li:x.i,barcode:x.l.pb||x.l.barcode,ref:x.l.pr||x.l.ref,code:x.l.pb||x.l.barcode||x.l.pr||x.l.ref,name:x.l.name,lot:'',exp:'',c:'',pc:pc?String(pc):'',u:''};
+    p.found.push(f);save();OW.hl=f.id;renderOrdWork(f.id);return}
+  const a=b.dataset.ord;if(!a)return;
+  if(a==='file')return;
+  if(a==='cam'){unlockAudio();startCamera().then(()=>renderOrdWork());return}
+  if(a==='closeo'){S.ordActive={o:null,p:null};save();renderAll();return}
+  if(a==='newpal'){if(!o)return;ordNewPallet(o);renderAll();toast(t('ordPalAuto',{n:palCur(o).n}),'ok');return}
+  if(a==='back'){S.ordActive.p=null;save();renderAll();return}
+  if(a==='plus'){S.ordPlusCase=!S.ordPlusCase;save();renderOrdWork();return}
+  if(a==='rm'){const p=palCur(o);p.found.splice(+b.dataset.k,1);save();renderOrdWork();renderTop();return}
+  if(a==='add'){const box=$('#ordAdd');box.innerHTML=`<input id="ordAddQ" placeholder="${esc(t('invProdPh'))}" autocomplete="off" style="margin-top:8px"><div id="ordAddR" class="mres"></div>`;
+    const inp=$('#ordAddQ');const show=()=>{const w=normQ(inp.value).split(' ').filter(Boolean);
+      ordSug=o.lines.map((l,i)=>({l,i})).filter(x=>{const h=normQ([x.l.barcode,x.l.ref,x.l.pb,x.l.pr,lineName(x.l)].join(' '));return w.every(q=>h.includes(q))}).slice(0,10);
+      $('#ordAddR').innerHTML=ordSug.map((x,k)=>`<button class="ritem" data-osug="${k}"><div class="nm"><div>${esc(lineName(x.l))}</div><div>${t('ordRem')} ${x.l.qty-loadedOf(o,x.i)} / ${x.l.qty}</div></div></button>`).join('')};
+    inp.addEventListener('input',show);show();inp.focus();return}
+  if(a==='closepal'){ordClosePalletSheet(o,palCur(o));return}
+  if(a==='match'){ordMatchSheet(o,+b.dataset.li);return}
+  if(a==='modeon'){S.appMode='ord';S.modeTab=null;save();showView('scan');unlockAudio();if(!scanning)startCamera();renderAll();return}
+  if(a==='modeoff'){S.appMode='free';S.modeTab=null;save();renderAll();return}
+  if(a==='packing'){ordExportExcel(ordById(b.dataset.id));return}
+  if(a==='labels'){ordLabelsPdf(ordById(b.dataset.id));return}
+  if(a==='closeorder'){const x=ordById(b.dataset.id);x.closedAt=x.closedAt?null:Date.now();save();renderAll();return}
+  if(a==='delorder'){const x=ordById(b.dataset.id);const sh=openSheet(`<h3>${t('ordDelQ',{no:esc(x.no)})}</h3><div class="note w">${t('ordDelWarn')}</div><div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button><button class="btn dangerfill" data-a="ok">${t('ordDel')}</button></div>`);
+    sh.onclick=e2=>{const y=e2.target.closest('button');if(!y)return;if(y.dataset.a==='cancel')closeSheet();if(y.dataset.a==='ok'){S.orders=S.orders.filter(z=>z.id!==x.id);if(S.ordActive.o===x.id)S.ordActive={o:null,p:null};save();closeSheet();renderAll()}};return}
+});
+const ordById=id=>S.orders.find(o=>o.id===id)||ordCur();
+let ordT=null;
+document.addEventListener('input',ev=>{
+  const i=ev.target.closest('#ordWork input[data-of]');if(i){const o=ordCur(),p=palCur(o);if(!p)return;const f=p.found[+i.dataset.k];f[i.dataset.of]=i.value.trim();
+    const e=$(`[data-otot="${i.dataset.k}"]`);if(e)e.textContent=f.c===''&&f.u===''?'–':fQty(f);clearTimeout(ordT);ordT=setTimeout(()=>{save();const over=o.lines.some((l,k)=>loadedOf(o,k)>l.qty);document.querySelectorAll('#ordWork .fl').forEach(el=>{const ff=p.found.find(z=>z.id===el.dataset.fid);el.classList.toggle('over',!!ff&&loadedOf(o,ff.li)>o.lines[ff.li].qty)});if(over)beepWarn();renderTop()},500);return}
+  const c=ev.target.closest('#ordWork input[data-ord-f]');if(c){const o=ordCur();o[c.dataset.ordF]=c.value;clearTimeout(ordT);ordT=setTimeout(save,400);return}
+});
+document.addEventListener('change',ev=>{const i=ev.target.closest('input[data-ord="file"]');if(i){const f=i.files[0];i.value='';if(f)ordImport(f)}});
+function ordClosePalletSheet(o,p){
+  if(!p)return;
+  const over=o.lines.some((l,i)=>loadedOf(o,i)>l.qty);
+  if(over){scanErr(t('ordOverNote'));return}
+  for(const f of p.found){if(f.c===''&&f.u===''){toast(t('invNeedQty'),'warn');return}if(+f.c>0&&!(+f.pc>0)){toast(t('invNeedPc'),'warn');return}}
+  const q=p.found.reduce((a,f)=>a+fQty(f),0),c=p.found.reduce((a,f)=>a+(+f.c||0),0);
+  const sh=openSheet(`<h3>${esc(o.no)} · P${p.n} – ${t('ordPalClose')}</h3>
+    <div class="sum"><div><b>${p.found.length}</b><span>${t('ordLinesW')}</span></div><div><b>${c}</b><span>${t('cases')}</span></div><div><b>${q}</b><span>${t('pcs')}</span></div></div>
+    <label class="fld">${t('ordWeight')}<input id="pW" type="number" inputmode="decimal" step="0.1" value="${esc(p.weight||'')}"></label>
+    <label class="fld">${t('ordHeight')}<input id="pH" type="number" inputmode="numeric" value="${esc(p.height||'')}"></label>
+    <div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button><button class="btn primary" data-a="ok">${t('ordPalCloseOk')}</button></div>`);
+  sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.a==='cancel')closeSheet();
+    if(b.dataset.a==='ok'){p.weight=$('#pW').value.trim();p.height=$('#pH').value.trim();p.closedAt=Date.now();S.ordActive.p=null;save();closeSheet();renderAll();beepSaved();
+      toast(ordStatus(o)==='complete'?t('ordComplete',{no:o.no}):t('ordPalDone',{n:p.n}),'ok')}};
+}
+function ordMatchSheet(o,li){
+  const l=o.lines[li];
+  const sh=openSheet(`<h3>${t('ordMatchTitle')}</h3><div class="pmeta">${esc(l.name)} · ${esc(l.barcode||l.ref||'')}</div>
+    <input id="omQ" value="${esc(l.name||l.ref||'')}" autocomplete="off" style="margin-top:8px"><div id="omR" class="mres"></div>
+    <div class="acts"><button class="btn ghost" data-a="cancel">${t('close')}</button></div>`);
+  let hits=[];const show=()=>{hits=searchProducts($('#omQ').value,10);$('#omR').innerHTML=hits.map((p,i)=>prodItem(p,`data-mi="${i}"`)).join('')};
+  $('#omQ').addEventListener('input',show);show();
+  sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.a==='cancel')return closeSheet();
+    if(b.dataset.mi!=null){const p=hits[+b.dataset.mi];l.pb=p.barcode;l.pr=p.ref;l.vol=p.vol;if(!l.name)l.name=p.name;l.matched=true;save();closeSheet();renderAll();toast(t('ordMatched'),'ok')}};
+}
+/* SSCC in order mode: open existing pallet or create a Mi.Da. pallet */
+function ordPalletBySSCC(sscc){
+  const o=ordCur();if(!o){scanErr(t('ordPickFirst'));return}
+  const ex=o.pallets.find(p=>p.label===sscc);
+  if(ex){S.ordActive.p=ex.id;save();renderAll();toast(t('ordPalOpened',{n:ex.n}));return}
+  for(const x of S.orders)if(x.id!==o.id&&x.pallets.some(p=>p.label===sscc)){scanWarn(t('ordSsccOther',{no:x.no}));return}
+  const p=ordNewPallet(o,sscc,true);renderAll();toast(t('ordPalSscc',{n:p.n}),'ok');
+}
+
+/* ---------- Liste / Export / Mode panel ---------- */
+function renderOrdList(){
+  const el=$('#ordList');if(!el)return;const F=S.ordFilter||'open';
+  const list=S.orders.filter(o=>F==='all'||(F==='open'&&!o.closedAt&&ordStatus(o)!=='complete')||(F==='complete'&&ordStatus(o)==='complete')||(F==='closed'&&o.closedAt));
+  const n=k=>S.orders.filter(o=>k==='all'||(k==='open'&&!o.closedAt&&ordStatus(o)!=='complete')||(k==='complete'&&ordStatus(o)==='complete')||(k==='closed'&&o.closedAt)).length;
+  const chip=(k,lab)=>`<button data-oflt="${k}" class="${F===k?'on':''}">${lab} <b>${n(k)}</b></button>`;
+  el.innerHTML=`<div class="fchips">${chip('open',t('os_open'))}${chip('complete',t('os_complete'))}${chip('closed',t('os_closed'))}${chip('all',t('f_all'))}</div>
+    <div class="recent">${list.map(ordItem).join('')||`<div class="empty">${t('ordNone')}</div>`}</div>
+    <label class="btn ghost wide" style="cursor:pointer;margin-top:10px">${t('ordLoadBtn')}<input type="file" accept=".xlsx,.xls,.csv" class="hidden" data-ord="file"></label>`;
+}
+function renderOrdExport(){
+  const el=$('#ordExp');if(!el)return;const o=ordCur();
+  if(!o){el.innerHTML=`<div class="empty">${t('ordPickFirst')}</div><div class="recent">${S.orders.map(ordItem).join('')}</div>`;return}
+  const tt=ordTot(o),short=o.lines.filter((l,i)=>loadedOf(o,i)<l.qty);
+  el.innerHTML=`<div class="card"><div class="row-sp"><b>${esc(o.no)}</b>${ordBadge(ordStatus(o))}</div><div class="mut">${o.customer?esc(o.customer)+' · ':''}${o.pallets.length} ${t('pallets')} · ${tt.ld}/${tt.ord} ${t('pcs')}</div>
+      <div class="prog"><i style="width:${tt.pct}%"></i></div>
+      ${short.length?`<div class="note w">${t('ordShortNote',{n:short.length})}</div>`:''}</div>
+    <div class="sect">${t('ordDocsHdr')}</div>
+    <button class="btn primary wide" data-ord="packing" data-id="${o.id}">${t('ordPackingBtn')}</button>
+    <p class="mut">${t('ordPackingHint')}</p>
+    <button class="btn ghost wide" data-ord="labels" data-id="${o.id}">${t('ordLabelsBtn')}</button>
+    <p class="mut">${t('ordLabelsHint')}</p>
+    <div class="sect">${t('ordManageHdr')}</div>
+    <div class="row2"><button class="btn ghost wide" data-ord="closeorder" data-id="${o.id}">${o.closedAt?t('ordReopen'):t('ordCloseOrder')}</button><button class="btn danger" data-ord="delorder" data-id="${o.id}">${t('ordDel')}</button></div>
+    ${S.orders.length>1?`<div class="sect">${t('ordOtherHdr')}</div><div class="recent">${S.orders.filter(x=>x.id!==o.id).map(ordItem).join('')}</div>`:''}`;
+}
+function renderOrdPanel(el){
+  const open=S.orders.filter(o=>!o.closedAt);
+  el.innerHTML=`<div class="card ${inOrd()?'modeon':''}"><h3 style="margin:2px 0 6px">${t('ordTitle')}</h3><p class="mut" style="margin:0 0 10px">${t('ordIntro')}</p>
+      <label class="btn ${S.orders.length?'ghost':'primary'} wide" style="cursor:pointer">${t('ordLoadBtn')}<input type="file" accept=".xlsx,.xls,.csv" class="hidden" data-ord="file"></label>
+      ${S.orders.length?(inOrd()?`<div class="note" style="margin-top:10px">${t('ordModeOnNote')}</div><button class="btn ghost wide" data-ord="modeoff" style="margin-top:8px">${t('invModeOff')}</button>`
+        :`<button class="btn primary wide" data-ord="modeon" style="margin-top:10px">${t('ordModeOn')}</button>`):''}
+    </div>
+    ${open.length?`<div class="sect">${t('ordOpenHdr')}</div><div class="recent">${open.map(ordItem).join('')}</div>`:''}
+    <p class="mut">${t('ordFileHint')}</p>`;
+}
+
+/* ---------- packing list + instruction (Excel) ---------- */
+async function ordExportExcel(o){
+  if(!o)return;let XL;try{XL=await ensureXLSX()}catch(e){return toast(t('xlsxFail'),'err')}
+  const now=Date.now();const tt=ordTot(o);
+  const A=[[t('xPackTitle')],[t('xOrderNo'),o.no],[t('xCustomer'),o.customer||''],[t('xDate'),fDate(now)],[t('xPallets'),o.pallets.length],[],
+    [t('xPallet'),t('xPalLabel'),t('xBarcode'),t('xRef'),t('xProduct'),t('lot'),t('expShort'),t('xCases'),t('xPc'),t('xUnits'),t('xQty'),t('xWeight'),t('xHeight')]];
+  let gq=0,gc=0;
+  for(const p of [...o.pallets].sort((a,b)=>a.n-b.n)){
+    let pq=0,pcs=0;
+    p.found.forEach((f,k)=>{const l=o.lines[f.li]||{};const q=fQty(f);pq+=q;pcs+=+f.c||0;
+      A.push(['P'+p.n,p.label,l.pb||l.barcode||f.barcode||'',l.pr||l.ref||f.ref||'',lineName(l),f.lot||'',f.exp||'',+f.c||0,+f.c?+f.pc:'',+f.u||0,q,k===0?(p.weight?+p.weight:''):'',k===0?(p.height?+p.height:''):''])});
+    A.push(['',t('xPalTotal',{n:p.n}),'','','','','',pcs,'','',pq,p.weight?+p.weight:'',p.height?+p.height:'']);gq+=pq;gc+=pcs;
+  }
+  A.push([],['',t('xGrandTotal'),'','','','','',gc,'','',gq,o.pallets.reduce((a,p)=>a+(+p.weight||0),0)||'','']);
+  const B=[[t('xInstrTitle')],[t('xOrderNo'),o.no],[t('xCustomer'),o.customer||''],[t('xDate'),fDate(now)],[],
+    [t('xBarcode'),t('xRef'),t('xProduct'),t('xOrdered'),t('xLoaded'),t('xBalance'),t('xStatus'),t('xPalletsLots')]];
+  o.lines.forEach((l,i)=>{const ld=loadedOf(o,i);const where=[];for(const p of o.pallets)for(const f of p.found)if(f.li===i)where.push('P'+p.n+(f.lot?' ('+f.lot+')':'')+': '+fQty(f));
+    B.push([l.pb||l.barcode||'',l.pr||l.ref||'',lineName(l),l.qty,ld,Math.max(0,l.qty-ld),ld>=l.qty?t('xLineOk'):ld>0?t('xLinePart'):t('xLineNone'),where.join(' · ')])});
+  B.push([],['','',t('xGrandTotal'),tt.ord,tt.ld,tt.ord-tt.ld]);
+  const ws=XL.utils.aoa_to_sheet(A);ws['!cols']=[{wch:6},{wch:22},{wch:15},{wch:12},{wch:36},{wch:12},{wch:11},{wch:6},{wch:7},{wch:6},{wch:8},{wch:8},{wch:8}];
+  const ws2=XL.utils.aoa_to_sheet(B);ws2['!cols']=[{wch:15},{wch:12},{wch:36},{wch:9},{wch:9},{wch:9},{wch:12},{wch:50}];
+  const wb=XL.utils.book_new();XL.utils.book_append_sheet(wb,ws,t('xSheetPack').slice(0,31));XL.utils.book_append_sheet(wb,ws2,t('xSheetInstr').slice(0,31));
+  const name='siparis_'+asciiNo(o.no)+'_packing_'+fDate(now)+'.xlsx';
+  if(await shareFile(new Blob([XL.write(wb,{bookType:'xlsx',type:'array'})],{type:XLSX_MIME}),name))toast(t('xlsxReady'),'ok');
+}
+
+/* ---------- minimal PDF + Code128 (no external library) ---------- */
+const C128='212222,222122,222221,121223,121322,131222,122213,122312,132212,221213,221312,231212,112232,122132,122231,113222,123122,123221,223211,221132,221231,213212,223112,312131,311222,321122,321221,312212,322112,322211,212123,212321,232121,111323,131123,131321,112313,132113,132311,211313,231113,231311,112133,112331,132131,113123,113321,133121,313121,211331,231131,213113,213311,213131,311123,311321,331121,312113,312311,332111,314111,221411,431111,111224,111422,121124,121421,141122,141221,112214,112412,122114,122411,142112,142211,241211,221114,413111,241112,134111,111242,121142,121241,114212,124112,124211,411212,421112,421211,212141,214121,412121,111143,111341,131141,114113,114311,411113,411311,113141,114131,311141,411131,211412,211214,211232,2331112'.split(',');
+function c128(data,gs1){
+  const codes=[];const digits=/^\d+$/.test(data);
+  if(gs1||(digits&&data.length>=4)){codes.push(105);if(gs1)codes.push(102);let s=data;const odd=s.length%2;const main=odd?s.slice(0,-1):s;
+    for(let i=0;i<main.length;i+=2)codes.push(+main.substr(i,2));if(odd){codes.push(100);codes.push(s.charCodeAt(s.length-1)-32)}}
+  else{codes.push(104);for(const ch of data){const c=ch.charCodeAt(0);codes.push(c>=32&&c<=127?c-32:31)}}
+  let sum=codes[0];for(let i=1;i<codes.length;i++)sum+=codes[i]*i;codes.push(sum%103);codes.push(106);
+  return codes.map(c=>C128[c]).join('');
+}
+const MM=72/25.4;
+const pdfTxt=s=>String(s??'').replace(/ş/g,'s').replace(/Ş/g,'S').replace(/ğ/g,'g').replace(/Ğ/g,'G').replace(/ı/g,'i').replace(/İ/g,'I').replace(/[–—]/g,'-').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/·/g,'·')
+  .replace(/[^\x20-\x7e -ÿ]/g,'?').replace(/[\\()]/g,m=>'\\'+m);
+function pdfDoc(pages,wmm,hmm){
+  const W=(wmm*MM).toFixed(2),H=(hmm*MM).toFixed(2);const objs=[];
+  objs[1]='<< /Type /Catalog /Pages 2 0 R >>';
+  objs[3]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>';
+  objs[4]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>';
+  const kids=[];let n=5;
+  for(const c of pages){const po=n++,co=n++;kids.push(po+' 0 R');
+    objs[po]=`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${co} 0 R >>`;
+    objs[co]=`<< /Length ${c.length} >>\nstream\n${c}\nendstream`}
+  objs[2]=`<< /Type /Pages /Kids [${kids.join(' ')}] /Count ${kids.length} >>`;
+  let out='%PDF-1.4\n%âãÏÓ\n';const off=[];
+  for(let i=1;i<n;i++){off[i]=out.length;out+=`${i} 0 obj\n${objs[i]}\nendobj\n`}
+  const x=out.length;out+=`xref\n0 ${n}\n0000000000 65535 f \n`+off.slice(1).map(o=>String(o).padStart(10,'0')+' 00000 n \n').join('')+`trailer\n<< /Size ${n} /Root 1 0 R >>\nstartxref\n${x}\n%%EOF`;
+  const b=new Uint8Array(out.length);for(let i=0;i<out.length;i++)b[i]=out.charCodeAt(i)&255;return b;
+}
+function ordLabelPage(o,p,total){
+  const hmm=150,wmm=100,ops=[];const Y=mm=>((hmm-mm)*MM).toFixed(2),X=mm=>(mm*MM).toFixed(2);
+  const txt=(x,y,s,size,bold)=>ops.push(`BT /${bold?'F2':'F1'} ${size} Tf ${X(x)} ${Y(y)} Td (${pdfTxt(s)}) Tj ET`);
+  const line=(y)=>ops.push(`0.6 w ${X(4)} ${Y(y)} m ${X(96)} ${Y(y)} l S`);
+  const fit=(s,n)=>{s=String(s||'');return s.length>n?s.slice(0,n-1)+'.':s};
+  ops.push(`1.2 w ${X(3)} ${Y(147)} ${X(94)} ${(144*MM).toFixed(2)} re S`);
+  txt(6,11,'ORDER / ORDINE',7);txt(6,20,fit(o.no,22),17,true);
+  txt(62,11,'PALLET',7);txt(62,21,`${p.n} / ${total}`,20,true);
+  if(o.customer)txt(6,27,fit(o.customer,48),9);
+  line(30);
+  txt(6,35,'PRODUCT',6.5,true);txt(58,35,'LOT',6.5,true);txt(76,35,'CS',6.5,true);txt(86,35,'QTY',6.5,true);
+  let y=40.5;const rows=p.found;let shown=0;
+  for(const f of rows){if(shown>=11)break;const l=o.lines[f.li]||{};txt(6,y,fit(lineName(l),34),7.5);txt(58,y,fit(f.lot||'-',11),7.5);txt(76,y,String(+f.c||''),7.5);txt(86,y,String(fQty(f)),7.5,true);y+=5;shown++}
+  if(rows.length>shown){txt(6,y,`+ ${rows.length-shown} more lines`,7.5);y+=5}
+  line(99);
+  const q=rows.reduce((a,f)=>a+fQty(f),0),c=rows.reduce((a,f)=>a+(+f.c||0),0);
+  txt(6,105,'TOTAL',6.5,true);txt(6,111,`${c} cs · ${q} pcs`,10,true);
+  txt(52,105,'WEIGHT / HEIGHT',6.5,true);txt(52,111,`${p.weight?p.weight+' kg':'-'}  ${p.height?p.height+' cm':''}`,10,true);
+  txt(6,117,'DATE '+fDate(p.closedAt||Date.now()),6.5);
+  // barcode
+  const gs1=p.sscc&&/^\d{18}$/.test(p.label);const pat=c128(gs1?'00'+p.label:asciiNo(p.label),gs1);
+  const modules=pat.split('').reduce((a,d)=>a+ +d,0);const bw=Math.min(0.42,82/modules);let bx=(100-modules*bw)/2;
+  pat.split('').forEach((d,i)=>{const w=+d*bw;if(i%2===0)ops.push(`${X(bx)} ${Y(142)} ${(w*MM).toFixed(3)} ${(20*MM).toFixed(2)} re f`);bx+=w});
+  const hr=gs1?'(00)'+p.label:asciiNo(p.label);ops.push(`BT /F1 8 Tf ${X(50-hr.length*0.85)} ${Y(145.5)} Td (${pdfTxt(hr)}) Tj ET`);
+  return ops.join('\n');
+}
+async function ordLabelsPdf(o){
+  if(!o)return;const ps=[...o.pallets].sort((a,b)=>a.n-b.n);if(!ps.length)return toast(t('ordNoPallets'),'warn');
+  const pdf=pdfDoc(ps.map(p=>ordLabelPage(o,p,ps.length)),100,150);
+  if(await shareFile(new Blob([pdf],{type:'application/pdf'}),'palet_etiketleri_'+asciiNo(o.no)+'.pdf'))toast(t('ordLabelsReady'),'ok');
+}
+
+/* ---------- Mode tab ---------- */
+function renderInv(){
+  const el=$('#invBody');if(!el)return;
+  const tab=S.modeTab||S.appMode||'free';
+  el.innerHTML=`<div class="seg2 modeseg" id="modeTabSeg">${['free','inv','ord'].map(m=>`<button data-mtab="${m}" class="${tab===m?'on':''}">${S.appMode===m?'● ':''}${t(m==='free'?'modeFree':m==='inv'?'modeInv':'modeOrd')}</button>`).join('')}</div><div id="modePanel" style="margin-top:12px"></div>`;
+  const pnl=$('#modePanel');
+  if(tab==='inv')renderInvPanel(pnl);
+  else if(tab==='ord')renderOrdPanel(pnl);
+  else pnl.innerHTML=`<div class="card ${S.appMode==='free'?'modeon':''}"><h3 style="margin:2px 0 6px">${t('freeTitle')}</h3><p class="mut" style="margin:0 0 10px">${t('freeIntro')}</p>
+    ${S.appMode==='free'?`<div class="note">${t('freeActive')}</div>`:`<button class="btn primary wide" data-inv="freeon">${t('freeModeOn')}</button>`}</div>`;
+}
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-mtab]');if(!b)return;S.modeTab=b.dataset.mtab;save();renderInv()});
+
+
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+if(S.appMode==='inv'&&!S.inv)S.appMode='free';
 buildIndex();
 initDecoder();
 applyLang();
 renderAll();
-if(!S.pallet)setTimeout(()=>{if(!sheetOpen())openPalletSheet()},300);
+if(S.appMode==='inv')setTimeout(()=>{unlockAudio();},0);
+if(!S.pallet&&S.appMode==='free')setTimeout(()=>{if(!sheetOpen())openPalletSheet()},300);
 
 </script>
 </body>
