@@ -201,6 +201,30 @@ main{flex:1;overflow:hidden;position:relative}
 .pos{color:var(--acc);font-weight:800}.neg{color:var(--err);font-weight:800}
 .tabs button span{font-size:10px}
 .invctx #modeSeg,.invctx #finishBtn,.invctx .scanbody .sect,.invctx #recent{display:none}
+.flash.warn{background:rgba(245,158,11,.55);opacity:1;transition:none}
+.hit{position:absolute;border:4px solid transparent;border-radius:10px;pointer-events:none;opacity:0;transition:opacity .4s;z-index:2}
+.hit.ok{border-color:var(--ok);opacity:1;transition:none;box-shadow:0 0 18px var(--ok)}
+.hit.warn{border-color:var(--warn);opacity:1;transition:none;box-shadow:0 0 18px var(--warn)}
+.hit.err{border-color:var(--err);opacity:1;transition:none;box-shadow:0 0 18px var(--err)}
+.sheet.half{max-height:56vh}
+.sheetbg.clear{background:transparent;pointer-events:none}
+.sheet.half .grip{margin-bottom:6px}
+.exl{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+.exl .nm{flex:1;min-width:0}.exl .nm div:first-child{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.exl .nm div:last-child{font-size:12px;color:var(--mut)}
+.exl .mk{font-size:18px;width:26px;text-align:center}
+.exl.done .mk{color:var(--ok)}.exl.abs{opacity:.55}.exl.abs .nm div:first-child{text-decoration:line-through}
+.fl{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:8px 10px;margin-top:8px}
+.fl.extra{border-color:var(--warn)}.fl.hl{box-shadow:0 0 0 3px var(--ok)}
+.fl .top{display:flex;align-items:center;gap:8px}.fl .top .nm{flex:1;min-width:0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fl .lotin{display:flex;gap:6px;align-items:center;margin-top:6px}.fl .lotin input{flex:1;padding:8px 10px;font-weight:700;margin:0}
+.lchip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}
+.lchip.on{border-color:var(--ok);color:var(--ok)}
+.rbanner{background:var(--acc);color:#04202e;font-weight:800;border-radius:10px;padding:8px 10px;margin:6px 0}
+.rcs{margin-top:4px;padding:6px 8px;font-size:13px}
+.hd{display:flex;align-items:center;gap:8px}.hd h3{flex:1;margin:0}
+.fold{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);font-weight:800;margin:10px 0 2px;display:flex;justify-content:space-between}
+.exl.warnrow{background:rgba(245,158,11,.15)}
+.st-recount{background:var(--acc);color:#04202e}
 .shake{animation:sh .3s}
 @keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 </style>
@@ -220,6 +244,7 @@ main{flex:1;overflow:hidden;position:relative}
         <video id="video" playsinline muted autoplay></video>
         <div class="box" id="box"><div class="laser"></div></div>
         <div id="flash" class="flash"></div>
+        <div id="hit" class="hit"></div>
         <div id="banner" class="banner hidden"></div>
         <div class="camtools">
           <button id="zoomBtn" class="hidden">2×</button>
@@ -705,13 +730,63 @@ xBancale:'Bancale (report)',xLabel:'Pallet no. on label',xCode:'Code',xDesc:'Des
 xDiff:'Difference',xCases:'Cases',xPc:'Per case',xUnits:'Single',xStatus:'Status',xLevel:'Level',xOpen:'To open',xReasons:'Reasons',xNote:'Note',xTime:'Check time',xDevice:'Device',
 xLotTypo:'lot O/0?',xAddedLine:'Line outside report',xSheetDiff:'Differences',yes:'yes'
 });
+Object.assign(I18N.tr,{invExpectedHdr:'Beklenen (rapor)',invFoundHdr:'Bulunan',invAbsent:'Yok',invUndo:'Geri al',invScanHint:'Koli barkodlarını okutun – ürünler buraya eklenir.',invAddHint:'Ürün eklemek için "+ Ürün ekle"ye basın.',invAddProduct:'+ Ürün ara / ekle',
+invPlusCase:'Okut = +1 koli',invPlusCaseSub:'Aynı ürünü her okutuşta koli sayısı 1 artar',invUnmatchedWarn:'{n} beklenen ürün bulunamadı. Palette yoksa "Yok" işaretleyin veya tekrar "Kaydet"e basın.',invSave2:'2. sayımı kaydet',
+invRecountBanner:'🔁 Fark eşiği aşıldı – kör tekrar sayım. İşaretli satırları yeniden sayın.',invExtraTag:'rapor dışı',invSamePallet:'Bu palet zaten açık',invOtherPallet:'Başka bir paletin etiketi – önce bu paleti kaydedin',invUnknownCode:'Tanınmayan barkod',
+invAlreadyListed:'Bu ürün ve lot zaten listede',invNotExpected:'Bu ürün bu palette beklenmiyor',invAllFound:'✓ Beklenen tüm ürünler bulundu',invRecountLater:'{n} satırda fark var – palet "Tekrar sayılacak" listesine alındı',invRecountNow:'Fark eşiği aşıldı – lütfen tekrar sayın',
+r_recountFail:'tekrar sayım tutmadı',r_missingProd:'beklenen ürün yok',r_caseDiff:'fark eşiği aşıldı',ty_ok:'Tuttu',ty_qty:'Adet farkı',ty_lot:'Lot farkı',ty_missing:'Palette yok',ty_extra:'Rapor dışı ürün',
+rcPick:'Fark nedeni seçin…',rc_count:'Sayım/kayıt hatası',rc_damaged:'Hasarlı / imha',rc_uom:'Yanlış birim / koli içi',rc_moved:'Başka palete / yere taşınmış',rc_shipped:'Kaydı yapılmamış çıkış / sevk',rc_label:'Yanlış etiket / ürün',rc_lot:'Lot hatası',rc_other:'Diğer',
+invCounts:'1. sayım {a} · 2. sayım {b}',st_recount:'Tekrar sayılacak',invTolLbl:'Fark eşiği',tol0:'0 – her fark tekrar sayılır',tolCase:'±1 koli (önerilen)',tolPct:'%2',invRecLbl:'Tekrar sayım',recNow:'Hemen – aynı kişi, kör',recLater:'Sonra – ikinci kişi (listeye alınır)',
+invDeviceLbl:'Bu cihaz / sayan kişi',invTeamHdr:'Ekip sayımı (birden fazla telefon)',invTeamHint:'Her telefon aynı raporu yükler ve sayar. Sonuçları paylaşıp tek telefonda birleştirin; aynı palet iki kez sayıldıysa en yeni sayım geçerli olur.',
+invShareRes:'📤 Sonuçlarımı paylaş',invMergeRes:'📥 Sonuçları birleştir',invNeedDevice:'Önce cihaz / sayan kişi adını girin',invShared:'{n} paletin sonucu paylaşıldı',invMergeOther:'Bu sonuçlar farklı bir rapora ait',invMergedOver:'{d} cihazının sayımının üzerine yazıldı',
+invMerged:'{d}: {a} yeni, {u} güncellendi, {k} aynı kaldı',xCount1:'1. sayım',xCount2:'2. sayım',xType:'Sonuç',xRc:'Fark nedeni'});
+Object.assign(I18N.de,{invExpectedHdr:'Erwartet (Bericht)',invFoundHdr:'Gefunden',invAbsent:'Fehlt',invUndo:'Zurück',invScanHint:'Kartonbarcodes scannen – Artikel erscheinen hier.',invAddHint:'Mit „+ Artikel hinzufügen“ Artikel ergänzen.',invAddProduct:'+ Artikel suchen / hinzufügen',
+invPlusCase:'Scan = +1 Karton',invPlusCaseSub:'Jeder Scan desselben Artikels erhöht die Kartonzahl um 1',invUnmatchedWarn:'{n} erwartete Artikel nicht gefunden. Wenn nicht auf der Palette, „Fehlt“ markieren oder erneut „Speichern“ tippen.',invSave2:'2. Zählung speichern',
+invRecountBanner:'🔁 Toleranz überschritten – blinde Nachzählung. Markierte Zeilen erneut zählen.',invExtraTag:'nicht im Bericht',invSamePallet:'Diese Palette ist bereits geöffnet',invOtherPallet:'Etikett einer anderen Palette – erst diese Palette speichern',invUnknownCode:'Unbekannter Barcode',
+invAlreadyListed:'Artikel und Charge bereits in der Liste',invNotExpected:'Dieser Artikel wird auf dieser Palette nicht erwartet',invAllFound:'✓ Alle erwarteten Artikel gefunden',invRecountLater:'{n} Zeilen mit Differenz – Palette auf „Nachzählen“ gesetzt',invRecountNow:'Toleranz überschritten – bitte erneut zählen',
+r_recountFail:'Nachzählung abweichend',r_missingProd:'erwarteter Artikel fehlt',r_caseDiff:'Toleranz überschritten',ty_ok:'Stimmt',ty_qty:'Mengendifferenz',ty_lot:'Chargendifferenz',ty_missing:'Nicht auf Palette',ty_extra:'Artikel außerhalb Bericht',
+rcPick:'Differenzgrund wählen…',rc_count:'Zähl-/Buchungsfehler',rc_damaged:'Beschädigt / entsorgt',rc_uom:'Falsche Einheit / Kartoninhalt',rc_moved:'Auf andere Palette / Platz umgelagert',rc_shipped:'Nicht gebuchter Ausgang / Versand',rc_label:'Falsches Etikett / Artikel',rc_lot:'Chargenfehler',rc_other:'Sonstiges',
+invCounts:'1. Zählung {a} · 2. Zählung {b}',st_recount:'Nachzählen',invTolLbl:'Toleranz',tol0:'0 – jede Differenz wird nachgezählt',tolCase:'±1 Karton (empfohlen)',tolPct:'2 %',invRecLbl:'Nachzählung',recNow:'Sofort – gleiche Person, blind',recLater:'Später – zweite Person (auf Liste)',
+invDeviceLbl:'Dieses Gerät / Zähler',invTeamHdr:'Teamzählung (mehrere Telefone)',invTeamHint:'Jedes Telefon lädt denselben Bericht und zählt. Ergebnisse teilen und auf einem Telefon zusammenführen; bei doppelt gezählten Paletten gilt die neueste Zählung.',
+invShareRes:'📤 Meine Ergebnisse teilen',invMergeRes:'📥 Ergebnisse zusammenführen',invNeedDevice:'Bitte zuerst Gerät / Zähler eingeben',invShared:'Ergebnisse von {n} Paletten geteilt',invMergeOther:'Diese Ergebnisse gehören zu einem anderen Bericht',invMergedOver:'Zählung von Gerät {d} überschrieben',
+invMerged:'{d}: {a} neu, {u} aktualisiert, {k} unverändert',xCount1:'1. Zählung',xCount2:'2. Zählung',xType:'Ergebnis',xRc:'Differenzgrund'});
+Object.assign(I18N.it,{invExpectedHdr:'Atteso (report)',invFoundHdr:'Trovato',invAbsent:'Assente',invUndo:'Annulla',invScanHint:'Scansiona i barcode dei cartoni – i prodotti appaiono qui.',invAddHint:'Premi "+ Aggiungi prodotto" per aggiungere.',invAddProduct:'+ Cerca / aggiungi prodotto',
+invPlusCase:'Scan = +1 cartone',invPlusCaseSub:'Ogni scansione dello stesso prodotto aumenta i cartoni di 1',invUnmatchedWarn:'{n} prodotti attesi non trovati. Se non sono sul pallet segna "Assente" o premi di nuovo "Salva".',invSave2:'Salva 2° conteggio',
+invRecountBanner:'🔁 Tolleranza superata – riconteggio cieco. Riconta le righe segnate.',invExtraTag:'fuori report',invSamePallet:'Questo pallet è già aperto',invOtherPallet:"Etichetta di un altro pallet – salva prima questo",invUnknownCode:'Barcode sconosciuto',
+invAlreadyListed:'Prodotto e lotto già in elenco',invNotExpected:'Questo prodotto non è atteso su questo pallet',invAllFound:'✓ Tutti i prodotti attesi trovati',invRecountLater:'{n} righe con differenza – pallet messo in "Da ricontare"',invRecountNow:'Tolleranza superata – ricontare',
+r_recountFail:'riconteggio non coincide',r_missingProd:'prodotto atteso mancante',r_caseDiff:'tolleranza superata',ty_ok:'Corrisponde',ty_qty:'Differenza quantità',ty_lot:'Differenza lotto',ty_missing:'Non sul pallet',ty_extra:'Prodotto fuori report',
+rcPick:'Scegli motivo differenza…',rc_count:'Errore di conteggio/registrazione',rc_damaged:'Danneggiato / smaltito',rc_uom:'Unità / pezzi per cartone errati',rc_moved:'Spostato su altro pallet / posto',rc_shipped:'Uscita / spedizione non registrata',rc_label:'Etichetta / prodotto errato',rc_lot:'Errore lotto',rc_other:'Altro',
+invCounts:'1° conteggio {a} · 2° conteggio {b}',st_recount:'Da ricontare',invTolLbl:'Tolleranza',tol0:'0 – ogni differenza va ricontata',tolCase:'±1 cartone (consigliato)',tolPct:'2%',invRecLbl:'Riconteggio',recNow:'Subito – stessa persona, cieco',recLater:'Dopo – seconda persona (in elenco)',
+invDeviceLbl:'Questo dispositivo / operatore',invTeamHdr:'Conteggio in team (più telefoni)',invTeamHint:'Ogni telefono carica lo stesso report e conta. Condividi i risultati e uniscili su un telefono; se un pallet è contato due volte vale il conteggio più recente.',
+invShareRes:'📤 Condividi i miei risultati',invMergeRes:'📥 Unisci risultati',invNeedDevice:'Inserisci prima dispositivo / operatore',invShared:'Risultati di {n} pallet condivisi',invMergeOther:'Questi risultati appartengono a un altro report',invMergedOver:'Sovrascritto il conteggio del dispositivo {d}',
+invMerged:'{d}: {a} nuovi, {u} aggiornati, {k} invariati',xCount1:'1° conteggio',xCount2:'2° conteggio',xType:'Esito',xRc:'Motivo differenza'});
+Object.assign(I18N.ru,{invExpectedHdr:'Ожидается (отчёт)',invFoundHdr:'Найдено',invAbsent:'Нет',invUndo:'Отменить',invScanHint:'Сканируйте штрихкоды коробов – товары появятся здесь.',invAddHint:'Нажмите «+ Добавить товар».',invAddProduct:'+ Найти / добавить товар',
+invPlusCase:'Скан = +1 короб',invPlusCaseSub:'Каждый скан того же товара добавляет 1 короб',invUnmatchedWarn:'Не найдено ожидаемых товаров: {n}. Если их нет на паллете, отметьте «Нет» или снова нажмите «Сохранить».',invSave2:'Сохранить 2-й пересчёт',
+invRecountBanner:'🔁 Превышен допуск – слепой пересчёт. Пересчитайте отмеченные строки.',invExtraTag:'вне отчёта',invSamePallet:'Эта паллета уже открыта',invOtherPallet:'Этикетка другой паллеты – сначала сохраните эту',invUnknownCode:'Неизвестный штрихкод',
+invAlreadyListed:'Товар и партия уже в списке',invNotExpected:'Этот товар не ожидается на этой паллете',invAllFound:'✓ Все ожидаемые товары найдены',invRecountLater:'Расхождения в {n} строках – паллета добавлена в «Пересчитать»',invRecountNow:'Превышен допуск – пересчитайте',
+r_recountFail:'пересчёт не совпал',r_missingProd:'нет ожидаемого товара',r_caseDiff:'превышен допуск',ty_ok:'Совпадает',ty_qty:'Расхождение кол-ва',ty_lot:'Расхождение партии',ty_missing:'Нет на паллете',ty_extra:'Товар вне отчёта',
+rcPick:'Причина расхождения…',rc_count:'Ошибка подсчёта/учёта',rc_damaged:'Повреждено / списано',rc_uom:'Неверная единица / вложение',rc_moved:'Перемещено на другую паллету / место',rc_shipped:'Неучтённая отгрузка',rc_label:'Неверная этикетка / товар',rc_lot:'Ошибка партии',rc_other:'Другое',
+invCounts:'1-й пересчёт {a} · 2-й пересчёт {b}',st_recount:'Пересчитать',invTolLbl:'Допуск расхождения',tol0:'0 – любое расхождение пересчитывается',tolCase:'±1 короб (рекомендуется)',tolPct:'2%',invRecLbl:'Пересчёт',recNow:'Сразу – тот же человек, вслепую',recLater:'Позже – второй человек (в список)',
+invDeviceLbl:'Это устройство / сотрудник',invTeamHdr:'Командный пересчёт (несколько телефонов)',invTeamHint:'Каждый телефон загружает тот же отчёт и считает. Поделитесь результатами и объедините их на одном телефоне; если паллета посчитана дважды, действует последний пересчёт.',
+invShareRes:'📤 Поделиться результатами',invMergeRes:'📥 Объединить результаты',invNeedDevice:'Сначала введите устройство / сотрудника',invShared:'Отправлены результаты {n} паллет',invMergeOther:'Эти результаты относятся к другому отчёту',invMergedOver:'Перезаписан пересчёт устройства {d}',
+invMerged:'{d}: новых {a}, обновлено {u}, без изменений {k}',xCount1:'1-й пересчёт',xCount2:'2-й пересчёт',xType:'Результат',xRc:'Причина расхождения'});
+Object.assign(I18N.en,{invExpectedHdr:'Expected (report)',invFoundHdr:'Found',invAbsent:'Absent',invUndo:'Undo',invScanHint:'Scan case barcodes – products appear here.',invAddHint:'Tap "+ Add product" to add products.',invAddProduct:'+ Search / add product',
+invPlusCase:'Scan = +1 case',invPlusCaseSub:'Each scan of the same product adds 1 case',invUnmatchedWarn:'{n} expected products not found. If they are not on the pallet, mark "Absent" or tap "Save" again.',invSave2:'Save 2nd count',
+invRecountBanner:'🔁 Tolerance exceeded – blind recount. Recount the marked lines.',invExtraTag:'not in report',invSamePallet:'This pallet is already open',invOtherPallet:'Label of another pallet – save this pallet first',invUnknownCode:'Unknown barcode',
+invAlreadyListed:'Product and lot already listed',invNotExpected:'This product is not expected on this pallet',invAllFound:'✓ All expected products found',invRecountLater:'{n} lines with differences – pallet moved to "Recount"',invRecountNow:'Tolerance exceeded – please recount',
+r_recountFail:'recount does not match',r_missingProd:'expected product missing',r_caseDiff:'tolerance exceeded',ty_ok:'Matches',ty_qty:'Qty difference',ty_lot:'Lot difference',ty_missing:'Not on pallet',ty_extra:'Product outside report',
+rcPick:'Pick difference reason…',rc_count:'Counting / booking error',rc_damaged:'Damaged / scrapped',rc_uom:'Wrong unit / case qty',rc_moved:'Moved to another pallet / location',rc_shipped:'Unbooked issue / shipment',rc_label:'Wrong label / product',rc_lot:'Lot error',rc_other:'Other',
+invCounts:'1st count {a} · 2nd count {b}',st_recount:'Recount',invTolLbl:'Variance tolerance',tol0:'0 – every difference is recounted',tolCase:'±1 case (recommended)',tolPct:'2%',invRecLbl:'Recount',recNow:'Now – same person, blind',recLater:'Later – second person (listed)',
+invDeviceLbl:'This device / counter',invTeamHdr:'Team count (several phones)',invTeamHint:'Each phone loads the same report and counts. Share results and merge them on one phone; if a pallet was counted twice, the newest count wins.',
+invShareRes:'📤 Share my results',invMergeRes:'📥 Merge results',invNeedDevice:'Enter device / counter name first',invShared:'Results of {n} pallets shared',invMergeOther:'These results belong to a different report',invMergedOver:'Overwrote count from device {d}',
+invMerged:'{d}: {a} new, {u} updated, {k} unchanged',xCount1:'1st count',xCount2:'2nd count',xType:'Result',xRc:'Difference reason'});
 
 'use strict';
 const PRODUCTS=[["8053839950161","SAO001","SONO ARGAN OIL",30,200,""],["8053839950178","SAO002","SONO ARGAN OIL",100,36,""],["8053839950109","SASH002","SONO ARGAN SHAMPOO 250",250,48,""],["8053839950093","SACN002","SONO ARGAN CONDITIONER",250,48,""],["8053839950130","SADM001","SONO ARGAN DEEP MASK box",250,32,""],["8053839950123","SALM002","SONO ARGAN LEAVE IN MASK box",150,64,""],["8053839950154","SALMM002","SONO ARGAN LEAVE IN MASK",50,100,""],["8053839950024","SAA001","SONO COLOR SHAMPOO",250,48,""],["8053839950000","SAA002","SONO COLOR MASK box",250,32,""],["8053839950246","SSO002","SONO BLONDER OIL",100,36,""],["8053839950062","SSH001","SONO SILVER SHAMPOO",250,48,""],["8053839950048","SSMA02","SONO SILVER MASK box",250,32,""],["8053839950192","SSSI01","SONO SILVER SILK box",150,64,""],["8053839950321","SSSIM011","SONO SILVER SILK",50,100,""],["8053839950239","SSS003","SONO STYLE SALT WAVE",150,64,""],["8053839950338","SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250,48,""],["8053839950352","SGM001","SONO GOLD RESTRUCTURING MASK",150,64,""],["8053839950376","SSG001","SONO SILKY GOLD",150,64,""],["8053839950277","SKSH001","SONO KERATIN SHAMPOO",250,48,""],["8053839950284","SKCN001","SONO KERATIN CONDITIONER",250,48,""],["8053839950314","SAAP001","Sono Color Potion 150 ml",150,64,""],["8053839950857","SSG002","Silky Gold 50 ml",50,100,""],["8053839950956","SCP050","Sono Color Potion 50 ml",50,100,""],["8053839950116","SASH003","SONO ARGAN SHAMPOO 1000",1000,12,""],["8053839950086","SACN003","SONO ARGAN CONDITIONER",1000,12,""],["8053839950536","SKSH002","SONO KERATIN SHAMPOO",1000,12,""],["8053839951151","SSVS150","VOLUME SPRAY",150,64,""],["8053839951182","SSTP150","THERMO-PROTECTIVE SPRAY",150,80,""],["8053839950031","SAA003","SONO COLOR SHAMPOO 1000 ml",1000,12,""],["8053839950345","SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000,12,""],["8053839951168","SSVM150","Sono Volume Mousse",150,48,""],["8053839951199","SSBW150","BEACH WAVES SPRAY",150,64,""],["8053839950680","SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250,48,""],["8053839950697","SVMA001","THE VOLUMIZING MASK 250 ml",250,32,""],["8053839950079","SSH003","SONO SILVER SHAMPOO 1000 ml",1000,12,""],["8053839951755","SAPGS25","SONO Argan Perfume Gift Set 2025","",18,""],["8053839951472","SGCN1000","SONO GOLD Conditioner 1000 ml",1000,12,""],["8053839951489","SGCN0250","SONO GOLD Conditioner 250 ml",250,48,""],["8053839951496","SSCN1000","SONO Silver Conditioner 1000 ml",1000,12,""],["8053839951502","SSCN0250","SONO Silver Conditioner 250 ml",250,48,""],["8053839951618","SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250,48,""],["8053839951519","SCCN1000","SONO Color Conditioner 1000 ml",1000,12,""],["8053839951649","SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250,48,""],["8053839951700","SKHP001","SONO KERATIN PERFUME",30,256,""],["8053839951526","SCCN0250","SONO Color Conditioner 250 ml",250,48,""],["8053839951281","SSDRS200","SPRAY DRY SHAMPOO","",12,""],["8053839951311","SSFSPR300","FIX SPRAY","",12,""],["8053839951564","SCSH250","SONO THE CURL SHAMPOO",250,48,""],["8053839951588","SCMA250","SONO CURL MASK",250,32,""],["8053839951601","SCLG150","SONO CURL LIQUID GEL",150,64,""],["8053839951632","SDLT150","SONO ANTI-DANDRUFF LOTION",150,64,""],["8053839951656","SGFM050","SONO GOLD  LIQUID FILLER MASK",50,100,""],["8053839951663","SBLM050","SONO BLONDER LIQUID MASK",50,100,""],["8053839951670","SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250,48,""],["8053839951687","SHLCN250","SONO HAIR-LOSS CONDITIONER",250,48,""],["8053839951694","SHLT150","SONO HAIR-LOSS LOTION",150,64,""],["8053839951717","SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100,36,""],["8053839950475","SAOM02","ARGAN OIL 10 ML",10,800,""],["8053839950437","SASHS02","ARGAN SHAMPOO 10 ML",10,800,""],["8053839950444","SACNS02","ARGAN CONDITIONER 10 ML",10,800,""],["8053839950451","SADMS01","ARGAN DEEP MASK 10 ML",10,800,""],["8053839950468","SALMS02","ARGAN LEAVE IN MASK 10 ML",10,800,""],["8053839950482","SAAS001","COLOR SHAMPOO 10 ML",10,800,""],["8053839950499","SAAS002","ANTI-AGE MASK 10 ML",10,800,""],["8053839950390","SAHS01","SILVER SHAMPOO 10 ML",10,800,""],["","","SONO Silver Conditioner 10 ml",10,800,""],["8053839950406","SSMS01","SILVER MASK 10 ML",10,800,""],["8053839950413","SSSS01","SONO SILVER SILK SPRAY 10ML",10,800,""],["8053839950567","SKSHS01","SONO KERATIN SHAMPOO",10,800,""],["8053839950574","SKCNS01","SONO KERATIN CONDITIONER",10,800,""],["8053839950376_","SSGS01","SONO SILKY GOLD",10,800,""],["8053839950529","SACNS02","SONO Kraft Bag 18X24X8 cm","","",""],["8053839951120","SWB001","SMAL SONO WHITE BAG","",200,""],["","SADM002","SONO ARGAN DEEP MASK",500,16,""],["","SAA004","SONO COLOR MASK",500,16,""],["","SSO001","SONO BLONDER OIL",30,200,""],["","SSMA01","SONO SILVER MASK",500,16,""],["","SGM002","SONO GOLD RESTRUCTURING MASK",500,16,""],["","SGF002","SONO GOLD FILLER",250,48,""],["","SGA001","SONO GOLD AMPOULE","6 x 10 ml",32,"noteSGA"],["","SKCN002","SONO KERATIN CONDITIONER",1000,12,""],["","SSS004","SONO STYLE SALT WAVE",50,100,""],["","SSGG150","LIQUID GEL",150,64,""],["","SSDC050","STYLING PASTE",50,112,""],["","SSDCSH250","SONO STYLE DEEP CLEANSING SHAMPOO 250 ml",250,48,""],["","SSDCSH1000","SONO STYLE DEEP CLEANSING SHAMPOO 1000 ml",1000,12,""],["","SAPD001","SONO DETOX LOTION 150 ML",150,64,""],["","SAPSH001","SONO DETOX SHAMPOO 250 ML",250,48,""],["","SAPM001","SONO DETOX MASK 150 ML",150,64,""],["","SAPS001","SONO DETOX SPRAY 150 ML",150,64,""],["","SVSP001","SONO VOLUME VOLUMIZING  SPRAY 150 ml",150,64,""],["","SCSH1000","SONO CURL SHAMPOO 1000 ML",1000,12,""],["","SCMA500","SONO CURL MASK 500 ML",500,16,""],["","SDSH1000","SONO ANTI-DANDRUFF SHAMPOO 1000 ML",1000,12,""],["","SCP010","SONO COLOR POTION",10,800,""],["","SSOS01","SONO SILVER OIL",10,800,""],["","SGSS01","SONO GOLD RESTRUCTURING SHAMPOO",10,800,""],["","SGMS01","SONO GOLD RESTRUCTURING MASK",10,800,""],["","KWB001","SMALL SONO WHITE BAG","",200,""],["","SGP00","SONO GOLD PERFUME",30,256,""],["","SAP00","SONO ARGAN PERFUME",30,256,""],["","SBP00","SONO BLONDER PERFUME",30,256,""]];
-const VERSION='2.0';
+const VERSION='2.1';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const LS='palet_sayim_v1';
-const DEF={lang:'auto',entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false,inv:null,invBlind:true,invQuick:false,invFilter:'all'};
+const DEF={lang:'auto',entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false,inv:null,invBlind:true,invQuick:false,invFilter:'all',invTol:'case',invRecount:'now',invPlusCase:false};
 let S=Object.assign({},DEF,(()=>{try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}}})());
 if(S.mode==='plus')S.mode='plusu';
 if(Array.isArray(S.extra)||typeof S.extra!=='object')S.extra={};
@@ -813,6 +888,7 @@ function tone(f,dur,at=0,vol=.18,type='square'){
 const beepOk=()=>tone(1850,.09);
 const beepSaved=()=>{tone(1400,.06);tone(2100,.08,.07)};
 const beepErr=()=>{tone(320,.16,0,.22,'sawtooth');tone(220,.22,.18,.22,'sawtooth')};
+const beepWarn=()=>{tone(880,.08,0,.2);tone(660,.12,.1,.2)};
 function vib(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
 function flash(kind){const f=$('#flash');f.className='flash '+kind;requestAnimationFrame(()=>requestAnimationFrame(()=>{f.className='flash'}))}
 
@@ -826,10 +902,11 @@ function toast(msg,kind='',action=null){
 function hideToast(){$('#toast').className='toast hidden'}
 
 /* ---------- sheet ---------- */
-let sheetOnClose=null,sheetKey=null;
+let sheetOnClose=null,sheetKey=null,sheetScan=false,invSheetScan=null;
 const sheetOpen=()=>!$('#sheet').classList.contains('hidden');
-function openSheet(html,onClose){
-  const sh=$('#sheet');sh.innerHTML='<div class="grip"></div>'+html;sh.onclick=null;sh.oninput=null;
+function openSheet(html,onClose,opt={}){
+  const sh=$('#sheet');sh.innerHTML='<div class="grip"></div>'+html;sh.onclick=null;sh.oninput=null;sh.onchange=null;
+  sheetScan=!!opt.scan;sh.classList.toggle('half',!!opt.half);$('#sheetBg').classList.toggle('clear',!!opt.half);if(!opt.scan)invSheetScan=null;
   sh.classList.remove('hidden');$('#sheetBg').classList.remove('hidden');sh.scrollTop=0;
   sheetOnClose=onClose||null;sheetKey=null;return sh;
 }
@@ -837,7 +914,7 @@ function closeSheet(){
   if(!sheetOpen())return;
   if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
   $('#sheet').classList.add('hidden');$('#sheetBg').classList.add('hidden');$('#sheet').innerHTML='';
-  sheetKey=null;const f=sheetOnClose;sheetOnClose=null;
+  sheetKey=null;sheetScan=false;invSheetScan=null;$('#sheet').classList.remove('half');const f=sheetOnClose;sheetOnClose=null;
   if(cool.until===Infinity)cool.until=Date.now()+1500;
   f&&f();
 }
@@ -918,15 +995,17 @@ function cropRect(){
 function loop(ts){
   if(!scanning)return;
   requestAnimationFrame(loop);
-  if(busy||sheetOpen()||ts-lastTry<110||video.readyState<2||!video.videoWidth)return;
+  const blocked=()=>sheetOpen()&&!sheetScan;
+  if(busy||blocked()||ts-lastTry<110||video.readyState<2||!video.videoWidth)return;
   lastTry=ts;busy=true;
-  decodeFrame().then(r=>{busy=false;if(r&&r.text&&!sheetOpen())onScan(r.text.replace(/^[\s]+|[\s]+$/g,''),r.format)}).catch(()=>{busy=false});
+  decodeFrame().then(r=>{busy=false;if(r&&r.text&&!blocked()){lastPts=r.pts||null;onScan(r.text.replace(/^[\s]+|[\s]+$/g,''),r.format)}}).catch(()=>{busy=false});
 }
 async function decodeFrame(){
   const c=cropRect();if(c.w<10||c.h<10)return null;
   const k=Math.min(1,1000/c.w);cv.width=Math.round(c.w*k);cv.height=Math.round(c.h*k);
   cx.drawImage(video,c.x,c.y,c.w,c.h,0,0,cv.width,cv.height);
-  if(nativeDet){const r=await nativeDet.detect(cv);return r&&r.length?{text:r[0].rawValue,format:String(r[0].format||'').toUpperCase()}:null}
+  const map=pts=>(pts||[]).map(p=>({x:c.x+p.x/k,y:c.y+p.y/k}));
+  if(nativeDet){const r=await nativeDet.detect(cv);return r&&r.length?{text:r[0].rawValue,format:String(r[0].format||'').toUpperCase(),pts:map(r[0].cornerPoints)}:null}
   if(mfr){
     try{
       let lum;
@@ -935,13 +1014,26 @@ async function decodeFrame(){
         for(let i=0,j=0;i<d.length;i+=4,j++)g[j]=(d[i]*306+d[i+1]*601+d[i+2]*117)>>10;
         lum=new ZXing.RGBLuminanceSource(g,cv.width,cv.height)}
       const r=mfr.decodeWithState(new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(lum)));
-      return {text:r.getText(),format:ZXing.BarcodeFormat[r.getBarcodeFormat()]};
+      let pts=[];try{pts=(r.getResultPoints()||[]).filter(Boolean).map(p=>({x:p.getX(),y:p.getY()}))}catch(e){}
+      return {text:r.getText(),format:ZXing.BarcodeFormat[r.getBarcodeFormat()],pts:map(pts)};
     }catch(e){return null}
   }
   return null;
 }
-function scanOk(){flash('ok');beepOk();vib(40)}
-function scanErr(msg){flash('err');beepErr();vib([60,40,60]);toast(msg,'err')}
+let lastPts=null;
+function showHit(kind){
+  const h=$('#hit');if(!h||!lastPts||!lastPts.length||!video.videoWidth)return;
+  const r=$('#cam').getBoundingClientRect(),vw=video.videoWidth,vh=video.videoHeight;
+  const sc=Math.max(r.width/vw,r.height/vh),offX=(vw*sc-r.width)/2,offY=(vh*sc-r.height)/2;
+  const xs=lastPts.map(p=>p.x*sc-offX),ys=lastPts.map(p=>p.y*sc-offY);
+  let x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  const padX=Math.max(14,(x1-x0)*.08),padY=Math.max(26,(y1-y0)*.3);
+  h.style.left=(x0-padX)+'px';h.style.top=(y0-padY)+'px';h.style.width=(x1-x0+2*padX)+'px';h.style.height=(y1-y0+2*padY)+'px';
+  h.className='hit '+kind;clearTimeout(h._t);h._t=setTimeout(()=>{h.className='hit'},700);lastPts=null;
+}
+function scanOk(){flash('ok');showHit('ok');beepOk();vib(40)}
+function scanWarn(msg){flash('warn');showHit('warn');beepWarn();vib([40,30,40]);if(msg)toast(msg,'warn')}
+function scanErr(msg){flash('err');showHit('err');beepErr();vib([60,40,60]);toast(msg,'err')}
 function onScan(code,format){
   if(!code)return;
   const f=String(format||'').toUpperCase().replace('-','_');
@@ -960,6 +1052,7 @@ function onScan(code,format){
   let p=null,pre=null;
   if(g&&g.gtin){const ean=gtinToEan13(g.gtin);p=lookup(ean)||lookup(g.gtin)||{barcode:ean,ref:'',name:'',vol:'',unknown:true};pre={lot:g.lot||'',exp:g.exp||'',count:g.count||0,isCase:g.isCase}}
   if(ctx==='invPallet'){
+    if(sheetScan&&invSheetScan){cool={code:ck,until:Date.now()+(S.invPlusCase?(+S.cool||1200):4000)};if(!p&&!sscc)p=lookup(code.replace(/[\x00-\x1f]/g,''))||invCodeProduct(code)||null;invSheetScan({p,pre,sscc,code});return}
     cool={code:ck,until:Date.now()+2500};
     if(sscc){scanOk();invOpenPallet(sscc);return}
     if(!p&&!(f==='DATA_MATRIX'&&!g))p=lookup(code)||invCodeProduct(code);
@@ -1501,10 +1594,10 @@ function invRows(id){return S.inv?S.inv.rows.filter(r=>r.bancale===id):[]}
 function invIds(){if(!S.inv)return[];const ids=S.inv.order.slice();for(const k of Object.keys(S.inv.pal))if(S.inv.pal[k].isNew&&!ids.includes(k))ids.push(k);return ids}
 function invStatus(id){
   const r=S.inv&&S.inv.pal[id];if(!r||!r.checkedAt)return 'pending';
-  if(r.missing)return 'missing';if(r.isNew)return 'new';if(r.quick)return 'quick';return r.diff?'diff':'ok';
+  if(r.missing)return 'missing';if(r.recount==='pending')return 'recount';if(r.isNew)return 'new';if(r.quick)return 'quick';return r.diff?'diff':'ok';
 }
 function invCounts(){
-  const c={all:0,pending:0,ok:0,quick:0,diff:0,missing:0,new:0,open:0};
+  const c={all:0,pending:0,ok:0,quick:0,diff:0,missing:0,new:0,open:0,recount:0};
   for(const id of invIds()){c.all++;const s=invStatus(id);c[s]++;const r=S.inv.pal[id];if(r&&r.flagOpen)c.open++}
   return c;
 }
@@ -1542,7 +1635,8 @@ async function invImport(file){
   }
   if(!rows.length)return toast(t('invBadFile'),'err');
   const head=aoa.slice(0,hi).map(r=>r.map(cellStr));
-  const inv={id:uid(),fileName:file.name,sheetName:sn.slice(0,31),importedAt:Date.now(),head,hdr,col,ncol:Math.max(hdr.length,...head.map(r=>r.length)),
+  let fp=0;for(const r of rows){const s=r.bancale+'|'+r.code+'|'+r.lot+'|'+r.qty;for(let j=0;j<s.length;j++)fp=(fp*31+s.charCodeAt(j))|0}
+  const inv={id:uid(),fp:String(fp>>>0)+'-'+rows.length,fileName:file.name,sheetName:sn.slice(0,31),importedAt:Date.now(),head,hdr,col,ncol:Math.max(hdr.length,...head.map(r=>r.length)),
     merges:(ws['!merges']||[]).filter(m=>m.e.r<hi),cols:ws['!cols']||null,rows,pal:{},order:[...new Set(rows.map(r=>r.bancale))]};
   const go=()=>{S.inv=inv;save();buildIndex();renderAll();toast(t('invLoaded',{n:inv.order.length,r:rows.length}),'ok');if(numWarn)setTimeout(()=>toast(t('invNumWarn'),'warn'),2700)};
   if(S.inv&&Object.keys(S.inv.pal).length){
@@ -1552,138 +1646,218 @@ async function invImport(file){
   }else go();
 }
 
-/* expected breakdown for a qty */
-function breakdown(q,pc){if(!pc)return '';const c=Math.floor(q/pc),u=q-c*pc;return t('nCases',{n:c})+(u?' + '+u:'')}
 
-/* pallet sheet */
+function breakdown(q,pc){if(!pc)return '';const c=Math.floor(q/pc),u=q-c*pc;return t('nCases',{n:c})+(u?' + '+u:'')}
+/* ---------- product identity & reconciliation ---------- */
+function idsOf(p){const s=new Set();if(!p)return s;for(const v of [p.barcode,p.ref,p.code])if(v)s.add(String(v).trim().toUpperCase());return s}
+function rowIds(r){const s=idsOf(rowProduct(r));s.add(String(r.code||'').trim().toUpperCase());return s}
+function sameIds(a,b){for(const x of a)if(b.has(x))return true;return false}
+const fQty=f=>(+f.c||0)*(+f.pc||0)+(+f.u||0);
+function groupsOf(rows){
+  const G=[],m=new Map();
+  for(const r of rows){const k='g:'+String(r.code).trim().toUpperCase()+'|'+normLot(r.lot);
+    if(!m.has(k)){const g={key:k,rows:[],exp:0,ids:rowIds(r),lot:r.lot,code:r.code,desc:r.desc};m.set(k,g);G.push(g)}
+    const g=m.get(k);g.rows.push(r);g.exp+=r.qty}
+  return G;
+}
+function reconcile(rows,found){
+  const G=groupsOf(rows),F=found.map(f=>({f,ids:idsOf(f),used:false})),P=[];
+  const take=(g,list,type)=>{list.forEach(y=>y.used=true);const fs=list.map(y=>y.f);const cnt=fs.reduce((a,f)=>a+fQty(f),0);
+    const pc=+((fs.find(f=>+f.pc)||{}).pc)||perCaseOf(rowProduct(g.rows[0]))||0;
+    P.push({key:g.key,type,rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt,diff:cnt-g.exp,lotExp:g.lot,lotCnt:fs.map(f=>f.lot).filter(Boolean).join(' / '),
+      pc,c:fs.reduce((a,f)=>a+(+f.c||0),0),u:fs.reduce((a,f)=>a+(+f.u||0),0)});g.done=true};
+  for(const g of G){const m=F.filter(y=>!y.used&&sameIds(g.ids,y.ids)&&normLot(y.f.lot)===normLot(g.lot));if(m.length)take(g,m,'match')}
+  for(const g of G){if(g.done)continue;const m=F.filter(y=>!y.used&&sameIds(g.ids,y.ids));if(m.length)take(g,m,'lot')}
+  for(const g of G){if(g.done)continue;P.push({key:g.key,type:'missing',rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt:0,diff:-g.exp,lotExp:g.lot,lotCnt:'',pc:perCaseOf(rowProduct(g.rows[0]))||0,c:0,u:0})}
+  for(const y of F){if(y.used)continue;const f=y.f;const q=fQty(f);
+    P.push({key:'x:'+f.id,type:'extra',rowIdx:[],code:f.code||f.barcode||f.ref||f.name,name:f.name,exp:0,cnt:q,diff:q,lotExp:'',lotCnt:f.lot||'',pc:+f.pc||0,c:+f.c||0,u:+f.u||0})}
+  return P;
+}
+function tolOf(p){const m=S.invTol||'case';if(m==='0')return 0;if(m==='pct')return Math.ceil(p.exp*0.02);return p.pc||0}
+const exceeds=p=>(p.type==='match'||p.type==='lot')&&Math.abs(p.diff)>tolOf(p);
+function legacyFound(rec,rows){
+  if(rec.found||!rec.lines)return;
+  rec.found=[];
+  for(const r of rows){const l=rec.lines[r.i];if(!l||rec.quick)continue;const p=l.prodOk===false?{code:l.code,name:l.desc}:rowProduct(r);
+    rec.found.push({id:uid(),barcode:p.barcode||'',ref:p.ref||'',code:p.code||p.barcode||p.ref||r.code,name:p.name||l.desc||r.desc,lot:l.lot||'',c:l.c||0,pc:l.pc||'',u:l.u||0})}
+  for(const x of (rec.added||[]))rec.found.push({id:uid(),code:x.code,name:x.desc,lot:x.lot,c:x.c||0,pc:x.pc||'',u:x.u||0});
+}
+function badge(st,open){return `<span class="stb st-${st}">${t('st_'+st)}</span>${open?` <span class="stb st-open">${t('st_open')}</span>`:''}`}
+
+/* ---------- pallet sheet ---------- */
 function invOpenPallet(id,opts={}){
   if(!S.inv)return;
   if(!S.inv.order.includes(id)&&!(S.inv.pal[id]&&S.inv.pal[id].isNew)){
     const linked=Object.keys(S.inv.pal).find(k=>S.inv.pal[k].link===id);
     if(linked)id=linked;else return invUnknownPallet(id);
   }
-  const rec=S.inv.pal[id]||{};const rows=invRows(id);const isNew=!!rec.isNew;
-  const blind=!!S.invBlind;
-  let quickView=!!S.invQuick&&!isNew;
-  // working state
-  const L=rows.map(r=>{const o=(rec.lines&&rec.lines[r.i])||{};const p=rowProduct(r);const pc=o.pc||perCaseOf(p)||'';
-    return {row:r,prodOk:o.prodOk!=null?o.prodOk:null,code:o.code||'',desc:o.desc||'',lot:o.lot!=null?o.lot:r.lot,c:o.c!=null?String(o.c):'',u:o.u!=null?String(o.u):'',pc:pc?String(pc):'',lotOk:o.lotOk!=null?o.lotOk:null}});
-  const A=(rec.added||[]).map(x=>({...x,c:x.c!=null?String(x.c):'',u:x.u!=null?String(x.u):'',pc:x.pc?String(x.pc):''}));
-  let level3=rec.level===3,note=rec.note||'',missOk=false;
-  const lineHtml=(x,k,added)=>{
-    const r=x.row;const exp=r?r.qty:null;const p=r?rowProduct(r):null;
-    const pcv=+x.pc||0;const tot=(+x.c||0)*pcv+(+x.u||0);
-    const typo=r&&lotTypo(r.lot);
-    return `<div class="iline" data-k="${k}">
-      ${added?`<div class="row-sp"><b>${t('invAddedLine')}</b><button class="mini" data-a="rmadd" data-k="${k}">✕</button></div>
-        <input data-f="desc" data-k="${k}" placeholder="${esc(t('invProdPh'))}" value="${esc(x.desc||x.code||'')}" autocomplete="off"><div class="sug" data-sug="${k}"></div>`
-      :`<div class="pname">${esc(r.desc)}</div><div class="pmeta">${esc(r.code)}${p&&p.name&&p.name.toUpperCase()!==r.desc.toUpperCase()?' · '+esc(p.name):''}</div>`}
-      ${r?`<div class="expq">${t('invExpected')}: <b>${blind?'●●●':exp+' '+t('pcs')}</b>${!blind&&pcv?' <span class="mut">('+breakdown(exp,pcv)+')</span>':''} · ${t('lot')}: <b>${esc(r.lot||'–')}</b>${typo?' <span class="tag warnt">O/0?</span>':''}</div>`:''}
-      ${r&&!quickView?`<div class="okrow"><span>${t('invProduct')}</span><div class="seg3"><button data-a="pok" data-k="${k}" class="${x.prodOk===true?'on':''}">✓</button><button data-a="pno" data-k="${k}" class="${x.prodOk===false?'onr':''}">✗</button></div>
-        <span>${t('lot')}</span><div class="seg3"><button data-a="lok" data-k="${k}" class="${x.lotOk===true?'on':''}">✓</button><button data-a="lno" data-k="${k}" class="${x.lotOk===false?'onr':''}">✗</button></div></div>
-        ${x.prodOk===false?`<input data-f="desc" data-k="${k}" placeholder="${esc(t('invRealProd'))}" value="${esc(x.desc||'')}" autocomplete="off"><div class="sug" data-sug="${k}"></div>`:''}`:''}
-      ${(!r||x.lotOk===false)&&!quickView?`<input data-f="lot" data-k="${k}" placeholder="${esc(t('invRealLot'))}" value="${esc(x.lot||'')}" autocomplete="off" autocapitalize="characters">`:''}
-      ${!quickView?`<div class="cuin">
-        <label>${t('caseBox')}<input data-f="c" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(x.c)}"></label>
-        <span>×</span><label>${t('invPerCase')}<input data-f="pc" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(x.pc)}"></label>
-        <span>+</span><label>${t('unitBox')}<input data-f="u" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(x.u)}"></label>
-        <span>=</span><b class="ltot" data-tot="${k}">${x.c===''&&x.u===''?'–':tot}</b></div>`:''}
+  const rec=S.inv.pal[id]||{};legacyFound(rec,invRows(id));
+  const rows=invRows(id),isNew=!!rec.isNew,G=groupsOf(rows);
+  const live=cur==='scan'&&scanning;
+  let found=(rec.found||[]).map(f=>({...f,c:f.c===''||f.c==null?'':String(f.c),u:f.u===''||f.u==null?'':String(f.u),pc:f.pc?String(f.pc):''}));
+  let absent={...(rec.absent||{})};
+  let quickView=!!S.invQuick&&!isNew&&!rec.recount;
+  let level3=rec.level===3,note=rec.note||'',missOk=false,confirmMissing=false,hl=null;
+  let round=rec.recount==='pending'?1:0,first=rec.rc1||null,recKeys=rec.recount==='pending'?Object.keys(rec.rc1||{}):[];
+  if(round===1){for(const p of reconcile(rows,found))if(recKeys.includes(p.key))for(const f of found)if(pairHas(p,f)){f.c='';f.u=''}}
+  function pairHas(p,f){if(p.type==='extra')return p.key==='x:'+f.id;const g=G.find(g=>g.key===p.key);return g&&sameIds(g.ids,idsOf(f))&&(p.type==='lot'||normLot(f.lot)===normLot(g.lot))}
+  const expLots=p=>[...new Set(rows.filter(r=>sameIds(rowIds(r),idsOf(p))).map(r=>r.lot).filter(Boolean))];
+  let sugHits=[];
+  const lineHtml=(f,k)=>{
+    const inExp=G.some(g=>sameIds(g.ids,idsOf(f)));const unknown=!f.name&&!f.code;
+    const lots=inExp?expLots(f):[];
+    const recountLine=round===1&&recKeys.some(key=>{const p=reconcile(rows,found).find(p=>p.key===key);return p&&pairHas(p,f)});
+    return `<div class="fl ${inExp||unknown?'':'extra'} ${hl===f.id?'hl':''}" data-fid="${f.id}">
+      <div class="top"><div class="nm">${unknown?t('invProdPh'):esc(f.name||f.code)}</div>${!inExp&&!unknown?`<span class="stb st-diff">${t('invExtraTag')}</span>`:''}${recountLine?`<span class="stb st-recount">2.</span>`:''}<button class="mini" data-a="rm" data-k="${k}">✕</button></div>
+      ${unknown?`<input data-f="desc" data-k="${k}" placeholder="${esc(t('invProdPh'))}" autocomplete="off"><div class="sug" data-sug="${k}"></div>`:`<div class="pmeta">${esc(f.code||'')}${f.exp?' · '+t('expShort')+' '+esc(f.exp):''}</div>`}
+      <div class="lotin"><input data-f="lot" data-k="${k}" value="${esc(f.lot||'')}" placeholder="${esc(t('lot'))}" autocomplete="off" autocapitalize="characters">${lots.slice(0,3).map(l=>`<button class="lchip ${normLot(l)===normLot(f.lot)?'on':''}" data-lot="${esc(l)}" data-k="${k}">${esc(l)}</button>`).join('')}</div>
+      <div class="cuin">
+        <label>${t('caseBox')}<input data-f="c" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.c)}"></label>
+        <span>×</span><label>${t('invPerCase')}<input data-f="pc" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.pc)}"></label>
+        <span>+</span><label>${t('unitBox')}<input data-f="u" data-k="${k}" type="number" inputmode="numeric" pattern="[0-9]*" min="0" value="${esc(f.u)}"></label>
+        <span>=</span><b class="ltot" data-tot="${k}">${f.c===''&&f.u===''?'–':fQty(f)}</b></div>
     </div>`;
   };
-  let first=true;
-  const render=()=>{
-    const st=invStatus(id);const keepScroll=first?0:$('#sheet').scrollTop;first=false;
+  const render=(scrollTo)=>{
+    const keepScroll=$('#sheet').classList.contains('hidden')?0:$('#sheet').scrollTop;
+    const st=invStatus(id);const blind=!!S.invBlind||round===1;
+    const marks=G.map(g=>{const fs=found.filter(f=>sameIds(g.ids,idsOf(f)));return {g,any:fs.length>0,lotOk:fs.some(f=>normLot(f.lot)===normLot(g.lot))}});
+    const unmatched=marks.filter(m=>!m.any&&!absent[m.g.key]);
     const sh=openSheet(`
-      <h3>${t('palletWord')} <span class="mono">${esc(shortId(id))}</span> ${badge(st,rec.flagOpen)}</h3>
-      <div class="pmeta mono">${esc(id)}${rec.link?' · '+t('invLinkedTo',{p:esc(rec.link)}):''}${opts.noLabel?' · '+t('invNoLabel'):''}</div>
+      <div class="hd"><h3>${t('palletWord')} <span class="mono">${esc(shortId(id))}</span> ${badge(st,rec.flagOpen)}</h3><button class="mini" data-a="cancel" style="font-size:20px">✕</button></div>
+      <div class="pmeta mono">${esc(id)}${rec.link?' · '+t('invLinkedTo',{p:esc(rec.link)}):''}${opts.noLabel||rec.noLabel?' · '+t('invNoLabel'):''}</div>
+      ${round===1?`<div class="rbanner">${t('invRecountBanner')}</div>`:''}
       ${rows.length>1?`<div class="note w">${t('invMixed',{n:rows.length})}</div>`:''}
       ${isNew?`<div class="note w">${t('invNewPallet')}</div>`:''}
+      ${G.length?`<div class="fold"><span>${t('invExpectedHdr')}</span><span>${marks.filter(m=>m.any).length}/${G.length}</span></div>
+      ${marks.map(m=>`<div class="exl ${m.any?'done':''} ${absent[m.g.key]?'abs':''} ${confirmMissing&&!m.any&&!absent[m.g.key]?'warnrow':''}"><span class="mk">${m.any?(m.lotOk?'✓':'⚠'):(absent[m.g.key]?'✕':'○')}</span>
+        <div class="nm"><div>${esc(m.g.desc)}</div><div>${esc(m.g.code)} · ${t('lot')} ${esc(m.g.lot||'–')} · ${blind?'●●●':m.g.exp+' '+t('pcs')+(perCaseOf(rowProduct(m.g.rows[0]))?' ('+breakdown(m.g.exp,perCaseOf(rowProduct(m.g.rows[0])))+')':'')}</div></div>
+        ${!m.any&&!quickView?`<button class="mini" data-a="abs" data-g="${esc(m.g.key)}">${absent[m.g.key]?t('invUndo'):t('invAbsent')}</button>`:''}</div>`).join('')}`:''}
+      ${quickView?'':`<div class="fold"><span>${t('invFoundHdr')}</span><span>${found.length}</span></div>
+      ${found.length?found.map(lineHtml).join(''):`<div class="mut" style="padding:8px 0">${live?t('invScanHint'):t('invAddHint')}</div>`}
+      <button class="btn ghost wide" data-a="add" style="margin-top:8px">${t('invAddProduct')}</button>
+      <div class="tgl"><span>${t('invPlusCase')}<small>${t('invPlusCaseSub')}</small></span><button class="sw ${S.invPlusCase?'on':''}" data-a="plus"></button></div>
+      <div class="tgl"><span>${t('invLevel3')}<small>${t('invLevel3Sub')}</small></span><button class="sw ${level3?'on':''}" data-a="lv3"></button></div>`}
       <div class="tgl"><span>${t('invQuickMode')}</span><button class="sw ${quickView?'on':''}" data-a="qv"></button></div>
-      <div id="ilines">${L.map((x,k)=>lineHtml(x,'r'+k,false)).join('')}${A.map((x,k)=>lineHtml(x,'a'+k,true)).join('')}</div>
-      ${!quickView?`<button class="btn ghost wide" data-a="add">${t('invAddLine')}</button>
-      <div class="tgl"><span>${t('invLevel3')}<small>${t('invLevel3Sub')}</small></span><button class="sw ${level3?'on':''}" data-a="lv3"></button></div>`:''}
+      ${confirmMissing&&unmatched.length?`<div class="note w">${t('invUnmatchedWarn',{n:unmatched.length})}</div>`:''}
       <input id="invNote" placeholder="${esc(t('invNotePh'))}" value="${esc(note)}" autocomplete="off" style="margin-top:8px">
       <div class="acts">
         ${isNew?'':`<button class="btn danger" data-a="missing">${t('invMissing')}</button>`}
-        ${quickView?`<button class="btn primary" data-a="quick">${t('invQuickOk')}</button>`:`<button class="btn primary" data-a="save">${t('invSave')}</button>`}
+        ${quickView?`<button class="btn primary" data-a="quick">${t('invQuickOk')}</button>`:`<button class="btn primary" data-a="save">${round===1?t('invSave2'):t('invSave')}</button>`}
       </div>
-      <div class="acts">${rec.checkedAt?`<button class="btn ghost" data-a="reset">${t('invReset')}</button>`:''}<button class="btn ghost" data-a="cancel">${t('close')}</button></div>`);
-    sh.scrollTop=keepScroll;wire(sh);
+      ${rec.checkedAt?`<div class="acts"><button class="btn ghost" data-a="reset">${t('invReset')}</button></div>`:''}`,null,{scan:live,half:live});
+    sh.scrollTop=keepScroll;
+    if(scrollTo){const el=sh.querySelector(`[data-fid="${scrollTo}"]`);if(el)el.scrollIntoView({block:'nearest'})}
+    wire(sh);
+    invSheetScan=live?onSheetScan:null;
   };
-  const getX=k=>k[0]==='r'?L[+k.slice(1)]:A[+k.slice(1)];
-  const updTot=k=>{const x=getX(k);const el=$(`[data-tot="${k}"]`);if(el)el.textContent=x.c===''&&x.u===''?'–':((+x.c||0)*(+x.pc||0)+(+x.u||0))};
+  const updTot=k=>{const f=found[+k];const el=$(`[data-tot="${k}"]`);if(el)el.textContent=f.c===''&&f.u===''?'–':fQty(f)};
+  const showSug=(k,q)=>{const box=$(`[data-sug="${k}"]`);if(!box)return;const w=q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    sugHits=!w.length?[]:IDX.all.filter(p=>{const s=(p.barcode+' '+p.ref+' '+p.name+' '+p.vol).toLowerCase();return w.every(x=>s.includes(x))}).slice(0,6);
+    box.innerHTML=sugHits.map((p,i)=>`<button class="ritem" data-pick="${i}" data-k="${k}"><div class="nm"><div>${esc(p.name||p.ref)}</div><div>${esc(p.ref)} ${esc(p.barcode)}</div></div></button>`).join('')};
+  const setProduct=(f,p)=>{f.barcode=p.barcode||'';f.ref=p.ref||'';f.code=p.barcode||p.ref||'';f.name=p.name||p.ref||'';if(perCaseOf(p))f.pc=String(perCaseOf(p));
+    const ls=expLots(f);if(!f.lot&&ls.length===1)f.lot=ls[0]};
+  function onSheetScan({p,pre,sscc}){
+    if(sscc){if(sscc===id||sscc===rec.link){scanOk();toast(t('invSamePallet'))}else scanWarn(t('invOtherPallet'));return}
+    if(!p){scanErr(t('invUnknownCode'));return}
+    const lots=expLots(p);const lot=(pre&&pre.lot)||(lots.length===1?lots[0]:'');
+    let f=found.find(x=>sameIds(idsOf(x),idsOf(p))&&normLot(x.lot)===normLot(lot));
+    if(f){if(S.invPlusCase)f.c=String((+f.c||0)+1);else toast(t('invAlreadyListed'))}
+    else{
+      const pc=perCaseOf(p)||(pre&&pre.isCase&&pre.count)||0;
+      f={id:uid(),barcode:p.barcode||'',ref:p.ref||'',code:p.barcode||p.ref||'',name:p.name||p.ref||'',lot,exp:(pre&&pre.exp)||'',
+        c:S.invPlusCase?'1':(pre&&pre.count&&pc&&pre.count%pc===0?String(pre.count/pc):''),pc:pc?String(pc):'',u:pre&&pre.count&&!(pc&&pre.count%pc===0)?String(pre.count):''};
+      if(p.unknown){f.name='';f.code=p.barcode||'';f.barcode=p.barcode||''}
+      found.push(f);
+    }
+    const inExp=G.some(g=>sameIds(g.ids,idsOf(f)));
+    if(inExp&&!p.unknown)scanOk();else scanWarn(t('invNotExpected'));
+    hl=f.id;confirmMissing=false;render(f.id);
+    const allFound=G.length&&G.every(g=>found.some(x=>sameIds(g.ids,idsOf(x))));
+    if(allFound&&inExp)setTimeout(()=>toast(t('invAllFound'),'ok'),300);
+  }
   const wire=sh=>{
-    sh.oninput=(ev=>{const i=ev.target.closest('input[data-f]');if(!i)return;const x=getX(i.dataset.k);const f=i.dataset.f;
-      if(f==='desc'){x.desc=i.value;x.code='';showSug(i.dataset.k,i.value)}else x[f]=i.value.trim();
-      if(f==='c'||f==='u'||f==='pc')updTot(i.dataset.k)});
+    sh.oninput=ev=>{const i=ev.target.closest('input[data-f]');if(!i)return;const k=i.dataset.k,f=found[+k],fl=i.dataset.f;
+      if(fl==='desc'){showSug(k,i.value);return}
+      f[fl]=fl==='lot'?i.value.trim():i.value.trim();if(fl==='c'||fl==='u'||fl==='pc')updTot(k)};
     sh.onclick=ev=>{
       const b=ev.target.closest('button');if(!b)return;const a=b.dataset.a,k=b.dataset.k;note=($('#invNote')||{}).value||note;
-      if(b.dataset.pick!=null){const x=getX(b.dataset.sk);const p=sugHits[+b.dataset.pick];x.code=p.barcode||p.ref;x.desc=p.name||p.ref;if(perCaseOf(p))x.pc=String(perCaseOf(p));render();return}
-      if(a==='pok'){getX(k).prodOk=true;return render()}
-      if(a==='pno'){getX(k).prodOk=false;return render()}
-      if(a==='lok'){const x=getX(k);x.lotOk=true;x.lot=x.row.lot;return render()}
-      if(a==='lno'){const x=getX(k);x.lotOk=false;x.lot=lotTypo(x.row.lot)?normLot(x.row.lot):x.row.lot;return render()}
+      if(b.dataset.pick!=null){setProduct(found[+k],sugHits[+b.dataset.pick]);hl=found[+k].id;return render(hl)}
+      if(b.dataset.lot!=null){found[+k].lot=b.dataset.lot;return render()}
+      if(a==='rm'){found.splice(+k,1);return render()}
+      if(a==='abs'){const g=b.dataset.g;if(absent[g])delete absent[g];else absent[g]=true;return render()}
+      if(a==='add'){const f={id:uid(),barcode:'',ref:'',code:'',name:'',lot:'',c:'',pc:'',u:''};found.push(f);hl=f.id;render(f.id);const i=$(`[data-fid="${f.id}"] input[data-f=desc]`);if(i)i.focus();return}
+      if(a==='plus'){S.invPlusCase=!S.invPlusCase;save();return render()}
       if(a==='qv'){quickView=!quickView;return render()}
       if(a==='lv3'){level3=!level3;return render()}
-      if(a==='add'){A.push({code:'',desc:'',lot:'',c:'',u:'',pc:''});return render()}
-      if(a==='rmadd'){A.splice(+k.slice(1),1);return render()}
       if(a==='cancel')return closeSheet();
-      if(a==='reset'){delete S.inv.pal[id];if(rec.link)S.inv.pal[id]={link:rec.link};save();closeSheet();renderAll();return toast(t('invResetDone'))}
+      if(a==='reset'){const keep=rec.link?{link:rec.link}:null;delete S.inv.pal[id];if(keep)S.inv.pal[id]=keep;save();closeSheet();renderAll();return toast(t('invResetDone'))}
       if(a==='missing'){if(!missOk){missOk=true;b.textContent=t('invMissingSure');b.className='btn dangerfill';return}
-        S.inv.pal[id]={...keep(),missing:true,checkedAt:Date.now(),device:S.device||'',note,flagOpen:false};save();closeSheet();renderAll();beepSaved();return toast(t('invMissingDone'),'warn')}
+        S.inv.pal[id]={...base(),missing:true,checkedAt:Date.now(),device:S.device||'',note,flagOpen:false,res:G.map(g=>({key:g.key,type:'missing',rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt:0,diff:-g.exp,lotExp:g.lot,lotCnt:'',pc:0,c:0,u:0}))};
+        save();closeSheet();renderAll();beepSaved();return toast(t('invMissingDone'),'warn')}
       if(a==='quick'){
-        S.inv.pal[id]={...keep(),quick:true,level:1,checkedAt:Date.now(),device:S.device||'',note,flagOpen:!!rec.link,diff:false,
-          lines:Object.fromEntries(L.map(x=>[x.row.i,{prodOk:true,lotOk:true,lot:x.row.lot,qty:x.row.qty}]))};
-        save();closeSheet();renderAll();beepSaved();return toast(t('invQuickDone',{p:shortId(id)}),'ok');
-      }
+        S.inv.pal[id]={...base(),quick:true,level:1,checkedAt:Date.now(),device:S.device||'',note,flagOpen:!!rec.link,diff:false,reasons:rec.link?['r_link']:[],
+          res:G.map(g=>({key:g.key,type:'quick',rowIdx:g.rows.map(r=>r.i),code:g.code,name:g.desc,exp:g.exp,cnt:null,diff:null,lotExp:g.lot,lotCnt:g.lot,pc:0,c:'',u:''}))};
+        save();closeSheet();renderAll();beepSaved();return toast(t('invQuickDone',{p:shortId(id)}),'ok')}
       if(a==='save')return doSave();
     };
   };
-  const keep=()=>{const o={};if(rec.link)o.link=rec.link;if(isNew)o.isNew=true;if(opts.noLabel||rec.noLabel)o.noLabel=true;return o};
-  let sugHits=[];
-  const showSug=(k,q)=>{const box=$(`[data-sug="${k}"]`);if(!box)return;const w=q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    sugHits=!w.length?[]:IDX.all.filter(p=>{const s=(p.barcode+' '+p.ref+' '+p.name+' '+p.vol).toLowerCase();return w.every(x=>s.includes(x))}).slice(0,6);
-    box.innerHTML=sugHits.map((p,i)=>`<button class="ritem" data-pick="${i}" data-sk="${k}"><div class="nm"><div>${esc(p.name||p.ref)}</div><div>${esc(p.ref)} ${esc(p.barcode)}</div></div></button>`).join('')};
+  const base=()=>{const o={};if(rec.link)o.link=rec.link;if(isNew)o.isNew=true;if(opts.noLabel||rec.noLabel)o.noLabel=true;if(rec.rcodes)o.rcodes=rec.rcodes;return o};
   const doSave=()=>{
     note=($('#invNote')||{}).value||'';
-    const all=[...L,...A];
-    for(const x of all){if(x.c===''&&x.u===''){toast(t('invNeedQty'),'warn');return}}
-    for(const x of L){if(x.prodOk===false&&!x.desc.trim()){toast(t('invNeedProd'),'warn');return}}
-    for(const x of A){if(!x.desc.trim()&&!x.code){toast(t('invNeedProd'),'warn');return}}
-    const reasons=new Set();let diff=false;const lines={};
-    for(const x of L){
-      const pc=+x.pc||0,c=+x.c||0,u=+x.u||0;if(c&&!pc){toast(t('invNeedPc'),'warn');return}
-      const q=c*pc+u,d=q-x.row.qty;const lot=x.lotOk===false?String(x.lot||'').trim():x.row.lot;
-      const lotChanged=normLot(lot)!==normLot(x.row.lot);
-      if(d!==0)diff=true;if(x.prodOk===false){diff=true;reasons.add('r_prod')}if(lotChanged){diff=true;reasons.add('r_lot')}
-      if(d!==0&&(pc?Math.abs(d)>pc:true))reasons.add(pc?'r_caseDiff':'r_noPc');
-      lines[x.row.i]={prodOk:x.prodOk!==false,lotOk:x.lotOk!==false,code:x.prodOk===false?(x.code||x.desc):'',desc:x.prodOk===false?x.desc:'',lot,c,u,pc,qty:q,diff:d};
-      if(pc&&!perCaseOf(rowProduct(x.row))){S.perCase[pid(rowProduct(x.row))]=pc}
+    for(const f of found){
+      if(!f.name&&!f.code){toast(t('invNeedProd'),'warn');return}
+      if(f.c===''&&f.u===''){toast(t('invNeedQty'),'warn');hl=f.id;render(f.id);return}
+      if(+f.c>0&&!(+f.pc>0)){toast(t('invNeedPc'),'warn');hl=f.id;render(f.id);return}
     }
-    const added=A.map(x=>{const pc=+x.pc||0,c=+x.c||0,u=+x.u||0;return {code:x.code||'',desc:x.desc.trim(),lot:String(x.lot||'').trim(),c,u,pc,qty:c*pc+u}});
-    for(const x of added)if(x.c&&!x.pc){toast(t('invNeedPc'),'warn');return}
-    if(added.length){diff=true;reasons.add('r_added')}
+    const nums=found.map(f=>({...f,c:+f.c||0,u:+f.u||0,pc:+f.pc||0}));
+    let P=reconcile(rows,nums);
+    const unmatched=P.filter(p=>p.type==='missing'&&!absent[p.key]);
+    if(unmatched.length&&!confirmMissing){confirmMissing=true;beepWarn();render();toast(t('invUnmatchedWarn',{n:unmatched.length}),'warn');return}
+    for(const f of nums)if(f.pc&&(f.barcode||f.ref)){const p=lookup(f.barcode)||IDX.ref.get(String(f.ref).toUpperCase());if(p&&!perCaseOf(p))S.perCase[pid(p)]=f.pc}
+    const ex=P.filter(exceeds);
+    // first round with variance above tolerance -> blind recount
+    if(round===0&&ex.length&&!level3){
+      const rc1=Object.fromEntries(ex.map(p=>[p.key,p.cnt]));
+      if(S.invRecount==='later'){
+        S.inv.pal[id]={...base(),recount:'pending',rc1,found:nums,absent,level:2,checkedAt:Date.now(),device:S.device||'',note,flagOpen:false,diff:true,res:P};
+        save();closeSheet();renderAll();beepWarn();return toast(t('invRecountLater',{n:ex.length}),'warn');
+      }
+      first=rc1;recKeys=Object.keys(rc1);round=1;
+      for(const p of ex)for(const f of found)if(pairHas(p,f)){f.c='';f.u=''}
+      beepWarn();vib([40,30,40]);render();return toast(t('invRecountNow'),'warn');
+    }
+    const reasons=new Set(),rc2={};let recFail=false;
+    for(const p of P){
+      if(round===1&&first&&p.key in first){rc2[p.key]=p.cnt;p.r1=first[p.key];p.r2=p.cnt;
+        const ok2=Math.abs(p.diff)<=tolOf(p);if(!ok2&&p.r2!==p.r1){recFail=true;reasons.add('r_recountFail')}}
+      if(p.type==='lot')reasons.add('r_lot');if(p.type==='extra')reasons.add('r_added');if(p.type==='missing'&&!absent[p.key])reasons.add('r_missingProd');
+      if(p.type==='missing'&&absent[p.key])reasons.add('r_missingProd');
+      if(exceeds(p)&&!(round===1&&p.key in first&&p.r1===p.r2))reasons.add(p.pc?'r_caseDiff':'r_noPc');
+    }
     if(rows.length>1)reasons.add('r_mixed');if(rec.link)reasons.add('r_link');if(isNew)reasons.add('r_new');
-    const flagOpen=!level3&&reasons.size>0;
-    S.inv.pal[id]={...keep(),level:level3?3:2,checkedAt:Date.now(),device:S.device||'',note,lines,added,diff:diff||isNew,flagOpen,reasons:[...reasons]};
-    save();closeSheet();renderAll();
-    showResult(id);
+    const diff=P.some(p=>p.diff!==0||p.type!=='match');
+    S.inv.pal[id]={...base(),level:level3?3:2,checkedAt:Date.now(),device:S.device||'',note,found:nums,absent,res:P,diff,
+      flagOpen:!level3&&reasons.size>0,reasons:[...reasons],recount:round===1?'done':undefined,rc1:round===1?first:undefined,rc2:round===1?rc2:undefined};
+    save();closeSheet();renderAll();showResult(id);
   };
   render();
 }
-function badge(st,open){return `<span class="stb st-${st}">${t('st_'+st)}</span>${open?` <span class="stb st-open">${t('st_open')}</span>`:''}`}
+const TYPE_TXT=p=>p.type==='match'?(p.diff===0?t('ty_ok'):t('ty_qty')):t('ty_'+p.type);
+const RCODES=['rc_count','rc_damaged','rc_uom','rc_moved','rc_shipped','rc_label','rc_lot','rc_other'];
 function showResult(id){
-  const rec=S.inv.pal[id],rows=invRows(id);
-  const okAll=!rec.diff;
-  if(okAll&&!rec.flagOpen){beepSaved();toast(t('invOk',{p:shortId(id)}),'ok');return}
-  if(rec.diff)beepErr();else beepSaved();
-  const lineRes=rows.map(r=>{const l=rec.lines[r.i];return `<div class="resl"><div class="nm"><div>${esc(r.desc)}</div><div>${t('lot')} ${esc(l.lot||'–')}${normLot(l.lot)!==normLot(r.lot)?' <span class="tag warnt">≠ '+esc(r.lot)+'</span>':''}${!l.prodOk?' · <span class="tag warnt">'+t('invProdChanged')+': '+esc(l.desc)+'</span>':''}</div></div>
-    <div class="rq"><span class="mut">${t('invReport')} ${r.qty}</span><b>${l.qty}</b><span class="${l.diff>0?'pos':l.diff<0?'neg':'mut'}">${l.diff>0?'+':''}${l.diff}</span></div></div>`}).join('')
-    +(rec.added||[]).map(x=>`<div class="resl"><div class="nm"><div>+ ${esc(x.desc)}</div><div>${t('lot')} ${esc(x.lot||'–')}</div></div><div class="rq"><b>${x.qty}</b><span class="pos">+${x.qty}</span></div></div>`).join('');
+  const rec=S.inv.pal[id];const P=rec.res||[];
+  if(!rec.diff&&!rec.flagOpen){beepSaved();toast(t('invOk',{p:shortId(id)}),'ok');return}
+  if(rec.flagOpen)beepErr();else beepSaved();
+  rec.rcodes=rec.rcodes||{};
   const sh=openSheet(`<h3>${t('palletWord')} <span class="mono">${esc(shortId(id))}</span> ${badge(invStatus(id),rec.flagOpen)}</h3>
-    ${lineRes}
+    ${P.map(p=>`<div class="resl"><div class="nm"><div>${p.type==='extra'?'+ ':''}${esc(p.name||p.code)}</div>
+      <div>${TYPE_TXT(p)} · ${t('lot')} ${esc(p.lotCnt||p.lotExp||'–')}${p.type==='lot'?' <span class="tag warnt">≠ '+esc(p.lotExp)+'</span>':''}${p.r1!=null?' · '+t('invCounts',{a:p.r1,b:p.r2}):''}</div>
+      ${p.diff!==0||p.type!=='match'?`<select class="rcs" data-rc="${esc(p.key)}"><option value="">${t('rcPick')}</option>${RCODES.map(c=>`<option value="${c}" ${rec.rcodes[p.key]===c?'selected':''}>${t(c)}</option>`).join('')}</select>`:''}</div>
+      <div class="rq"><span class="mut">${t('invReport')} ${p.exp}</span><b>${p.cnt}</b><span class="${p.diff>0?'pos':p.diff<0?'neg':'mut'}">${p.diff>0?'+':''}${p.diff}</span></div></div>`).join('')}
     ${rec.flagOpen?`<div class="note w">${t('invOpenNote')}<br>${rec.reasons.map(r=>'• '+t(r)).join('<br>')}</div>`:''}
     <div class="acts"><button class="btn ghost" data-a="edit">${t('invEdit')}</button><button class="btn primary" data-a="next">${t('invNext')}</button></div>`);
+  sh.onchange=ev=>{const s=ev.target.closest('select[data-rc]');if(!s)return;rec.rcodes[s.dataset.rc]=s.value;save()};
   sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.a==='edit'){closeSheet();invOpenPallet(id)}if(b.dataset.a==='next')closeSheet()};
 }
 function invUnknownPallet(sid){
@@ -1711,17 +1885,16 @@ function invUnknownPallet(sid){
     if(b.dataset.a==='cancel')closeSheet();
     if(b.dataset.a==='new'){const lot=$('#uLot').value.trim(),q=+$('#uQty').value||0,pq=$('#uProd').value.trim();
       const p=pq?(IDX.all.find(p=>(p.name+' '+p.ref+' '+p.barcode).toLowerCase().includes(pq.toLowerCase()))||null):null;
-      S.inv.pal[sid]={isNew:true,added:[{code:p?(p.barcode||p.ref):'',desc:p?p.name:pq,lot,c:'',u:q?q:'',pc:p&&perCaseOf(p)?perCaseOf(p):''}]};
+      S.inv.pal[sid]={isNew:true,found:(p||q||lot)?[{id:uid(),barcode:p?p.barcode:'',ref:p?p.ref:'',code:p?(p.barcode||p.ref):'',name:p?p.name:pq,lot,c:'',pc:p&&perCaseOf(p)?perCaseOf(p):'',u:q?q:''}]:[]};
       save();closeSheet();invOpenPallet(sid)}};
   try{$('#uLot').focus()}catch(e){}
 }
 function invProductPick(p,code){
-  // unlabeled pallet: show report pallets containing this product
-  const ids=S.inv.order.filter(id=>invRows(id).some(r=>rowMatchesProduct(r,p)||String(r.code).trim()===String(code).trim()));
+  const ids=S.inv.order.filter(id=>invRows(id).some(r=>sameIds(rowIds(r),idsOf(p))||String(r.code).trim()===String(code).trim()));
   ids.sort((a,b)=>(invStatus(a)==='pending'?0:1)-(invStatus(b)==='pending'?0:1));
   const sh=openSheet(`<h3>${t('invNoLabelTitle')}</h3><div class="pmeta">${esc(p.name||p.ref||code)} · ${esc(p.barcode||p.ref||code)}</div>
     <div class="note">${t('invNoLabelHint')}</div>
-    <div class="mres">${ids.length?ids.map(id=>{const rows=invRows(id);const r=rows.find(r=>rowMatchesProduct(r,p))||rows[0];return `<button class="ritem" data-id="${esc(id)}"><div class="nm"><div><span class="mono">${esc(shortId(id))}</span> ${t('lot')} ${esc(r.lot||'–')}</div><div>${S.invBlind?'':r.qty+' '+t('pcs')+' · '}${t('st_'+invStatus(id))}</div></div></button>`}).join(''):`<div class="mut">${t('invNoPalletForProd')}</div>`}</div>
+    <div class="mres">${ids.length?ids.map(id=>{const rows=invRows(id);const r=rows.find(r=>sameIds(rowIds(r),idsOf(p)))||rows[0];return `<button class="ritem" data-id="${esc(id)}"><div class="nm"><div><span class="mono">${esc(shortId(id))}</span> ${t('lot')} ${esc(r.lot||'–')}</div><div>${S.invBlind?'':r.qty+' '+t('pcs')+' · '}${t('st_'+invStatus(id))}</div></div></button>`}).join(''):`<div class="mut">${t('invNoPalletForProd')}</div>`}</div>
     <div class="acts"><button class="btn ghost" data-a="cancel">${t('close')}</button></div>`);
   sh.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.id){closeSheet();invOpenPallet(b.dataset.id,{noLabel:true});return}if(b.dataset.a==='cancel')closeSheet()};
 }
@@ -1737,10 +1910,11 @@ function invManualPallet(){
 }
 function palItem(id){
   const rows=invRows(id),rec=S.inv.pal[id]||{},st=invStatus(id);
-  const desc=rows.length?rows[0].desc+(rows.length>1?' +'+(rows.length-1):''):(rec.added&&rec.added[0]?rec.added[0].desc:'');
-  const lot=rows.length?rows[0].lot:(rec.added&&rec.added[0]?rec.added[0].lot:'');
+  const f0=(rec.found||[])[0];
+  const desc=rows.length?rows[0].desc+(rows.length>1?' +'+(rows.length-1):''):(f0?f0.name:'');
+  const lot=rows.length?rows[0].lot:(f0?f0.lot:'');
   const q=rows.reduce((a,r)=>a+r.qty,0);
-  return `<button class="ritem pal" data-pal="${esc(id)}"><div class="nm"><div><span class="mono">${esc(shortId(id))}</span> ${esc(desc)}</div><div>${t('lot')} ${esc(lot||'–')}${S.invBlind||!rows.length?'':' · '+q+' '+t('pcs')}${rec.noLabel?' · '+t('invNoLabel'):''}${rec.note?' · 📝':''}</div></div>${badge(st,rec.flagOpen)}</button>`;
+  return `<button class="ritem pal" data-pal="${esc(id)}"><div class="nm"><div><span class="mono">${esc(shortId(id))}</span> ${esc(desc)}</div><div>${t('lot')} ${esc(lot||'–')}${S.invBlind||!rows.length?'':' · '+q+' '+t('pcs')}${rec.noLabel?' · '+t('invNoLabel'):''}${rec.device&&rec.device!==S.device?' · 📱'+esc(rec.device):''}${rec.note?' · 📝':''}</div></div>${badge(st,rec.flagOpen)}</button>`;
 }
 let invShow=60;
 function renderInv(){
@@ -1753,14 +1927,14 @@ function renderInv(){
   const c=invCounts(),checked=c.all-c.pending,pct=c.all?Math.round(checked*100/c.all):0;
   const info=S.inv.head.map(r=>r.filter(Boolean).join('  ')).filter(Boolean).slice(1).join(' · ');
   const F=S.invFilter||'all';
-  const q=($('#invQ')&&$('#invQ').value||'').trim().toLowerCase();
+  const qEl=$('#invQ');const q=(qEl&&qEl.value||'').trim().toLowerCase();const hasQ=qEl&&document.activeElement===qEl;
   let ids=invIds().filter(id=>{const st=invStatus(id),r=S.inv.pal[id];
     if(F==='pending'&&st!=='pending')return false;if(F==='diff'&&st!=='diff')return false;if(F==='open'&&!(r&&r.flagOpen))return false;
-    if(F==='missing'&&st!=='missing')return false;if(F==='new'&&st!=='new')return false;if(F==='ok'&&!(st==='ok'||st==='quick'))return false;
+    if(F==='recount'&&st!=='recount')return false;if(F==='missing'&&st!=='missing')return false;if(F==='new'&&st!=='new')return false;if(F==='ok'&&!(st==='ok'||st==='quick'))return false;
     if(q&&!(id.includes(q)||invRows(id).some(x=>(x.desc+' '+x.code+' '+x.lot).toLowerCase().includes(q))))return false;return true});
   const total=ids.length;ids=ids.slice(0,invShow);
   const chip=(k,lab,n)=>`<button data-flt="${k}" class="${F===k?'on':''}">${lab} <b>${n}</b></button>`;
-  const hasQ=$('#invQ')&&document.activeElement===$('#invQ');
+  const opt=(v,cur2,lab)=>`<option value="${v}" ${v===cur2?'selected':''}>${lab}</option>`;
   el.innerHTML=`<div class="card">
       <div class="row-sp"><b>${esc(S.inv.fileName)}</b><span class="mut">${c.all} ${t('pallets')}</span></div>
       <div class="mut" style="font-size:12px">${esc(info)}</div>
@@ -1768,12 +1942,19 @@ function renderInv(){
       <div class="row-sp mut" style="font-size:13px"><span>${t('invProgress',{a:checked,b:c.all})}</span><b>${pct}%</b></div>
       <div class="tgl"><span>${t('invBlind')}<small>${t('invBlindSub')}</small></span><button class="sw ${S.invBlind?'on':''}" data-inv="blind"></button></div>
       <div class="tgl"><span>${t('invQuickMode')}<small>${t('invQuickSub')}</small></span><button class="sw ${S.invQuick?'on':''}" data-inv="quick"></button></div>
+      <label class="fld">${t('invTolLbl')}<select data-inv-set="invTol">${opt('0',S.invTol,t('tol0'))}${opt('case',S.invTol,t('tolCase'))}${opt('pct',S.invTol,t('tolPct'))}</select></label>
+      <label class="fld">${t('invRecLbl')}<select data-inv-set="invRecount">${opt('now',S.invRecount,t('recNow'))}${opt('later',S.invRecount,t('recLater'))}</select></label>
+      <label class="fld">${t('invDeviceLbl')}<input data-inv-dev value="${esc(S.device||'')}" placeholder="${esc(t('setDevicePh'))}" autocomplete="off"></label>
     </div>
     <div class="row2" style="margin-top:0"><button class="btn primary wide" data-inv="scan">${t('invScanBtn')}</button><button class="btn ghost" data-inv="find">🔍</button></div>
-    <div class="fchips">${chip('all',t('f_all'),c.all)}${chip('pending',t('st_pending'),c.pending)}${chip('diff',t('st_diff'),c.diff)}${chip('open',t('st_open'),c.open)}${chip('missing',t('st_missing'),c.missing)}${chip('new',t('st_new'),c.new)}${chip('ok',t('st_ok'),c.ok+c.quick)}</div>
+    <div class="fchips">${chip('all',t('f_all'),c.all)}${chip('pending',t('st_pending'),c.pending)}${chip('diff',t('st_diff'),c.diff)}${chip('open',t('st_open'),c.open)}${chip('recount',t('st_recount'),c.recount)}${chip('missing',t('st_missing'),c.missing)}${chip('new',t('st_new'),c.new)}${chip('ok',t('st_ok'),c.ok+c.quick)}</div>
     <input id="invQ" type="search" placeholder="${esc(t('invSearchPh'))}" value="${esc(q)}" autocomplete="off" style="margin-bottom:8px">
     <div class="recent">${ids.map(palItem).join('')||`<div class="empty">${t('noMatch')}</div>`}</div>
     ${total>ids.length?`<button class="btn ghost wide" data-inv="more" style="margin-top:8px">${t('invMore',{n:total-ids.length})}</button>`:''}
+    <div class="sect">${t('invTeamHdr')}</div>
+    <div class="card"><p class="mut" style="margin-top:0">${t('invTeamHint')}</p>
+      <div class="row2"><button class="btn ghost wide" data-inv="share">${t('invShareRes')}</button>
+      <label class="btn ghost wide" style="cursor:pointer">${t('invMergeRes')}<input type="file" accept=".json,application/json" class="hidden" data-inv="merge"></label></div></div>
     <div class="sect">${t('invExportHdr')}</div>
     <button class="btn primary wide" data-inv="export">${t('invExportBtn')}</button>
     <p class="mut">${t('invExportHint')}</p>
@@ -1800,49 +1981,74 @@ document.addEventListener('click',ev=>{
   if(a==='find')invManualPallet();
   if(a==='more'){invShow+=100;renderInv()}
   if(a==='export')invExport();
+  if(a==='share')invShareResults();
   if(a==='del'){const sh=openSheet(`<h3>${t('invDeleteQ')}</h3><div class="note w">${t('invDeleteWarn')}</div><div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button><button class="btn dangerfill" data-a="ok">${t('invDelete')}</button></div>`);
     sh.onclick=ev2=>{const x=ev2.target.closest('button');if(!x)return;if(x.dataset.a==='cancel')closeSheet();if(x.dataset.a==='ok'){S.inv=null;ctx='free';save();buildIndex();closeSheet();renderAll()}}}
 });
-document.addEventListener('change',ev=>{const i=ev.target.closest('input[data-inv="file"]');if(!i)return;const f=i.files[0];i.value='';if(f)invImport(f)});
+document.addEventListener('change',ev=>{
+  const i=ev.target.closest('input[data-inv="file"]');if(i){const f=i.files[0];i.value='';if(f)invImport(f);return}
+  const m=ev.target.closest('input[data-inv="merge"]');if(m){const f=m.files[0];m.value='';if(f)invMergeResults(f);return}
+  const s=ev.target.closest('select[data-inv-set]');if(s){S[s.dataset.invSet]=s.value;save();return}
+  const d=ev.target.closest('input[data-inv-dev]');if(d){S.device=d.value.trim();save();return}
+});
 document.addEventListener('input',ev=>{if(ev.target.id==='invQ'){invShow=60;renderInv()}});
 
-/* export in the same format + differences sheet */
+/* ---------- team: share & merge results ---------- */
+async function invShareResults(){
+  if(!S.device)toast(t('invNeedDevice'),'warn');
+  const pal=Object.fromEntries(Object.entries(S.inv.pal).filter(([k,v])=>v.checkedAt||v.link));
+  const data=JSON.stringify({app:'palet-sayim-inv',fp:S.inv.fp,fileName:S.inv.fileName,device:S.device||'',ts:Date.now(),pal});
+  const d=new Date();const name='envanter_'+(S.device||'cihaz').replace(/[^\w\-]+/g,'_')+'_'+fDate(d)+'_'+pad2(d.getHours())+pad2(d.getMinutes())+'.json';
+  if(await shareFile(new Blob([data],{type:'application/json'}),name))toast(t('invShared',{n:Object.keys(pal).length}),'ok');
+}
+async function invMergeResults(file){
+  let o;try{o=JSON.parse(await file.text())}catch(e){return toast(t('restoreBad'),'err')}
+  if(!o||o.app!=='palet-sayim-inv'||!o.pal)return toast(t('restoreBad'),'err');
+  if(o.fp&&S.inv.fp&&o.fp!==S.inv.fp)return toast(t('invMergeOther'),'err');
+  let add=0,upd=0,keep=0;
+  for(const [k,r] of Object.entries(o.pal)){
+    if(!r.device)r.device=o.device||'';
+    const l=S.inv.pal[k];
+    if(!l||!l.checkedAt){S.inv.pal[k]={...(l||{}),...r};add++}
+    else if((r.checkedAt||0)>(l.checkedAt||0)){S.inv.pal[k]={...r,note:[r.note,t('invMergedOver',{d:l.device||'?'})].filter(Boolean).join(' · ')};upd++}
+    else keep++;
+  }
+  save();renderAll();toast(t('invMerged',{a:add,u:upd,k:keep,d:o.device||'?'}),'ok');
+}
+
+/* ---------- export: same format + differences sheet ---------- */
 async function invExport(){
   let XL;try{XL=await ensureXLSX()}catch(e){return toast(t('xlsxFail'),'err')}
   const inv=S.inv,C=inv.col,n=inv.ncol;
+  for(const id of Object.keys(inv.pal)){const r=inv.pal[id];if(r.lines&&!r.res&&r.checkedAt){legacyFound(r,invRows(id));r.res=reconcile(invRows(id),r.found||[])}}
   const aoa=inv.head.map(r=>{const a=r.slice();while(a.length<n)a.push('');return a});
   const h=inv.hdr.map(cellStr);while(h.length<n)h.push('');aoa.push(h);
   let total=0;
   const put=o=>{const a=new Array(n).fill('');const set=(k,v)=>{if(C[k]>=0)a[C[k]]=v};
     set('bancale',o.bancale);set('codPrec',o.codPrec||'');set('mag',o.mag||'');set('pos',o.pos||'');set('code',o.code||'');set('desc',o.desc||'');set('lot',o.lot||'');set('exp',o.exp||'');set('um',o.um||'');set('qty',+o.qty||0);
     total+=+o.qty||0;aoa.push(a)};
-  const D=[[t('xBancale'),t('xLabel'),t('xCode'),t('xDesc'),t('xLotRep'),t('xLotCnt'),t('xQtyRep'),t('xQtyCnt'),t('xDiff'),t('xCases'),t('xPc'),t('xUnits'),t('xStatus'),t('xLevel'),t('xOpen'),t('xReasons'),t('xNote'),t('xTime'),t('xDevice')]];
-  const stTxt=(st,r)=>t('st_'+st)+(r&&r.noLabel?' / '+t('invNoLabel'):'');
-  for(const id of inv.order){
-    const rec=inv.pal[id]||{},rows=invRows(id),st=invStatus(id),when=rec.checkedAt?fDate(rec.checkedAt)+' '+fTime(rec.checkedAt):'';
-    for(const r of rows){
-      const o={...r};let l=null;
-      if(st==='missing')o.qty=0;
-      else if(rec.lines&&rec.lines[r.i]&&!rec.quick){l=rec.lines[r.i];o.qty=l.qty;o.lot=l.lot;if(!l.prodOk){o.code=l.code||o.code;o.desc=l.desc||o.desc}}
-      put(o);
-      const cnt=st==='pending'?'':(st==='missing'?0:(rec.quick?'':o.qty));
-      D.push([id,rec.link||'',o.code,o.desc,r.lot,st==='pending'?'':(l?l.lot:r.lot),r.qty,cnt,cnt===''?'':cnt-r.qty,l?l.c:'',l&&l.c?l.pc:'',l?l.u:'',
-        stTxt(st,rec)+(r.lot&&lotTypo(r.lot)?' / '+t('xLotTypo'):''),rec.level||'',rec.flagOpen?t('yes'):'',(rec.reasons||[]).map(x=>t(x)).join(', '),rec.note||'',when,rec.device||'']);
-    }
-    for(const x of (rec.added||[])){
-      const o={bancale:id,mag:rows[0]?rows[0].mag:'',code:x.code||x.desc,desc:x.desc,lot:x.lot,um:'PEZZI',qty:x.qty};put(o);
-      D.push([id,rec.link||'',o.code,x.desc,'',x.lot,0,x.qty,x.qty,x.c,x.c?x.pc:'',x.u,t('xAddedLine'),rec.level||'',rec.flagOpen?t('yes'):'',(rec.reasons||[]).map(x=>t(x)).join(', '),rec.note||'',when,rec.device||'']);
-    }
-  }
+  const D=[[t('xBancale'),t('xLabel'),t('xCode'),t('xDesc'),t('xLotRep'),t('xLotCnt'),t('xQtyRep'),t('xQtyCnt'),t('xDiff'),t('xCases'),t('xPc'),t('xUnits'),t('xCount1'),t('xCount2'),t('xType'),t('xRc'),t('xStatus'),t('xLevel'),t('xOpen'),t('xReasons'),t('xNote'),t('xTime'),t('xDevice')]];
   const mag0=inv.rows[0]?inv.rows[0].mag:'';
-  for(const id of invIds().filter(i=>!inv.order.includes(i))){
-    const rec=inv.pal[id];if(!rec||!rec.checkedAt)continue;
-    for(const x of (rec.added||[])){put({bancale:id,mag:mag0,code:x.code||x.desc,desc:x.desc,lot:x.lot,um:'PEZZI',qty:x.qty});
-      D.push([id,'',x.code||x.desc,x.desc,'',x.lot,0,x.qty,x.qty,x.c,x.c?x.pc:'',x.u,t('st_new'),rec.level||'',rec.flagOpen?t('yes'):'',(rec.reasons||[]).map(x=>t(x)).join(', '),rec.note||'',fDate(rec.checkedAt)+' '+fTime(rec.checkedAt),rec.device||''])}
-  }
+  const meta=(rec,st)=>[t('st_'+st)+(rec.noLabel?' / '+t('invNoLabel'):''),rec.level||'',rec.flagOpen?t('yes'):'',(rec.reasons||[]).map(x=>t(x)).join(', '),rec.note||'',rec.checkedAt?fDate(rec.checkedAt)+' '+fTime(rec.checkedAt):'',rec.device||''];
+  const emit=(id,rows,rec,st)=>{
+    const res=rec.res||[];const byRow={};
+    if(st!=='pending'&&!rec.quick)for(const p of res)if(p.type!=='extra'){
+      let left=p.cnt;p.rowIdx.forEach((ri,j)=>{const r=rows.find(x=>x.i===ri);if(!r)return;const last=j===p.rowIdx.length-1;const v=last?left:Math.min(left,r.qty);left-=v;byRow[ri]={qty:v,lot:p.type==='lot'?(p.lotCnt.split(' / ')[0]||r.lot):r.lot}})}
+    for(const r of rows){const o={...r};if(st==='missing')o.qty=0;else if(byRow[r.i]){o.qty=byRow[r.i].qty;o.lot=byRow[r.i].lot}put(o)}
+    for(const p of res.filter(p=>p.type==='extra'))put({bancale:id,mag:rows[0]?rows[0].mag:mag0,code:p.code,desc:p.name,lot:p.lotCnt,um:'PEZZI',qty:p.cnt});
+    if(st==='pending'){for(const r of rows)D.push([id,rec.link||'',r.code,r.desc,r.lot,'',r.qty,'','','','','','','',t('st_pending')+(lotTypo(r.lot)?' / '+t('xLotTypo'):''),'','','','','','','',''].slice(0,23));return}
+    const list=res.length?res:groupsOf(rows).map(g=>({key:g.key,type:'quick',code:g.code,name:g.desc,exp:g.exp,cnt:null,diff:null,lotExp:g.lot,lotCnt:g.lot}));
+    for(const p of list){
+      const rc=rec.rcodes&&rec.rcodes[p.key]?t(rec.rcodes[p.key]):'';
+      D.push([id,rec.link||'',p.code,p.name,p.lotExp||'',p.lotCnt||'',p.exp,p.cnt==null?'':p.cnt,p.diff==null?'':p.diff,p.c===''?'':p.c,p.c?p.pc:'',p.u===''?'':p.u,p.r1!=null?p.r1:'',p.r2!=null?p.r2:'',
+        p.type==='quick'?t('st_quick'):TYPE_TXT(p)+(p.lotExp&&lotTypo(p.lotExp)?' / '+t('xLotTypo'):''),rc,...meta(rec,st)]);
+    }
+  };
+  for(const id of inv.order){const rec=inv.pal[id]||{};emit(id,invRows(id),rec,invStatus(id))}
+  for(const id of invIds().filter(i=>!inv.order.includes(i))){const rec=inv.pal[id];if(rec&&rec.checkedAt)emit(id,[],rec,invStatus(id))}
   const tot=new Array(n).fill('');if(C.um>=0)tot[C.um]='Totale generale:';else tot[Math.max(0,C.qty-1)]='Totale generale:';tot[C.qty]=total;aoa.push(tot);
   const ws=XL.utils.aoa_to_sheet(aoa);ws['!merges']=inv.merges;ws['!cols']=inv.cols||[{wch:20},{wch:20},{wch:12},{wch:9},{wch:16},{wch:40},{wch:12},{wch:10},{wch:7},{wch:9}];
-  const ws2=XL.utils.aoa_to_sheet(D);ws2['!cols']=[{wch:20},{wch:20},{wch:16},{wch:36},{wch:12},{wch:12},{wch:9},{wch:9},{wch:8},{wch:6},{wch:7},{wch:6},{wch:22},{wch:6},{wch:8},{wch:30},{wch:24},{wch:18},{wch:14}];
+  const ws2=XL.utils.aoa_to_sheet(D);ws2['!cols']=[{wch:20},{wch:20},{wch:16},{wch:36},{wch:12},{wch:12},{wch:9},{wch:9},{wch:8},{wch:6},{wch:7},{wch:6},{wch:8},{wch:8},{wch:18},{wch:20},{wch:16},{wch:6},{wch:8},{wch:30},{wch:24},{wch:18},{wch:14}];
   const wb=XL.utils.book_new();XL.utils.book_append_sheet(wb,ws,inv.sheetName||'Situazione');XL.utils.book_append_sheet(wb,ws2,t('xSheetDiff').slice(0,31));
   const base=String(inv.fileName||'giacenza').replace(/\.[^.]+$/,'');const d=new Date();
   const name=base+'_kontrol_'+fDate(d)+'_'+pad2(d.getHours())+pad2(d.getMinutes())+'.xlsx';
