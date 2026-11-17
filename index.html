@@ -17,8 +17,9 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:16px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;overscroll-behavior:none}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation}
-input,select{font:inherit;color:var(--tx);background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;outline:none}
-input:focus{border-color:var(--acc)}
+input,select,textarea{font:inherit;color:var(--tx);background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;outline:none}
+input:focus,textarea:focus{border-color:var(--acc)}
+textarea{resize:vertical;min-height:64px;line-height:1.35}
 .hidden{display:none!important}
 #app{display:flex;flex-direction:column;height:100%;padding-top:var(--st)}
 .top{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line)}
@@ -101,7 +102,7 @@ main{flex:1;overflow:hidden;position:relative}
 .acts .btn{flex:1}
 .acts .btn.primary{flex:1.6;font-size:19px}
 .fld{display:block;font-size:13px;color:var(--mut);margin:10px 0}
-.fld input,.fld select{margin-top:5px}
+.fld input,.fld select,.fld textarea{margin-top:5px}
 .bigin{font-size:24px;font-weight:700;text-align:center;letter-spacing:.04em}
 .mres{display:flex;flex-direction:column;gap:6px;margin-top:10px;max-height:40vh;overflow:auto}
 .sum{display:flex;gap:8px;margin:6px 0 4px}
@@ -912,13 +913,33 @@ Object.assign(I18N.tr,{invManualTag:'elle',invVerified:'✓ Barkodla doğruland�
 Object.assign(I18N.de,{invManualTag:'manuell',invVerified:'✓ Per Barcode bestätigt',xManual:'manuell erfasst',invTapHint:'Sie können auch auf einen erwarteten Artikel tippen, um ihn hinzuzufügen.'});
 Object.assign(I18N.it,{invManualTag:'a mano',invVerified:'✓ Verificato con barcode',xManual:'aggiunto a mano',invTapHint:'Puoi anche toccare un prodotto atteso per aggiungerlo.'});
 Object.assign(I18N.ru,{invManualTag:'вручную',invVerified:'✓ Подтверждено штрихкодом',xManual:'добавлено вручную',invTapHint:'Можно также нажать на ожидаемый товар, чтобы добавить его.'});
-Object.assign(I18N.en,{invManualTag:'manual',invVerified:'✓ Verified by barcode',xManual:'added manually',invTapHint:'You can also tap an expected product to add it.'});
+Object.assign(I18N.en,{invManualTag:'manual',invVerified:'✓ Verified by barcode',xManual:'added manually',invTapHint:'You can also tap an expected product to add it.'});Object.assign(I18N.tr,{labHdr:'Etiket bilgileri (shipping mark)',labSupplier:'Tedarikçi – firma + adres',labSupplierPh:'Firma adı\nAdres',labBuyerName:'Alıcı firma',labBuyerAddr:'Alıcı adresi',labBuyerAddrPh:'Sokak, şehir, posta kodu, ülke',labOrigin:'Menşe ülke',
+labMissing:'Tedarikçi, alıcı veya menşe boş – etikette "-" olarak çıkar.',ordCtnBtn:'📦 Koli etiketleri (PDF)',ordCtnHint:'{n} koli · her koliye 100×150 mm etiket: CTN 1 of N, palet, ürün, ref, adet, lot, SKT, EAN-13 barkod, tedarikçi, alıcı, menşe. Tam koli + her satırın tekil artığı ayrı koli sayılır.',
+ordNoCtn:'Yüklenmiş koli yok',ordCtnReady:'Koli etiketleri hazır',xCtnNo:'Koli no',xTotalCtn:'Toplam koli',xCtnTotal:'{n} koli',xSupplier:'Tedarikçi',
+ordLabelsHint:'Her palet için 100×150 mm etiket: palet 1 of N, tedarikçi, alıcı, menşe, içerik, koli adedi ve koli no aralığı, ağırlık, SSCC/palet barkodu.'});
+Object.assign(I18N.de,{labHdr:'Etikettendaten (Shipping Mark)',labSupplier:'Lieferant – Firma + Adresse',labSupplierPh:'Firmenname\nAdresse',labBuyerName:'Empfänger (Firma)',labBuyerAddr:'Empfängeradresse',labBuyerAddrPh:'Straße, Ort, PLZ, Land',labOrigin:'Ursprungsland',
+labMissing:'Lieferant, Empfänger oder Ursprung fehlt – erscheint als "-" auf dem Etikett.',ordCtnBtn:'📦 Kartonetiketten (PDF)',ordCtnHint:'{n} Kartons · je Karton ein Etikett 100×150 mm: CTN 1 of N, Palette, Artikel, Ref, Menge, Charge, MHD, EAN-13-Barcode, Lieferant, Empfänger, Ursprung. Volle Kartons + Einzelstück-Rest je Zeile als eigener Karton.',
+ordNoCtn:'Keine geladenen Kartons',ordCtnReady:'Kartonetiketten bereit',xCtnNo:'Karton-Nr.',xTotalCtn:'Kartons gesamt',xCtnTotal:'{n} Kartons',xSupplier:'Lieferant',
+ordLabelsHint:'Je Palette ein Etikett 100×150 mm: Palette 1 of N, Lieferant, Empfänger, Ursprung, Inhalt, Kartonanzahl und Karton-Nr.-Bereich, Gewicht, SSCC/Paletten-Barcode.'});
+Object.assign(I18N.it,{labHdr:'Dati etichetta (shipping mark)',labSupplier:'Fornitore – ragione sociale + indirizzo',labSupplierPh:'Ragione sociale\nIndirizzo',labBuyerName:'Destinatario (azienda)',labBuyerAddr:'Indirizzo destinatario',labBuyerAddrPh:'Via, città, CAP, paese',labOrigin:'Paese di origine',
+labMissing:'Fornitore, destinatario o origine mancanti – in etichetta appare "-".',ordCtnBtn:'📦 Etichette cartoni (PDF)',ordCtnHint:'{n} cartoni · un\'etichetta 100×150 mm per cartone: CTN 1 of N, pallet, prodotto, codice, quantità, lotto, scadenza, barcode EAN-13, fornitore, destinatario, origine. Cartoni pieni + resto sfuso di ogni riga come cartone a parte.',
+ordNoCtn:'Nessun cartone caricato',ordCtnReady:'Etichette cartoni pronte',xCtnNo:'N. cartone',xTotalCtn:'Totale cartoni',xCtnTotal:'{n} cartoni',xSupplier:'Fornitore',
+ordLabelsHint:'Un\'etichetta 100×150 mm per pallet: pallet 1 of N, fornitore, destinatario, origine, contenuto, n. cartoni e intervallo numeri, peso, barcode SSCC/pallet.'});
+Object.assign(I18N.ru,{labHdr:'Данные маркировки (shipping mark)',labSupplier:'Поставщик – компания + адрес',labSupplierPh:'Название компании\nАдрес',labBuyerName:'Покупатель (компания)',labBuyerAddr:'Адрес покупателя',labBuyerAddrPh:'Улица, город, индекс, страна',labOrigin:'Страна происхождения',
+labMissing:'Не заполнены поставщик, покупатель или происхождение – на этикетке будет "-". Пишите латиницей.',ordCtnBtn:'📦 Этикетки коробов (PDF)',ordCtnHint:'{n} коробов · этикетка 100×150 мм на каждый короб: CTN 1 of N, паллета, товар, артикул, кол-во, партия, срок годности, штрихкод EAN-13, поставщик, покупатель, происхождение. Полные короба + штучный остаток каждой строки – отдельный короб.',
+ordNoCtn:'Нет загруженных коробов',ordCtnReady:'Этикетки коробов готовы',xCtnNo:'№ короба',xTotalCtn:'Всего коробов',xCtnTotal:'{n} коробов',xSupplier:'Поставщик',
+ordLabelsHint:'Этикетка 100×150 мм на каждую паллету: паллета 1 of N, поставщик, покупатель, происхождение, содержимое, кол-во коробов и их номера, вес, штрихкод SSCC/паллеты.'});
+Object.assign(I18N.en,{labHdr:'Label data (shipping marks)',labSupplier:'Supplier – company + address',labSupplierPh:'Company name\nAddress',labBuyerName:'Buyer (company)',labBuyerAddr:'Buyer address',labBuyerAddrPh:'Street, city, postal code, country',labOrigin:'Country of origin',
+labMissing:'Supplier, buyer or origin is empty – it will print as "-".',ordCtnBtn:'📦 Carton labels (PDF)',ordCtnHint:'{n} cartons · one 100×150 mm label per carton: CTN 1 of N, pallet, item, ref, qty, batch, expiry, EAN-13 barcode, supplier, buyer, origin. Full cases + each line\'s loose units count as a separate carton.',
+ordNoCtn:'No cartons loaded',ordCtnReady:'Carton labels ready',xCtnNo:'Carton no.',xTotalCtn:'Total cartons',xCtnTotal:'{n} cartons',xSupplier:'Supplier',
+ordLabelsHint:'One 100×150 mm label per pallet: pallet 1 of N, supplier, buyer, origin, contents, carton count and number range, weight, SSCC/pallet barcode.'});
+
 'use strict';
 const PRODUCTS=[["8053839950161","SAO001","SONO ARGAN OIL",30,200,""],["8053839950178","SAO002","SONO ARGAN OIL",100,36,""],["8053839950109","SASH002","SONO ARGAN SHAMPOO 250",250,48,""],["8053839950093","SACN002","SONO ARGAN CONDITIONER",250,48,""],["8053839950130","SADM001","SONO ARGAN DEEP MASK box",250,32,""],["8053839950123","SALM002","SONO ARGAN LEAVE IN MASK box",150,64,""],["8053839950154","SALMM002","SONO ARGAN LEAVE IN MASK",50,100,""],["8053839950024","SAA001","SONO COLOR SHAMPOO",250,48,""],["8053839950000","SAA002","SONO COLOR MASK box",250,32,""],["8053839950246","SSO002","SONO BLONDER OIL",100,36,""],["8053839950062","SSH001","SONO SILVER SHAMPOO",250,48,""],["8053839950048","SSMA02","SONO SILVER MASK box",250,32,""],["8053839950192","SSSI01","SONO SILVER SILK box",150,64,""],["8053839950321","SSSIM011","SONO SILVER SILK",50,100,""],["8053839950239","SSS003","SONO STYLE SALT WAVE",150,64,""],["8053839950338","SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250,48,""],["8053839950352","SGM001","SONO GOLD RESTRUCTURING MASK",150,64,""],["8053839950376","SSG001","SONO SILKY GOLD",150,64,""],["8053839950277","SKSH001","SONO KERATIN SHAMPOO",250,48,""],["8053839950284","SKCN001","SONO KERATIN CONDITIONER",250,48,""],["8053839950314","SAAP001","Sono Color Potion 150 ml",150,64,""],["8053839950857","SSG002","Silky Gold 50 ml",50,100,""],["8053839950956","SCP050","Sono Color Potion 50 ml",50,100,""],["8053839950116","SASH003","SONO ARGAN SHAMPOO 1000",1000,12,""],["8053839950086","SACN003","SONO ARGAN CONDITIONER",1000,12,""],["8053839950536","SKSH002","SONO KERATIN SHAMPOO",1000,12,""],["8053839951151","SSVS150","VOLUME SPRAY",150,64,""],["8053839951182","SSTP150","THERMO-PROTECTIVE SPRAY",150,80,""],["8053839950031","SAA003","SONO COLOR SHAMPOO 1000 ml",1000,12,""],["8053839950345","SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000,12,""],["8053839951168","SSVM150","Sono Volume Mousse",150,48,""],["8053839951199","SSBW150","BEACH WAVES SPRAY",150,64,""],["8053839950680","SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250,48,""],["8053839950697","SVMA001","THE VOLUMIZING MASK 250 ml",250,32,""],["8053839950079","SSH003","SONO SILVER SHAMPOO 1000 ml",1000,12,""],["8053839951755","SAPGS25","SONO Argan Perfume Gift Set 2025","",18,""],["8053839951472","SGCN1000","SONO GOLD Conditioner 1000 ml",1000,12,""],["8053839951489","SGCN0250","SONO GOLD Conditioner 250 ml",250,48,""],["8053839951496","SSCN1000","SONO Silver Conditioner 1000 ml",1000,12,""],["8053839951502","SSCN0250","SONO Silver Conditioner 250 ml",250,48,""],["8053839951618","SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250,48,""],["8053839951519","SCCN1000","SONO Color Conditioner 1000 ml",1000,12,""],["8053839951649","SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250,48,""],["8053839951700","SKHP001","SONO KERATIN PERFUME",30,256,""],["8053839951526","SCCN0250","SONO Color Conditioner 250 ml",250,48,""],["8053839951281","SSDRS200","SPRAY DRY SHAMPOO","",12,""],["8053839951311","SSFSPR300","FIX SPRAY","",12,""],["8053839951564","SCSH250","SONO THE CURL SHAMPOO",250,48,""],["8053839951588","SCMA250","SONO CURL MASK",250,32,""],["8053839951601","SCLG150","SONO CURL LIQUID GEL",150,64,""],["8053839951632","SDLT150","SONO ANTI-DANDRUFF LOTION",150,64,""],["8053839951656","SGFM050","SONO GOLD  LIQUID FILLER MASK",50,100,""],["8053839951663","SBLM050","SONO BLONDER LIQUID MASK",50,100,""],["8053839951670","SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250,48,""],["8053839951687","SHLCN250","SONO HAIR-LOSS CONDITIONER",250,48,""],["8053839951694","SHLT150","SONO HAIR-LOSS LOTION",150,64,""],["8053839951717","SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100,36,""],["8053839950475","SAOM02","ARGAN OIL 10 ML",10,800,""],["8053839950437","SASHS02","ARGAN SHAMPOO 10 ML",10,800,""],["8053839950444","SACNS02","ARGAN CONDITIONER 10 ML",10,800,""],["8053839950451","SADMS01","ARGAN DEEP MASK 10 ML",10,800,""],["8053839950468","SALMS02","ARGAN LEAVE IN MASK 10 ML",10,800,""],["8053839950482","SAAS001","COLOR SHAMPOO 10 ML",10,800,""],["8053839950499","SAAS002","ANTI-AGE MASK 10 ML",10,800,""],["8053839950390","SAHS01","SILVER SHAMPOO 10 ML",10,800,""],["","","SONO Silver Conditioner 10 ml",10,800,""],["8053839950406","SSMS01","SILVER MASK 10 ML",10,800,""],["8053839950413","SSSS01","SONO SILVER SILK SPRAY 10ML",10,800,""],["8053839950567","SKSHS01","SONO KERATIN SHAMPOO",10,800,""],["8053839950574","SKCNS01","SONO KERATIN CONDITIONER",10,800,""],["8053839950376_","SSGS01","SONO SILKY GOLD",10,800,""],["8053839950529","SACNS02","SONO Kraft Bag 18X24X8 cm","","",""],["8053839951120","SWB001","SMAL SONO WHITE BAG","",200,""],["","SADM002","SONO ARGAN DEEP MASK",500,16,""],["","SAA004","SONO COLOR MASK",500,16,""],["","SSO001","SONO BLONDER OIL",30,200,""],["","SSMA01","SONO SILVER MASK",500,16,""],["","SGM002","SONO GOLD RESTRUCTURING MASK",500,16,""],["","SGF002","SONO GOLD FILLER",250,48,""],["","SGA001","SONO GOLD AMPOULE","6 x 10 ml",32,"noteSGA"],["","SKCN002","SONO KERATIN CONDITIONER",1000,12,""],["","SSS004","SONO STYLE SALT WAVE",50,100,""],["","SSGG150","LIQUID GEL",150,64,""],["","SSDC050","STYLING PASTE",50,112,""],["","SSDCSH250","SONO STYLE DEEP CLEANSING SHAMPOO 250 ml",250,48,""],["","SSDCSH1000","SONO STYLE DEEP CLEANSING SHAMPOO 1000 ml",1000,12,""],["","SAPD001","SONO DETOX LOTION 150 ML",150,64,""],["","SAPSH001","SONO DETOX SHAMPOO 250 ML",250,48,""],["","SAPM001","SONO DETOX MASK 150 ML",150,64,""],["","SAPS001","SONO DETOX SPRAY 150 ML",150,64,""],["","SVSP001","SONO VOLUME VOLUMIZING  SPRAY 150 ml",150,64,""],["","SCSH1000","SONO CURL SHAMPOO 1000 ML",1000,12,""],["","SCMA500","SONO CURL MASK 500 ML",500,16,""],["","SDSH1000","SONO ANTI-DANDRUFF SHAMPOO 1000 ML",1000,12,""],["","SCP010","SONO COLOR POTION",10,800,""],["","SSOS01","SONO SILVER OIL",10,800,""],["","SGSS01","SONO GOLD RESTRUCTURING SHAMPOO",10,800,""],["","SGMS01","SONO GOLD RESTRUCTURING MASK",10,800,""],["","KWB001","SMALL SONO WHITE BAG","",200,""],["","SGP00","SONO GOLD PERFUME",30,256,""],["","SAP00","SONO ARGAN PERFUME",30,256,""],["","SBP00","SONO BLONDER PERFUME",30,256,""]];
-const VERSION='2.2.1';
+const VERSION='2.3.0';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const LS='palet_sayim_v1';
-const DEF={lang:'auto',entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false,inv:null,invBlind:true,invQuick:false,invFilter:'all',invTol:'case',invRecount:'now',invPlusCase:false,appMode:'free',invActive:null};
+const DEF={lang:'auto',entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false,inv:null,invBlind:true,invQuick:false,invFilter:'all',invTol:'case',invRecount:'now',invPlusCase:false,appMode:'free',invActive:null,labSupplier:'',labOrigin:''};
 let S=Object.assign({},DEF,(()=>{try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}}})());
 if(S.mode==='plus')S.mode='plusu';
 if(Array.isArray(S.extra)||typeof S.extra!=='object')S.extra={};
@@ -2501,6 +2522,7 @@ document.addEventListener('click',ev=>{
   if(a==='modeoff'){S.appMode='free';S.modeTab=null;save();renderAll();return}
   if(a==='packing'){ordExportExcel(ordById(b.dataset.id));return}
   if(a==='labels'){ordLabelsPdf(ordById(b.dataset.id));return}
+  if(a==='ctnlabels'){ordCartonsPdf(ordById(b.dataset.id));return}
   if(a==='closeorder'){const x=ordById(b.dataset.id);x.closedAt=x.closedAt?null:Date.now();save();renderAll();return}
   if(a==='delorder'){const x=ordById(b.dataset.id);const sh=openSheet(`<h3>${t('ordDelQ',{no:esc(x.no)})}</h3><div class="note w">${t('ordDelWarn')}</div><div class="acts"><button class="btn ghost" data-a="cancel">${t('back')}</button><button class="btn dangerfill" data-a="ok">${t('ordDel')}</button></div>`);
     sh.onclick=e2=>{const y=e2.target.closest('button');if(!y)return;if(y.dataset.a==='cancel')closeSheet();if(y.dataset.a==='ok'){S.orders=S.orders.filter(z=>z.id!==x.id);if(S.ordActive.o===x.id)S.ordActive={o:null,p:null};save();closeSheet();renderAll()}};return}
@@ -2511,6 +2533,12 @@ document.addEventListener('input',ev=>{
   const i=ev.target.closest('#ordWork input[data-of]');if(i){const o=ordCur(),p=palCur(o);if(!p)return;const f=p.found[+i.dataset.k];f[i.dataset.of]=i.value.trim();
     const e=$(`[data-otot="${i.dataset.k}"]`);if(e)e.textContent=f.c===''&&f.u===''?'–':fQty(f);clearTimeout(ordT);ordT=setTimeout(()=>{save();const over=o.lines.some((l,k)=>loadedOf(o,k)>l.qty);document.querySelectorAll('#ordWork .fl').forEach(el=>{const ff=p.found.find(z=>z.id===el.dataset.fid);el.classList.toggle('over',!!ff&&loadedOf(o,ff.li)>o.lines[ff.li].qty)});if(over)beepWarn();renderTop()},500);return}
   const c=ev.target.closest('#ordWork input[data-ord-f]');if(c){const o=ordCur();o[c.dataset.ordF]=c.value;clearTimeout(ordT);ordT=setTimeout(save,400);return}
+});
+let labT=null;
+document.addEventListener('input',ev=>{
+  const g=ev.target.closest('#ordExp [data-lab]');const f=ev.target.closest('#ordExp [data-ord-f]');if(!g&&!f)return;
+  const o=ordCur();if(g)S[g.dataset.lab]=g.value;if(f&&o){o[f.dataset.ordF]=f.value;if(f.dataset.ordF==='origin')S.labOrigin=f.value}
+  const m=$('#labMiss');if(m&&o)m.classList.toggle('hidden',!labMissing(o));clearTimeout(labT);labT=setTimeout(save,400);
 });
 document.addEventListener('change',ev=>{const i=ev.target.closest('input[data-ord="file"]');if(i){const f=i.files[0];i.value='';if(f)ordImport(f)}});
 function ordClosePalletSheet(o,p){
@@ -2564,11 +2592,21 @@ function renderOrdExport(){
   el.innerHTML=`<div class="card"><div class="row-sp"><b>${esc(o.no)}</b>${ordBadge(ordStatus(o))}</div><div class="mut">${o.customer?esc(o.customer)+' · ':''}${o.pallets.length} ${t('pallets')} · ${tt.ld}/${tt.ord} ${t('pcs')}</div>
       <div class="prog"><i style="width:${tt.pct}%"></i></div>
       ${short.length?`<div class="note w">${t('ordShortNote',{n:short.length})}</div>`:''}</div>
+    <div class="sect">${t('labHdr')}</div>
+    <div class="card labcard">
+      <label class="fld">${t('labSupplier')}<textarea data-lab="labSupplier" rows="3" placeholder="${esc(t('labSupplierPh'))}">${esc(S.labSupplier||'')}</textarea></label>
+      <label class="fld">${t('labBuyerName')}<input data-ord-f="customer" value="${esc(o.customer||'')}" placeholder="${esc(t('ordCustomerPh'))}" autocomplete="off"></label>
+      <label class="fld">${t('labBuyerAddr')}<textarea data-ord-f="buyerAddr" rows="3" placeholder="${esc(t('labBuyerAddrPh'))}">${esc(o.buyerAddr||'')}</textarea></label>
+      <label class="fld">${t('labOrigin')}<input data-ord-f="origin" value="${esc(o.origin??S.labOrigin??'')}" placeholder="Made in Italy" autocomplete="off"></label>
+      <div class="note w ${labMissing(o)?'':'hidden'}" id="labMiss">${t('labMissing')}</div>
+    </div>
     <div class="sect">${t('ordDocsHdr')}</div>
     <button class="btn primary wide" data-ord="packing" data-id="${o.id}">${t('ordPackingBtn')}</button>
     <p class="mut">${t('ordPackingHint')}</p>
     <button class="btn ghost wide" data-ord="labels" data-id="${o.id}">${t('ordLabelsBtn')}</button>
     <p class="mut">${t('ordLabelsHint')}</p>
+    <button class="btn ghost wide" data-ord="ctnlabels" data-id="${o.id}">${t('ordCtnBtn')}</button>
+    <p class="mut">${t('ordCtnHint',{n:ordCartons(o).length})}</p>
     <div class="sect">${t('ordManageHdr')}</div>
     <div class="row2"><button class="btn ghost wide" data-ord="closeorder" data-id="${o.id}">${o.closedAt?t('ordReopen'):t('ordCloseOrder')}</button><button class="btn danger" data-ord="delorder" data-id="${o.id}">${t('ordDel')}</button></div>
     ${S.orders.length>1?`<div class="sect">${t('ordOtherHdr')}</div><div class="recent">${S.orders.filter(x=>x.id!==o.id).map(ordItem).join('')}</div>`:''}`;
@@ -2588,22 +2626,24 @@ function renderOrdPanel(el){
 async function ordExportExcel(o){
   if(!o)return;let XL;try{XL=await ensureXLSX()}catch(e){return toast(t('xlsxFail'),'err')}
   const now=Date.now();const tt=ordTot(o);
-  const A=[[t('xPackTitle')],[t('xOrderNo'),o.no],[t('xCustomer'),o.customer||''],[t('xDate'),fDate(now)],[t('xPallets'),o.pallets.length],[],
-    [t('xPallet'),t('xPalLabel'),t('xBarcode'),t('xRef'),t('xProduct'),t('lot'),t('expShort'),t('xCases'),t('xPc'),t('xUnits'),t('xQty'),t('xWeight'),t('xHeight')]];
+  const cts=ordCartons(o),ctnOf=new Map();cts.forEach(c=>{const r=ctnOf.get(c.f)||[c.no,c.no];r[1]=c.no;ctnOf.set(c.f,r)});
+  const one=s=>String(s||'').replace(/\s*\n\s*/g,', ').trim();
+  const A=[[t('xPackTitle')],[t('xOrderNo'),o.no],[t('xSupplier'),one(S.labSupplier)],[t('xCustomer'),o.customer||''],[t('labBuyerAddr'),one(o.buyerAddr)],[t('labOrigin'),labOrigin(o)],[t('xDate'),fDate(now)],[t('xPallets'),o.pallets.length],[t('xTotalCtn'),cts.length],[],
+    [t('xPallet'),t('xPalLabel'),t('xBarcode'),t('xRef'),t('xProduct'),t('lot'),t('expShort'),t('xCases'),t('xPc'),t('xUnits'),t('xQty'),t('xCtnNo'),t('xWeight'),t('xHeight')]];
   let gq=0,gc=0;
   for(const p of [...o.pallets].sort((a,b)=>a.n-b.n)){
     let pq=0,pcs=0;
     p.found.forEach((f,k)=>{const l=o.lines[f.li]||{};const q=fQty(f);pq+=q;pcs+=+f.c||0;
-      A.push(['P'+p.n,p.label,l.pb||l.barcode||f.barcode||'',l.pr||l.ref||f.ref||'',lineName(l),f.lot||'',f.exp||'',+f.c||0,+f.c?+f.pc:'',+f.u||0,q,k===0?(p.weight?+p.weight:''):'',k===0?(p.height?+p.height:''):''])});
-    A.push(['',t('xPalTotal',{n:p.n}),'','','','','',pcs,'','',pq,p.weight?+p.weight:'',p.height?+p.height:'']);gq+=pq;gc+=pcs;
+      A.push(['P'+p.n,p.label,l.pb||l.barcode||f.barcode||'',l.pr||l.ref||f.ref||'',lineName(l),f.lot||'',f.exp||'',+f.c||0,+f.c?+f.pc:'',+f.u||0,q,ctnRange(ctnOf.get(f)),k===0?(p.weight?+p.weight:''):'',k===0?(p.height?+p.height:''):''])});
+    A.push(['',t('xPalTotal',{n:p.n}),'','','','','',pcs,'','',pq,ctnRange(palCtnRange(cts,p)),p.weight?+p.weight:'',p.height?+p.height:'']);gq+=pq;gc+=pcs;
   }
-  A.push([],['',t('xGrandTotal'),'','','','','',gc,'','',gq,o.pallets.reduce((a,p)=>a+(+p.weight||0),0)||'','']);
+  A.push([],['',t('xGrandTotal'),'','','','','',gc,'','',gq,cts.length?t('xCtnTotal',{n:cts.length}):'',o.pallets.reduce((a,p)=>a+(+p.weight||0),0)||'','']);
   const B=[[t('xInstrTitle')],[t('xOrderNo'),o.no],[t('xCustomer'),o.customer||''],[t('xDate'),fDate(now)],[],
     [t('xBarcode'),t('xRef'),t('xProduct'),t('xOrdered'),t('xLoaded'),t('xBalance'),t('xStatus'),t('xPalletsLots')]];
   o.lines.forEach((l,i)=>{const ld=loadedOf(o,i);const where=[];for(const p of o.pallets)for(const f of p.found)if(f.li===i)where.push('P'+p.n+(f.lot?' ('+f.lot+')':'')+': '+fQty(f));
     B.push([l.pb||l.barcode||'',l.pr||l.ref||'',lineName(l),l.qty,ld,Math.max(0,l.qty-ld),ld>=l.qty?t('xLineOk'):ld>0?t('xLinePart'):t('xLineNone'),where.join(' · ')])});
   B.push([],['','',t('xGrandTotal'),tt.ord,tt.ld,tt.ord-tt.ld]);
-  const ws=XL.utils.aoa_to_sheet(A);ws['!cols']=[{wch:6},{wch:22},{wch:15},{wch:12},{wch:36},{wch:12},{wch:11},{wch:6},{wch:7},{wch:6},{wch:8},{wch:8},{wch:8}];
+  const ws=XL.utils.aoa_to_sheet(A);ws['!cols']=[{wch:6},{wch:22},{wch:15},{wch:12},{wch:36},{wch:12},{wch:11},{wch:6},{wch:7},{wch:6},{wch:8},{wch:10},{wch:8},{wch:8}];
   const ws2=XL.utils.aoa_to_sheet(B);ws2['!cols']=[{wch:15},{wch:12},{wch:36},{wch:9},{wch:9},{wch:9},{wch:12},{wch:50}];
   const wb=XL.utils.book_new();XL.utils.book_append_sheet(wb,ws,t('xSheetPack').slice(0,31));XL.utils.book_append_sheet(wb,ws2,t('xSheetInstr').slice(0,31));
   const name='siparis_'+asciiNo(o.no)+'_packing_'+fDate(now)+'.xlsx';
@@ -2638,37 +2678,113 @@ function pdfDoc(pages,wmm,hmm){
   const x=out.length;out+=`xref\n0 ${n}\n0000000000 65535 f \n`+off.slice(1).map(o=>String(o).padStart(10,'0')+' 00000 n \n').join('')+`trailer\n<< /Size ${n} /Root 1 0 R >>\nstartxref\n${x}\n%%EOF`;
   const b=new Uint8Array(out.length);for(let i=0;i<out.length;i++)b[i]=out.charCodeAt(i)&255;return b;
 }
-function ordLabelPage(o,p,total){
-  const hmm=150,wmm=100,ops=[];const Y=mm=>((hmm-mm)*MM).toFixed(2),X=mm=>(mm*MM).toFixed(2);
-  const txt=(x,y,s,size,bold)=>ops.push(`BT /${bold?'F2':'F1'} ${size} Tf ${X(x)} ${Y(y)} Td (${pdfTxt(s)}) Tj ET`);
-  const line=(y)=>ops.push(`0.6 w ${X(4)} ${Y(y)} m ${X(96)} ${Y(y)} l S`);
-  const fit=(s,n)=>{s=String(s||'');return s.length>n?s.slice(0,n-1)+'.':s};
-  ops.push(`1.2 w ${X(3)} ${Y(147)} ${X(94)} ${(144*MM).toFixed(2)} re S`);
-  txt(6,11,'ORDER / ORDINE',7);txt(6,20,fit(o.no,22),17,true);
-  txt(62,11,'PALLET',7);txt(62,21,`${p.n} / ${total}`,20,true);
-  if(o.customer)txt(6,27,fit(o.customer,48),9);
-  line(30);
-  txt(6,35,'PRODUCT',6.5,true);txt(58,35,'LOT',6.5,true);txt(76,35,'CS',6.5,true);txt(86,35,'QTY',6.5,true);
-  let y=40.5;const rows=p.found;let shown=0;
-  for(const f of rows){if(shown>=11)break;const l=o.lines[f.li]||{};txt(6,y,fit(lineName(l),34),7.5);txt(58,y,fit(f.lot||'-',11),7.5);txt(76,y,String(+f.c||''),7.5);txt(86,y,String(fQty(f)),7.5,true);y+=5;shown++}
-  if(rows.length>shown){txt(6,y,`+ ${rows.length-shown} more lines`,7.5);y+=5}
-  line(99);
-  const q=rows.reduce((a,f)=>a+fQty(f),0),c=rows.reduce((a,f)=>a+(+f.c||0),0);
-  txt(6,105,'TOTAL',6.5,true);txt(6,111,`${c} cs · ${q} pcs`,10,true);
-  txt(52,105,'WEIGHT / HEIGHT',6.5,true);txt(52,111,`${p.weight?p.weight+' kg':'-'}  ${p.height?p.height+' cm':''}`,10,true);
-  txt(6,117,'DATE '+fDate(p.closedAt||Date.now()),6.5);
-  // barcode
+/* ---------- shipping marks: cartons + pallets ---------- */
+const labOrigin=o=>String(o.origin??S.labOrigin??'').trim();
+const labMissing=o=>!String(S.labSupplier||'').trim()||!String(o.customer||'').trim()||!labOrigin(o);
+/* one carton per full case; loose units of a line go into one extra carton */
+function ordCartons(o){
+  const out=[];let no=0;
+  for(const p of [...o.pallets].sort((a,b)=>a.n-b.n))for(const f of p.found){
+    const l=o.lines[f.li]||{};const c=+f.c||0,pc=+f.pc||0,u=+f.u||0;
+    for(let i=0;i<c;i++)out.push({no:++no,p,f,l,qty:pc});
+    if(u>0)out.push({no:++no,p,f,l,qty:u,part:true});
+  }
+  return out;
+}
+const ctnRange=r=>!r?'':r[0]===r[1]?String(r[0]):r[0]+'-'+r[1];
+function palCtnRange(cts,p){const m=cts.filter(c=>c.p===p);return m.length?[m[0].no,m[m.length-1].no]:null}
+/* EAN-13 / UPC-A as module string, null if not valid */
+function ean13Bits(code){
+  code=String(code||'').replace(/\D/g,'');if(code.length===12)code='0'+code;if(code.length!==13)return null;
+  let sum=0;for(let i=0;i<12;i++)sum+=(+code[i])*(i%2?3:1);if((10-sum%10)%10!==+code[12])return null;
+  const L=['0001101','0011001','0010011','0111101','0100011','0110001','0101111','0111011','0110111','0001011'];
+  const R=L.map(x=>x.replace(/./g,c=>c==='0'?'1':'0')),G=R.map(x=>x.split('').reverse().join(''));
+  const PAR=['LLLLLL','LLGLGG','LLGGLG','LLGGGL','LGLLGG','LGGLLG','LGGGLL','LGLGLG','LGLGGL','LGGLGL'][+code[0]];
+  let b='101';for(let i=1;i<=6;i++)b+=(PAR[i-1]==='L'?L:G)[+code[i]];b+='01010';for(let i=7;i<=12;i++)b+=R[+code[i]];return {bits:b+'101',code};
+}
+function labCanvas(hmm){
+  const ops=[];const Y=mm=>((hmm-mm)*MM).toFixed(2),X=mm=>(mm*MM).toFixed(2);
+  const fitW=(s,wmm,size)=>{s=String(s??'');const n=Math.max(4,Math.floor(wmm*MM/(size*0.53)));return s.length>n?s.slice(0,n-1)+'.':s};
+  const wrap=(s,wmm,size,max)=>{const n=Math.max(4,Math.floor(wmm*MM/(size*0.53)));const out=[];
+    for(const para of String(s??'').split(/\n/)){let cur='';for(const w of para.trim().split(/\s+/).filter(Boolean)){
+      if(!cur)cur=w;else if((cur+' '+w).length<=n)cur+=' '+w;else{out.push(cur);cur=w}
+      while(cur.length>n){out.push(cur.slice(0,n));cur=cur.slice(n)}}if(cur)out.push(cur)}
+    if(out.length>max){out.length=max;out[max-1]=fitW(out[max-1]+'...',wmm,size)}return out};
+  const c={ops,X,Y,
+    txt:(x,y,s,size,bold)=>ops.push(`BT /${bold?'F2':'F1'} ${size} Tf ${X(x)} ${Y(y)} Td (${pdfTxt(s)}) Tj ET`),
+    fit:(x,y,s,wmm,size,bold)=>c.txt(x,y,fitW(s,wmm,size),size,bold),
+    lines:(x,y,s,wmm,size,max,step,bold)=>{const ls=wrap(s,wmm,size,max);ls.forEach((t,i)=>c.txt(x,y+i*step,t,size,bold));return ls.length},
+    hline:y=>ops.push(`0.6 w ${X(4)} ${Y(y)} m ${X(96)} ${Y(y)} l S`),
+    box:()=>ops.push(`1.2 w ${X(3)} ${Y(hmm-3)} ${X(94)} ${((hmm-6)*MM).toFixed(2)} re S`),
+    bars:(bits,x,y,mw,h,guard)=>{let run=0;for(let i=0;i<=bits.length;i++){
+      if(bits[i]==='1'){run++;continue}
+      if(run){const st=i-run;const g=guard&&guard(st);ops.push(`${X(x+st*mw)} ${Y(y+h+(g?2.2:0))} ${(run*mw*MM).toFixed(3)} ${((h+(g?2.2:0))*MM).toFixed(2)} re f`);run=0}}},
+    c128:(pat,cx,y,maxw,h)=>{const mods=pat.split('').reduce((a,d)=>a+ +d,0);const bw=Math.min(0.42,maxw/mods);let bx=cx-mods*bw/2;
+      pat.split('').forEach((d,i)=>{const w=+d*bw;if(i%2===0)ops.push(`${X(bx)} ${Y(y+h)} ${(w*MM).toFixed(3)} ${(h*MM).toFixed(2)} re f`);bx+=w})},
+    center:(cx,y,s,size,bold)=>c.txt(cx-String(s).length*size*0.53/MM/2,y,s,size,bold)
+  };
+  return c;
+}
+function labParty(c,y,o){
+  c.txt(6,y,'SUPPLIER',6,true);const n1=c.lines(25,y,S.labSupplier||'-',69,7.5,3,3.4);y+=Math.max(1,n1)*3.4+1.6;
+  c.txt(6,y,'BUYER',6,true);c.fit(25,y,o.customer||'-',69,8.5,true);y+=3.6;
+  const n2=o.buyerAddr?c.lines(25,y,o.buyerAddr,69,7.5,3,3.4):0;y+=n2*3.4+1.6;
+  c.txt(6,y,'ORIGIN',6,true);c.fit(25,y,labOrigin(o)||'-',69,8.5,true);
+  return y+2.5;
+}
+function ordLabelPage(o,p,total,cts){
+  const c=labCanvas(150);c.box();
+  c.txt(6,10,'PALLET',7,true);c.txt(6,21,`${p.n} of ${total}`,22,true);
+  c.txt(62,10,'ORDER',7,true);c.fit(62,17,o.no,32,12,true);c.txt(62,22,'DATE '+fDate(p.closedAt||Date.now()),6.5);
+  c.hline(25);
+  let y=labParty(c,30,o);c.hline(y);y+=4.5;
+  const rows=p.found;c.txt(6,y,'CONTENTS',6,true);c.txt(58,y,'BATCH',6,true);c.txt(78,y,'CTN',6,true);c.txt(87,y,'PCS',6,true);y+=4.6;
+  const cmap=new Map();for(const x of cts)if(x.p===p)cmap.set(x.f,(cmap.get(x.f)||0)+1);
+  const maxRows=Math.max(1,Math.floor((99-y)/4.4));let shown=0;
+  for(const f of rows){if(shown>=maxRows-(rows.length>maxRows?1:0))break;const l=o.lines[f.li]||{};
+    c.fit(6,y,lineName(l),50,7);c.fit(58,y,f.lot||'-',19,7);c.txt(78,y,String(cmap.get(f)||0),7);c.txt(87,y,String(fQty(f)),7,true);y+=4.4;shown++}
+  if(rows.length>shown)c.txt(6,y,`+ ${rows.length-shown} more lines (see packing list)`,7);
+  c.hline(101);
+  const q=rows.reduce((a,f)=>a+fQty(f),0),nC=cts.filter(x=>x.p===p).length,rg=palCtnRange(cts,p);
+  c.txt(6,106,'Q-TY OF CARTONS',6,true);c.txt(6,113,`${nC} ctn`,13,true);c.txt(6,118,rg?'CTN No. '+ctnRange(rg):'',7);
+  c.txt(52,106,'PCS / WEIGHT / HEIGHT',6,true);c.txt(52,112,`${q} pcs`,10,true);c.txt(52,117.5,`${p.weight?p.weight+' kg':'- kg'}   ${p.height?p.height+' cm':''}`,9,true);
   const gs1=p.sscc&&/^\d{18}$/.test(p.label);const pat=c128(gs1?'00'+p.label:asciiNo(p.label),gs1);
-  const modules=pat.split('').reduce((a,d)=>a+ +d,0);const bw=Math.min(0.42,82/modules);let bx=(100-modules*bw)/2;
-  pat.split('').forEach((d,i)=>{const w=+d*bw;if(i%2===0)ops.push(`${X(bx)} ${Y(142)} ${(w*MM).toFixed(3)} ${(20*MM).toFixed(2)} re f`);bx+=w});
-  const hr=gs1?'(00)'+p.label:asciiNo(p.label);ops.push(`BT /F1 8 Tf ${X(50-hr.length*0.85)} ${Y(145.5)} Td (${pdfTxt(hr)}) Tj ET`);
-  return ops.join('\n');
+  c.c128(pat,50,121,82,19);const hr=gs1?'(00)'+p.label:asciiNo(p.label);c.center(50,145,hr,8);
+  return c.ops.join('\n');
 }
 async function ordLabelsPdf(o){
   if(!o)return;const ps=[...o.pallets].sort((a,b)=>a.n-b.n);if(!ps.length)return toast(t('ordNoPallets'),'warn');
-  const pdf=pdfDoc(ps.map(p=>ordLabelPage(o,p,ps.length)),100,150);
+  if(labMissing(o))toast(t('labMissing'),'warn');
+  const cts=ordCartons(o);const pdf=pdfDoc(ps.map(p=>ordLabelPage(o,p,ps.length,cts)),100,150);
   if(await shareFile(new Blob([pdf],{type:'application/pdf'}),'palet_etiketleri_'+asciiNo(o.no)+'.pdf'))toast(t('ordLabelsReady'),'ok');
 }
+function ordCartonPage(o,ct,total,npal){
+  const c=labCanvas(150);c.box();const l=ct.l,f=ct.f;
+  c.txt(6,10,'CTN No.',7,true);c.txt(6,21,`${ct.no} of ${total}`,22,true);
+  c.txt(66,10,'PALLET',7,true);c.txt(66,21,`${ct.p.n} of ${npal}`,14,true);
+  c.hline(25);
+  let y=labParty(c,30,o);c.hline(y);y+=5;
+  c.txt(6,y,'ITEM',6,true);const n=c.lines(25,y,lineName(l),69,10,2,4.3,true);y+=n*4.3+0.8;
+  const ref=l.pr||l.ref||f.ref||'';if(ref){c.txt(6,y,'REF',6,true);c.fit(25,y,ref,69,8.5);y+=4.6}
+  c.txt(6,y+1.5,'QTY',6,true);c.txt(25,y+3,`${ct.qty} pcs`,18,true);y+=9.5;
+  c.txt(6,y,'BATCH',6,true);c.fit(25,y,f.lot||'-',35,10,true);
+  if(f.exp){c.txt(62,y,'EXP',6,true);c.fit(70,y,f.exp,25,9,true)}y+=5;
+  c.txt(6,y,'ORDER',6,true);c.fit(25,y,o.no,69,8);
+  const code=l.pb||l.barcode||f.barcode||'';const e=ean13Bits(code);
+  c.txt(6,113,'BARCODE',6,true);
+  if(e){const mw=0.42,x=50-95*mw/2;c.bars(e.bits,x,117,mw,21,i=>i<3||(i>=45&&i<50)||i>=92);
+    const d=e.code;c.txt(x-3.2,143.5,d[0],9);c.txt(x+3*mw+1.2,143.5,d.slice(1,7),9);c.txt(x+50*mw+1.2,143.5,d.slice(7),9)}
+  else if(code||ref){const v=asciiNo(code||ref);c.c128(c128(v,false),50,117,82,20);c.center(50,143.5,v,9)}
+  else c.txt(25,125,'-',12);
+  return c.ops.join('\n');
+}
+async function ordCartonsPdf(o){
+  if(!o)return;const cts=ordCartons(o);if(!cts.length)return toast(t('ordNoCtn'),'warn');
+  if(labMissing(o))toast(t('labMissing'),'warn');
+  const pdf=pdfDoc(cts.map(ct=>ordCartonPage(o,ct,cts.length,o.pallets.length)),100,150);
+  if(await shareFile(new Blob([pdf],{type:'application/pdf'}),'koli_etiketleri_'+asciiNo(o.no)+'.pdf'))toast(t('ordCtnReady'),'ok');
+}
+
 
 /* ---------- Mode tab ---------- */
 function renderInv(){
