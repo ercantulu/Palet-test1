@@ -15,7 +15,7 @@
 :root{--bg:#0f1115;--card:#1a1d24;--card2:#232731;--line:#2e3340;--tx:#f2f4f8;--mut:#9aa3b2;--ok:#22c55e;--okd:#15803d;--warn:#f59e0b;--err:#ef4444;--acc:#38bdf8;
 --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:16px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;overscroll-behavior:none}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:16px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;overscroll-behavior:none;overflow:hidden}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation}
 input,select,textarea{font:inherit;color:var(--tx);background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;outline:none}
 input:focus,textarea:focus{border-color:var(--acc)}
@@ -77,7 +77,8 @@ main{flex:1;overflow:hidden;position:relative}
 .badge.dot{width:10px;height:10px;padding:0;border-radius:50%}
 /* sheet */
 .sheetbg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--card);border-radius:20px 20px 0 0;padding:10px 16px calc(16px + var(--sb));max-height:94vh;overflow-y:auto;border-top:1px solid var(--line);animation:up .18s ease-out}
+.sheet{position:fixed;left:0;right:0;bottom:var(--kb,0px);z-index:21;background:var(--card);border-radius:20px 20px 0 0;padding:10px 16px calc(16px + var(--sb));max-height:94vh;max-height:calc(var(--vvh,100dvh) - var(--st) - 10px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;border-top:1px solid var(--line);animation:up .18s ease-out}
+.sheet>.acts:last-child{position:sticky;bottom:calc(-16px - var(--sb));z-index:3;background:var(--card);margin:12px -16px calc(-16px - var(--sb));padding:10px 16px calc(16px + var(--sb));box-shadow:0 -8px 14px var(--card)}
 @keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
 .grip{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 10px}
 .sheet h3{margin:4px 0 12px;font-size:20px}
@@ -273,7 +274,7 @@ main{flex:1;overflow:hidden;position:relative}
   .kbbox input{font-size:18px;font-weight:700;letter-spacing:.03em}
   .kbbox small{display:block;color:var(--mut);font-size:13px;margin-top:6px;line-height:1.4}
   .scanbody{grid-column:2;grid-row:1/3;overflow-y:auto;min-height:0;padding:20px 28px 40px 0;max-width:1000px}
-  .sheet{left:50%;right:auto;top:50%;bottom:auto;width:min(560px,92vw);max-height:88vh;border-radius:20px;border:1px solid var(--line);transform:translate(-50%,-50%);animation:fadein .15s ease-out}
+  .sheet{left:50%;right:auto;top:50%;bottom:auto;width:min(560px,92vw);max-height:88vh!important;border-radius:20px;border:1px solid var(--line);transform:translate(-50%,-50%);animation:fadein .15s ease-out}
   .sheet.half{top:auto;bottom:20px;left:auto;right:24px;transform:none;max-height:70vh;width:480px}
   .grip{display:none}
   .expgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start}
@@ -320,6 +321,7 @@ kbd{display:inline-block;min-width:34px;text-align:center;background:var(--card2
 body.dropping::after{content:attr(data-drop);position:fixed;inset:12px;border:3px dashed var(--acc);border-radius:20px;background:rgba(56,189,248,.12);z-index:50;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--acc);pointer-events:none}
 /* large text */
 body.bigtxt #app,body.bigtxt #sheet,body.bigtxt #toast{zoom:1.15}
+body.bigtxt .sheet{max-height:calc((var(--vvh,100dvh) - var(--st) - 10px) / 1.15);bottom:calc(var(--kb,0px) / 1.15)}
 /* light theme */
 body.light{--bg:#eef1f5;--card:#ffffff;--card2:#f2f4f7;--line:#d3d8e0;--tx:#111827;--mut:#5b6474;--ok:#16a34a;--warn:#d97706;--err:#dc2626;--acc:#0284c7}
 body.light .toast{background:#1f2937;color:#fff}
@@ -330,9 +332,22 @@ body.light .sheetbg{background:rgba(15,17,21,.35)}
 body.light .guide .ghd button{color:#fff}
 body.light .camstart{background:#1a1d24}
 @media (min-width:900px){
+  body.bigtxt .sheet{max-height:76vh!important;bottom:auto}
   .olines{display:grid;grid-template-columns:1fr 1fr;column-gap:22px}
   .scanres{bottom:12px}
   .safebar{flex-basis:auto;flex:1 1 360px}
+}
+
+/* short phone screens (iPhone SE, landscape): compact dialogs so keypad + buttons fit */
+@media (max-height:740px) and (max-width:899px){
+  .sheet{padding-top:6px}.grip{margin-bottom:6px}.sheet h3{margin:2px 0 8px;font-size:18px}
+  .sheet .pinfo{padding:7px 12px}.sheet .pname{font-size:16px}
+  .pad{gap:6px}.pad button{height:44px;font-size:24px}
+  .fbox{padding:3px 8px}.fbox span{font-size:30px}.cu{margin:6px 0 2px}
+  .chips{margin:2px 0 6px}.chips button{padding:6px 13px}
+  .lotrow input,#edPal{padding:9px 12px}.fld{margin:6px 0}
+  .tot{margin:0 0 4px}
+  .grip{display:none}.sheet .note{margin-top:5px;padding:6px 10px;font-size:13px}.sheet .pcbtn{margin-top:4px}
 }
 </style>
 </head>
@@ -1154,7 +1169,7 @@ I18N.ru.addedX='Обновлено: {n}';
 I18N.en.addedX='Updated: {n}';
 'use strict';
 const PRODUCTS=[["8053839950161","SAO001","SONO ARGAN OIL",30,200,""],["8053839950178","SAO002","SONO ARGAN OIL",100,36,""],["8053839950109","SASH002","SONO ARGAN SHAMPOO 250",250,48,""],["8053839950093","SACN002","SONO ARGAN CONDITIONER",250,48,""],["8053839950130","SADM001","SONO ARGAN DEEP MASK box",250,32,""],["8053839950123","SALM002","SONO ARGAN LEAVE IN MASK box",150,64,""],["8053839950154","SALMM002","SONO ARGAN LEAVE IN MASK",50,100,""],["8053839950024","SAA001","SONO COLOR SHAMPOO",250,48,""],["8053839950000","SAA002","SONO COLOR MASK box",250,32,""],["8053839950246","SSO002","SONO BLONDER OIL",100,36,""],["8053839950062","SSH001","SONO SILVER SHAMPOO",250,48,""],["8053839950048","SSMA02","SONO SILVER MASK box",250,32,""],["8053839950192","SSSI01","SONO SILVER SILK box",150,64,""],["8053839950321","SSSIM011","SONO SILVER SILK",50,100,""],["8053839950239","SSS003","SONO STYLE SALT WAVE",150,64,""],["8053839950338","SGS001","SONO GOLD RESTRUCTURING SHAMPOO",250,48,""],["8053839950352","SGM001","SONO GOLD RESTRUCTURING MASK",150,64,""],["8053839950376","SSG001","SONO SILKY GOLD",150,64,""],["8053839950277","SKSH001","SONO KERATIN SHAMPOO",250,48,""],["8053839950284","SKCN001","SONO KERATIN CONDITIONER",250,48,""],["8053839950314","SAAP001","Sono Color Potion 150 ml",150,64,""],["8053839950857","SSG002","Silky Gold 50 ml",50,100,""],["8053839950956","SCP050","Sono Color Potion 50 ml",50,100,""],["8053839950116","SASH003","SONO ARGAN SHAMPOO 1000",1000,12,""],["8053839950086","SACN003","SONO ARGAN CONDITIONER",1000,12,""],["8053839950536","SKSH002","SONO KERATIN SHAMPOO",1000,12,""],["8053839951151","SSVS150","VOLUME SPRAY",150,64,""],["8053839951182","SSTP150","THERMO-PROTECTIVE SPRAY",150,80,""],["8053839950031","SAA003","SONO COLOR SHAMPOO 1000 ml",1000,12,""],["8053839950345","SGS002","SONO GOLD RESTRUCTURING SHAMPOO  1000 ml",1000,12,""],["8053839951168","SSVM150","Sono Volume Mousse",150,48,""],["8053839951199","SSBW150","BEACH WAVES SPRAY",150,64,""],["8053839950680","SVSH001","THE VOLUMIZING SHAMPOO 250 ML",250,48,""],["8053839950697","SVMA001","THE VOLUMIZING MASK 250 ml",250,32,""],["8053839950079","SSH003","SONO SILVER SHAMPOO 1000 ml",1000,12,""],["8053839951755","SAPGS25","SONO Argan Perfume Gift Set 2025","",18,""],["8053839951472","SGCN1000","SONO GOLD Conditioner 1000 ml",1000,12,""],["8053839951489","SGCN0250","SONO GOLD Conditioner 250 ml",250,48,""],["8053839951496","SSCN1000","SONO Silver Conditioner 1000 ml",1000,12,""],["8053839951502","SSCN0250","SONO Silver Conditioner 250 ml",250,48,""],["8053839951618","SDSH250","SONO THE ANTI-DANRUFF SHAMPOO",250,48,""],["8053839951519","SCCN1000","SONO Color Conditioner 1000 ml",1000,12,""],["8053839951649","SDCN250","SONO ANTI-DANDRUFF CONDITIONER",250,48,""],["8053839951700","SKHP001","SONO KERATIN PERFUME",30,256,""],["8053839951526","SCCN0250","SONO Color Conditioner 250 ml",250,48,""],["8053839951281","SSDRS200","SPRAY DRY SHAMPOO","",12,""],["8053839951311","SSFSPR300","FIX SPRAY","",12,""],["8053839951564","SCSH250","SONO THE CURL SHAMPOO",250,48,""],["8053839951588","SCMA250","SONO CURL MASK",250,32,""],["8053839951601","SCLG150","SONO CURL LIQUID GEL",150,64,""],["8053839951632","SDLT150","SONO ANTI-DANDRUFF LOTION",150,64,""],["8053839951656","SGFM050","SONO GOLD  LIQUID FILLER MASK",50,100,""],["8053839951663","SBLM050","SONO BLONDER LIQUID MASK",50,100,""],["8053839951670","SHLSH250","SONO THE HAIR-LOSS SHAMPOO",250,48,""],["8053839951687","SHLCN250","SONO HAIR-LOSS CONDITIONER",250,48,""],["8053839951694","SHLT150","SONO HAIR-LOSS LOTION",150,64,""],["8053839951717","SKHO100","SONO KERATIN 2 PHASES HAIR REPAIL OIL",100,36,""],["8053839950475","SAOM02","ARGAN OIL 10 ML",10,800,""],["8053839950437","SASHS02","ARGAN SHAMPOO 10 ML",10,800,""],["8053839950444","SACNS02","ARGAN CONDITIONER 10 ML",10,800,""],["8053839950451","SADMS01","ARGAN DEEP MASK 10 ML",10,800,""],["8053839950468","SALMS02","ARGAN LEAVE IN MASK 10 ML",10,800,""],["8053839950482","SAAS001","COLOR SHAMPOO 10 ML",10,800,""],["8053839950499","SAAS002","ANTI-AGE MASK 10 ML",10,800,""],["8053839950390","SAHS01","SILVER SHAMPOO 10 ML",10,800,""],["","","SONO Silver Conditioner 10 ml",10,800,""],["8053839950406","SSMS01","SILVER MASK 10 ML",10,800,""],["8053839950413","SSSS01","SONO SILVER SILK SPRAY 10ML",10,800,""],["8053839950567","SKSHS01","SONO KERATIN SHAMPOO",10,800,""],["8053839950574","SKCNS01","SONO KERATIN CONDITIONER",10,800,""],["8053839950376_","SSGS01","SONO SILKY GOLD",10,800,""],["8053839950529","SACNS02","SONO Kraft Bag 18X24X8 cm","","",""],["8053839951120","SWB001","SMAL SONO WHITE BAG","",200,""],["","SADM002","SONO ARGAN DEEP MASK",500,16,""],["","SAA004","SONO COLOR MASK",500,16,""],["","SSO001","SONO BLONDER OIL",30,200,""],["","SSMA01","SONO SILVER MASK",500,16,""],["","SGM002","SONO GOLD RESTRUCTURING MASK",500,16,""],["","SGF002","SONO GOLD FILLER",250,48,""],["","SGA001","SONO GOLD AMPOULE","6 x 10 ml",32,"noteSGA"],["","SKCN002","SONO KERATIN CONDITIONER",1000,12,""],["","SSS004","SONO STYLE SALT WAVE",50,100,""],["","SSGG150","LIQUID GEL",150,64,""],["","SSDC050","STYLING PASTE",50,112,""],["","SSDCSH250","SONO STYLE DEEP CLEANSING SHAMPOO 250 ml",250,48,""],["","SSDCSH1000","SONO STYLE DEEP CLEANSING SHAMPOO 1000 ml",1000,12,""],["","SAPD001","SONO DETOX LOTION 150 ML",150,64,""],["","SAPSH001","SONO DETOX SHAMPOO 250 ML",250,48,""],["","SAPM001","SONO DETOX MASK 150 ML",150,64,""],["","SAPS001","SONO DETOX SPRAY 150 ML",150,64,""],["","SVSP001","SONO VOLUME VOLUMIZING  SPRAY 150 ml",150,64,""],["","SCSH1000","SONO CURL SHAMPOO 1000 ML",1000,12,""],["","SCMA500","SONO CURL MASK 500 ML",500,16,""],["","SDSH1000","SONO ANTI-DANDRUFF SHAMPOO 1000 ML",1000,12,""],["","SCP010","SONO COLOR POTION",10,800,""],["","SSOS01","SONO SILVER OIL",10,800,""],["","SGSS01","SONO GOLD RESTRUCTURING SHAMPOO",10,800,""],["","SGMS01","SONO GOLD RESTRUCTURING MASK",10,800,""],["","KWB001","SMALL SONO WHITE BAG","",200,""],["","SGP00","SONO GOLD PERFUME",30,256,""],["","SAP00","SONO ARGAN PERFUME",30,256,""],["","SBP00","SONO BLONDER PERFUME",30,256,""]];
-const VERSION='2.5.0';
+const VERSION='2.5.1';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const LS='palet_sayim_v1';
 const DEF={lang:'auto',entries:[],pallet:'',mode:'ask',device:'',sound:true,sep:';',excelText:true,cool:1200,autoLot:true,recentC:[1],recentU:[1],recentPallets:[],closed:{},extra:{},perCase:{},lastExport:0,scope:'all',fmt:'sum',listMode:'rows',onlyActive:false,inv:null,invBlind:true,invQuick:false,invFilter:'all',invTol:'case',invRecount:'now',invPlusCase:false,appMode:'free',invActive:null,labSupplier:'',labOrigin:''};
@@ -3236,6 +3251,19 @@ function uxRender(){
 $('#setTheme').onchange=e=>{S.theme=e.target.value;save();applyUx()};
 $('#setBig').onclick=()=>{S.bigText=!S.bigText;save();uxRender()};
 $('#guideBtn').onclick=()=>guideSheet();
+
+/* ---------- iOS keyboard / viewport fix: sheets follow the visible area, page never stays shifted ---------- */
+function vvFix(){
+  const vv=window.visualViewport,r=document.documentElement.style;
+  const h=vv?vv.height:innerHeight,kb=vv?Math.max(0,Math.round(innerHeight-vv.height-vv.offsetTop)):0;
+  r.setProperty('--vvh',Math.round(h)+'px');r.setProperty('--kb',(kb>60?kb:0)+'px');
+  if(kb<=60&&(window.scrollY||document.documentElement.scrollTop||document.body.scrollTop)){window.scrollTo(0,0);document.body.scrollTop=0}
+}
+if(window.visualViewport){visualViewport.addEventListener('resize',vvFix);visualViewport.addEventListener('scroll',vvFix)}
+window.addEventListener('resize',vvFix);window.addEventListener('orientationchange',()=>setTimeout(vvFix,300));
+document.addEventListener('focusout',()=>setTimeout(vvFix,120));
+window.addEventListener('scroll',()=>{if(!document.activeElement||!['INPUT','TEXTAREA'].includes(document.activeElement.tagName))vvFix()},{passive:true});
+vvFix();
 
 
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
